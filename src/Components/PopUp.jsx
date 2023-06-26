@@ -1,77 +1,61 @@
-import React, { useState } from 'react';
-
-const PopUp = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-  });
-
-  const togglePopUp = () => {
-    setIsOpen(!isOpen);
+import React from "react";
+import { Modal } from "react-bootstrap";
+const PopUp = ({ campos, titulo, handleSubmit, ...props }) => {
+  const handleSubmit2 = (e) => {
+    handleSubmit(e);
+    props.onHide();
   };
-
-  const handleInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Aquí puedes agregar la lógica para enviar los datos del formulario
-    console.log(formData);
-    // Restablecer el formulario
-    setFormData({
-      name: '',
-      email: '',
-      password: '',
-    });
-    // Cerrar el PopUp
-    togglePopUp();
-  };
-
   return (
-    <div>
-      <button onClick={togglePopUp}>Abrir PopUp</button>
-      {isOpen && (
-        <div className="popup">
-          <div className="popup-content">
-            <h2>Formulario de Registro</h2>
-            <form onSubmit={handleSubmit}>
-              <label>
-                Nombre:
+    <Modal
+      {...props}
+      size="ls"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-vcenter">{titulo}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <div className="container">
+          <form onSubmit={handleSubmit2}>
+            {campos.map((campo) => (
+              <div key={campo.id}>
+                <label
+                  htmlFor={campo.id}
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                >
+                  {campo.label}{" "}
+                </label>
                 <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
+                  className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                  type={campo.tipo}
+                  id={campo.id}
+                  name={campo.nombre}
+                  placeholder={campo.placeholder}
+                  required={campo.required}
                 />
-              </label>
-              <label>
-                Email:
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                />
-              </label>
-              <label>
-                Contraseña:
-                <input
-                  type="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleInputChange}
-                />
-              </label>
-              <button type="submit">Enviar</button>
-            </form>
-            <button onClick={togglePopUp}>Cerrar</button>
-          </div>
+              </div>
+            ))}
+            <div className="flex justify-end">
+              <button
+                className="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 mx-2 rounded"
+                type="submit"
+              >
+                Sign Up
+              </button>
+              <button
+                className="flex-shrink-0 bg-red-500 hover:bg-red-700 border-red-500 hover:border-red-700 text-sm border-4 text-white py-1 px-2 rounded"
+                type="button"
+                onClick={props.onHide}
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
         </div>
-      )}
-    </div>
+      </Modal.Body>
+      <Modal.Footer></Modal.Footer>
+    </Modal>
   );
 };
 

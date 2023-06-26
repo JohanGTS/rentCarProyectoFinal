@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import Logo from "./Logo";
 import ItemNavbar from "./ItemNavbar";
 import Boton from "./Boton";
-import { Disclosure } from "@headlessui/react";
-import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/outline";
-import FormRegistro from "./FormRegistro";
+import PopUp from "./PopUp";
 
 const Navbar = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
   let [estado, setEstado] = useState(false);
   const campos = [
     {
@@ -16,6 +16,7 @@ const Navbar = () => {
       tipo: "email",
       nombre: "email",
       placeholder: "Ingrese su email",
+      required: true,
     },
     {
       id: "password",
@@ -23,6 +24,7 @@ const Navbar = () => {
       tipo: "password",
       nombre: "password",
       placeholder: "Ingrese su contraseña",
+      required: true,
     },
   ];
   return (
@@ -32,36 +34,12 @@ const Navbar = () => {
       </div>
       <nav className="nav font-semibold text-lg flex-grow md:flex-grow-0">
         <ul className="md:ml-auto md:mr-auto flex flex-wrap items-center text-base md:justify-center">
-          <li className="md:hidden">
-            <Disclosure>
-              {({ open }) => (
-                <>
-                  <Disclosure.Button className="flex items-center justify-between w-full py-2 px-4">
-                    <span className="text-lg font-semibold">Menú</span>
-                    {open ? (
-                      <ChevronUpIcon className="w-5 h-5" />
-                    ) : (
-                      <ChevronDownIcon className="w-5 h-5" />
-                    )}
-                  </Disclosure.Button>
-                  <Disclosure.Panel className="py-2 px-4">
-                    <div className="flex flex-col md:hidden">
-                      <ItemNavbar texto={"Automóviles"} />
-                      <ItemNavbar texto={"Sobre nosotros"} />
-                      <ItemNavbar texto={"Informaciones legales"} />
-                      <ItemNavbar texto={"Contacto"} />
-                    </div>
-                  </Disclosure.Panel>
-                </>
-              )}
-            </Disclosure>
-          </li>
-          <li className="hidden md:flex space-x-4">
-            <ItemNavbar texto={"Automóviles"} />
-            <ItemNavbar texto={"Sobre nosotros"} />
-            <ItemNavbar texto={"Informaciones legales"} />
-            <ItemNavbar texto={"Contacto"} />
-          </li>
+          <ul className="hidden md:flex space-x-4">
+            <ItemNavbar texto={"Automóviles"} to={"/"} />
+            <ItemNavbar texto={"Sobre nosotros"} to={"/nosotros"} />
+            <ItemNavbar texto={"Informaciones legales"} to={"/"} />
+            <ItemNavbar texto={"Contacto"} to={"/contacto"} />
+          </ul>
         </ul>
       </nav>
 
@@ -71,10 +49,12 @@ const Navbar = () => {
           color={"red-600"}
           onclick={() => setEstado(true)}
         />
-        <FormRegistro
+        <PopUp
           show={estado}
           onHide={() => setEstado(false)}
+          titulo={"Iniciar sesión"}
           campos={campos}
+          handleSubmit={handleSubmit}
         />
       </div>
     </header>
