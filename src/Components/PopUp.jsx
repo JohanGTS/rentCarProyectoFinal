@@ -1,9 +1,25 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { Modal } from "react-bootstrap";
+import { UserContext } from "../Contexts/UserContext";
+import { useNavigate } from "react-router-dom";
 const PopUp = ({ campos, titulo, handleSubmit, ...props }) => {
-  const handleSubmit2 = (e) => {
-    handleSubmit(e);
+  const [formValues, setFormValues] = useState({});
+  const {usuario,setUsuario} = useContext(UserContext);
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues({ ...formValues, [name]: value });
+  };
+
+  const navigate = useNavigate();
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    handleSubmit(formValues);
+    setUsuario(formValues);
+    // Cerrar el modal u realizar otras acciones después de enviar el formulario
     props.onHide();
+    if (usuario) {
+      navigate("/dashboard");
+    }
   };
   return (
     <Modal
@@ -17,7 +33,7 @@ const PopUp = ({ campos, titulo, handleSubmit, ...props }) => {
       </Modal.Header>
       <Modal.Body>
         <div className="container">
-          <form onSubmit={handleSubmit2}>
+          <form onSubmit={handleFormSubmit}>
             {campos.map((campo) => (
               <div key={campo.id}>
                 <label
@@ -33,6 +49,7 @@ const PopUp = ({ campos, titulo, handleSubmit, ...props }) => {
                   name={campo.nombre}
                   placeholder={campo.placeholder}
                   required={campo.required}
+                  onChange={handleInputChange}
                 />
               </div>
             ))}

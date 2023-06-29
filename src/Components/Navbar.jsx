@@ -1,12 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import PropTypes from "prop-types";
 import Logo from "./Logo";
 import ItemNavbar from "./ItemNavbar";
 import Boton from "./Boton";
-import PopUp from "./PopUp";
-
+import LoginPopUp from "./ComponentsEspecificos/LoginPopUp";
+import { UserContext } from "../Contexts/UserContext";
 const Navbar = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
+    const [usuario, setUsuario] = useContext(UserContext);
+    const form = e.target;
+    const email = form.email.value;
+    const password = form.password.value;
+    setUsuario({ email, password });
+    form.reset();
+    () => setEstado(false);
   };
   let [estado, setEstado] = useState(false);
   const campos = [
@@ -35,7 +43,7 @@ const Navbar = () => {
       <nav className="nav font-semibold text-lg flex-grow md:flex-grow-0">
         <ul className="md:ml-auto md:mr-auto flex flex-wrap items-center text-base md:justify-center">
           <ul className="hidden md:flex space-x-4">
-            <ItemNavbar texto={"Automóviles"} to={"/"} />
+            <ItemNavbar texto={"Automóviles"} to={"/home"} />
             <ItemNavbar texto={"Sobre nosotros"} to={"/nosotros"} />
             <ItemNavbar texto={"Informaciones legales"} to={"/"} />
             <ItemNavbar texto={"Contacto"} to={"/contacto"} />
@@ -49,13 +57,7 @@ const Navbar = () => {
           color={"red-600"}
           onclick={() => setEstado(true)}
         />
-        <PopUp
-          show={estado}
-          onHide={() => setEstado(false)}
-          titulo={"Iniciar sesión"}
-          campos={campos}
-          handleSubmit={handleSubmit}
-        />
+        <LoginPopUp show={estado} onHide={() => setEstado(false)} />
       </div>
     </header>
   );

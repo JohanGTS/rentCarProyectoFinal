@@ -1,17 +1,13 @@
 import { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import MainRouter from "./Routers/MainRouter";
+import { UserContext } from "./Contexts/UserContext";
+import AdminRouter from "./Routers/AdminRouter";
 export default function App() {
-  let [estado, setEstado] = useState(false);
+  const [usuario, setUsuario] = useState(null);
   return (
-    <>
-      {/*<Navbar />
-      <SobreNosotros />
-  <Footer />*/}
-
-      <MainRouter />
-    </>
+      <UserContext.Provider value={{usuario, setUsuario}}>
+       {usuario? <AdminRouter/>: <MainRouter/>}
+      </UserContext.Provider>
   );
 }
-
-
