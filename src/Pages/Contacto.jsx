@@ -40,7 +40,9 @@ const Contacto = () => {
       <Seccion color="white">
         <div className="container mx-auto flex flex-col lg:flex-row lg:gap-4">
           <div className="flex flex-col mb-4 lg:w-1/2">
-            <h2 className="lg:text-6xl font-bold text-4xl">Visítanos en Santiago</h2>
+            <h2 className="lg:text-6xl font-bold text-4xl">
+              Visítanos en Santiago
+            </h2>
             <p className="text-lg  py-8">
               Selected Car Leasing está presente en todo el país con salas de
               exhibición en Zelanda, Fionia y Jutlandia, y todos los

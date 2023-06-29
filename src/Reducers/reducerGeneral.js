@@ -1,8 +1,10 @@
 export const reducerGeneral = (state, action, link) => {
+  console.log("link: " + link);
+  console.log("action: " + action);
+  console.log("state: " + JSON.stringify(state));
   switch (action.type) {
     case "guardar":
-      console.log(state);
-      fetch(link, {
+      fetch(action.link, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

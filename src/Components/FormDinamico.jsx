@@ -1,5 +1,7 @@
 import React, { useState, useReducer } from "react";
 import { reducerGeneral } from "../Reducers/reducerGeneral";
+import { getData, addData, deleteData, updateData } from "../Features/apiCalls";
+
 const FormDinamico = ({ fields, link }) => {
   const [formValues, setFormValues] = useState({});
   const [state, dispatch] = useReducer(reducerGeneral);
@@ -7,21 +9,32 @@ const FormDinamico = ({ fields, link }) => {
     const { id, value } = e.target;
     setFormValues({ ...formValues, [id]: value });
   };
-  const handleGuardar = (e) => {
+
+  const handleGuardar = async (e) => {
     e.preventDefault();
-    console.log(link);
-    dispatch({ type: "guardar" }, link);
+    const data = await addData({
+      link,
+      formValues
+    });
+    console.log(data);
   };
 
-  const handleEliminar = () => {
-    dispatch({ type: "eliminar", id: state.id }, link);
+  const handleEliminar = async (e) => {
+    e.preventDefault();
+    const data = await deleteData(link, formValues);
+    console.log(data);
   };
 
-  const handleBlur = (e) => {
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    const data = await updateData(link, formValues);
+    console.log(data);
+  };
+
+  const handleBlur = async (e) => {
     const { id, value } = e.target;
-    if (id.includes("id")) {
-      dispatch({ type: "obtener", id: value }, link);
-    }
+    const data = await getData(link);
+    console.log(data);
   };
 
   return (
@@ -77,6 +90,13 @@ const FormDinamico = ({ fields, link }) => {
               Guardar
             </button>
             <button
+              className="flex-shrink-0 bg-sky-600 hover:bg-sky-800 border-sky-600 hover:border-sky-800 text-sm border-4 text-white py-1 px-2 mx-2 rounded"
+              type="submit"
+              onClick={handleUpdate}
+            >
+              Actualizar
+            </button>
+            <button
               className="flex-shrink-0 bg-red-500 hover:bg-red-700 border-red-500 hover:border-red-700 text-sm border-4 text-white py-1 px-2 rounded"
               type="button"
               onClick={handleEliminar}
@@ -89,5 +109,4 @@ const FormDinamico = ({ fields, link }) => {
     </div>
   );
 };
-
 export default FormDinamico;

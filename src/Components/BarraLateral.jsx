@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import {
   Outlet,
   Route,
@@ -6,6 +6,7 @@ import {
   useNavigate,
   useLocation,
 } from "react-router-dom";
+import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/solid";
 import { UserContext } from "../Contexts/UserContext";
 import { AdminHome } from "../Pages/AdminHome";
 import {
@@ -15,22 +16,27 @@ import {
   ciudad,
 } from "../JsonDinamico/mantenimientos";
 import { DashBoard } from "../Pages/DashBoard";
-export const BarraLateral = ({ child }) => {
+export const BarraLateral = () => {
   const { usuario, setUsuario } = useContext(UserContext);
-
+  const [abrirMantenimiento, setAbrirMantenimiento] = useState(false);
   const navigate = useNavigate();
   const logOut = () => {
     setUsuario(null);
     navigate("/contacto");
-    console.log("fuera");
+
   };
   const toDashboard = () => {
     navigate("/dashboard");
   };
 
+  const navega = (ruta) => {
+    if (ruta !== undefined && ruta !== null) {
+      navigate(`/${ruta}`);
+    }
+  };
   const dropdownItems = [
-    { label: "Item 1", value: "item1" },
-    { label: "Item 2", value: "item2" },
+    { label: "Color", value: "color", ruta: "color" },
+    { label: "Combustible", value: "combustible", ruta: "combustible" },
     { label: "Item 3", value: "item3" },
   ];
   return (
@@ -77,7 +83,7 @@ export const BarraLateral = ({ child }) => {
       </nav>
       <aside
         id="logo-sidebar"
-        className="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r sm:translate-x-0 bg-gray-800 border-gray-700"
+        className="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r sm:translate-x-0  border-gray-700"
         aria-label="Sidebar"
       >
         <div className="h-full px-3 pb-4 overflow-y-auto bg-white ">
@@ -101,10 +107,10 @@ export const BarraLateral = ({ child }) => {
                 <span className="ml-3">Dashboard</span>
               </a>
             </li>
-            <li>
-              <a
-                href="#"
-                className="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100 "
+            <ul>
+              <button
+                className="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100 w-full"
+                onClick={() => setAbrirMantenimiento((abrir) => !abrir)}
               >
                 <svg
                   aria-hidden="true"
@@ -115,32 +121,38 @@ export const BarraLateral = ({ child }) => {
                 >
                   <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                 </svg>
-                <span className="flex-1 ml-3 whitespace-nowrap">
-                  Mantenientos
+                <span className="flex-1 ml-3 whitespace-nowrap  ">
+                  Mantenimientos
                 </span>
-              </a>
-              {dropdownItems.map((item, index) => (
-                <li key={index}>
-                  <a
-                    href="#"
-                    className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75text-gray-400 group-hover:text-white"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                    </svg>
-                    <span className="flex-1 ml-3 whitespace-nowrap">
-                      {item.label}
-                    </span>
-                  </a>
-                </li>
-              ))}
-            </li>
+                {!abrirMantenimiento ? <ChevronDownIcon /> : <ChevronUpIcon />}
+              </button>
+
+              {abrirMantenimiento && (
+                <div>
+                  {dropdownItems.map((item, index) => (
+                    <li key={index}>
+                      <button
+                        className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
+                        onClick={navega(item.ruta)}
+                      >
+                        <svg
+                          aria-hidden="true"
+                          className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75text-gray-400 group-hover:text-white"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                        </svg>
+                        <span className="flex-1 ml-3 whitespace-nowrap">
+                          {item.label}
+                        </span>
+                      </button>
+                    </li>
+                  ))}
+                </div>
+              )}
+            </ul>
             <li>
               <a
                 href="#"
@@ -237,7 +249,7 @@ export const BarraLateral = ({ child }) => {
                 element={
                   <AdminHome
                     campos={color}
-                    link={"http://localhost:3000/color"}
+                    link={"color"}
                   />
                 }
               />
@@ -246,19 +258,27 @@ export const BarraLateral = ({ child }) => {
                 element={
                   <AdminHome
                     campos={combustible}
-                    link={"http://localhost:3000/combustible"}
+                    link={"combustible"}
                   />
                 }
               />
               <Route
-                path="/ciudad"
+                path="ciudad"
                 element={
                   <AdminHome
                     campos={ciudad}
-                    link={"http://localhost:3000/ciudad"}
+                    link={"/ciudad"}
                   />
                 }
-              />
+              /><Route
+              path="/todo"
+              element={
+                <AdminHome
+                  campos={fields}
+                  link={"todo"}
+                />
+              }
+            />
 
               {/* Agrega más rutas y componentes aquí */}
             </Routes>
