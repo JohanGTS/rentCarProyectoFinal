@@ -1,40 +1,70 @@
 import React, { useState, useReducer } from "react";
 import { reducerGeneral } from "../Reducers/reducerGeneral";
-import { getData, addData, deleteData, updateData } from "../Features/apiCalls";
-
+import {
+  getData,
+  getAllData,
+  addData,
+  deleteData,
+  updateData,
+} from "../Features/apiCalls";
+let actualiza = false;
+const limpiarForm = () => {
+  const updatedFormValues = {};
+  fields.forEach((field) => {
+    updatedFormValues[field.id] = field.busca ? field.options[0] : "";
+  });
+  setFormValues(updatedFormValues);
+  actualiza = false;
+};
 const FormDinamico = ({ fields, link }) => {
   const [formValues, setFormValues] = useState({});
-  const [state, dispatch] = useReducer(reducerGeneral);
   const handleInputChange = (e) => {
-    const { id, value } = e.target;
-    setFormValues({ ...formValues, [id]: value });
+    const { id, value, type } = e.target;
+    if (id.includes("id"))
+      setFormValues({ ...formValues, [id]: parseInt(value) });
+    else setFormValues({ ...formValues, [id]: value });
   };
 
   const handleGuardar = async (e) => {
     e.preventDefault();
-    const data = await addData({
-      link,
-      formValues
-    });
-    console.log(data);
+    const guardar = document.getElementById("guarda");
+    guardar.focus();
+    if (!actualiza) {
+      const data = await addData({
+        link,
+        formValues,
+      });
+      console.log(data);
+    } else {
+      const data = await updateData(link, formValues);
+      console.log(data);
+    }
   };
 
   const handleEliminar = async (e) => {
     e.preventDefault();
+    const eliminar = document.getElementById("elimina");
+    eliminar.focus();
     const data = await deleteData(link, formValues);
-    console.log(data);
-  };
-
-  const handleUpdate = async (e) => {
-    e.preventDefault();
-    const data = await updateData(link, formValues);
-    console.log(data);
   };
 
   const handleBlur = async (e) => {
     const { id, value } = e.target;
-    const data = await getData(link);
-    console.log(data);
+    const data = await getData(link, formValues);
+    if (data) {
+      setFormValues(data);
+      actualiza = true;
+      setTimeout(() => {
+        Object.entries(data).forEach(([key, value]) => {
+          const field = document.getElementById(key);
+          if (field) {
+            field.value = value;
+          }
+        });
+      }, 0);
+    } else {
+      actualiza = false;
+    }
   };
 
   return (
@@ -83,20 +113,16 @@ const FormDinamico = ({ fields, link }) => {
           ))}
           <div className="flex justify-end py-4">
             <button
+              id="guarda"
               className="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 mx-2 rounded"
               type="submit"
               onClick={handleGuardar}
             >
               Guardar
             </button>
+
             <button
-              className="flex-shrink-0 bg-sky-600 hover:bg-sky-800 border-sky-600 hover:border-sky-800 text-sm border-4 text-white py-1 px-2 mx-2 rounded"
-              type="submit"
-              onClick={handleUpdate}
-            >
-              Actualizar
-            </button>
-            <button
+              id="elimina"
               className="flex-shrink-0 bg-red-500 hover:bg-red-700 border-red-500 hover:border-red-700 text-sm border-4 text-white py-1 px-2 rounded"
               type="button"
               onClick={handleEliminar}

@@ -2,9 +2,21 @@ import axios from "axios";
 
 const primaryPath = "http://localhost:3000/";
 
-export const getData = async (ruta) => {
+export const getAllData = async (ruta) => {
   try {
     const res = await axios.get(`${primaryPath}${ruta}/`);
+    return res.data;
+  } catch (err) {
+    console.log(err);
+    return err;
+  }
+};
+export const getData = async (ruta, data) => {
+  try {
+    const id = data[Object.keys(data)[0]];
+    let total=`${primaryPath}${ruta}/${id}`
+    console.log(total)
+    const res = await axios.get(total);
     return res.data;
   } catch (err) {
     console.log(err);
@@ -28,6 +40,7 @@ export const addData = async (ruta) => {
 
 export const deleteData = async (ruta, data) => {
   try {
+    console.log(data);
     const dataId = data[Object.keys(data)[0]];
     const res = await axios.delete(`${primaryPath}${ruta}/` + dataId);
     return res.data;

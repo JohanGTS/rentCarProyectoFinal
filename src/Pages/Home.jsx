@@ -1,9 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import Seccion from '../Components/Seccion'
 
 const Home = props => {
   return (
-    <div>Home</div>
+    <main>
+      <Seccion color={"white"}></Seccion>
+    </main>
   )
 }
 

@@ -1,11 +1,5 @@
 import React, { useContext, useState } from "react";
-import {
-  Outlet,
-  Route,
-  Routes,
-  useNavigate,
-  useLocation,
-} from "react-router-dom";
+import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
 import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/solid";
 import { UserContext } from "../Contexts/UserContext";
 import { AdminHome } from "../Pages/AdminHome";
@@ -14,6 +8,16 @@ import {
   color,
   combustible,
   ciudad,
+  documentos,
+  estados,
+  tipoUsuario,
+  tipoVehiculo,
+  marca,
+  modelo,
+  pais,
+  seguro,
+  pieza,
+  vehiculo,
 } from "../JsonDinamico/mantenimientos";
 import { DashBoard } from "../Pages/DashBoard";
 export const BarraLateral = () => {
@@ -22,8 +26,11 @@ export const BarraLateral = () => {
   const navigate = useNavigate();
   const logOut = () => {
     setUsuario(null);
+    console.log(usuario);
     navigate("/contacto");
-
+  };
+  const toggleMantenimiento = () => {
+    setAbrirMantenimiento((abrir) => !abrir);
   };
   const toDashboard = () => {
     navigate("/dashboard");
@@ -37,7 +44,21 @@ export const BarraLateral = () => {
   const dropdownItems = [
     { label: "Color", value: "color", ruta: "color" },
     { label: "Combustible", value: "combustible", ruta: "combustible" },
-    { label: "Item 3", value: "item3" },
+    { label: "Documentos", value: "documento", ruta: "documento" },
+    { label: "Ciudades", value: "ciudad", ruta: "ciudades" },
+    { label: "Estados", value: "estado", ruta: "estado" },
+    { label: "Marcas", value: "marca", ruta: "marca" },
+    { label: "Modelos", value: "modelos", ruta: "modelo" },
+    { label: "Países", value: "pais", ruta: "pais" },
+    { label: "Piezas", value: "pieza", ruta: "pieza" },
+    { label: "Seguros", value: "seguro", ruta: "seguro" },
+    { label: "Tipos de usuarios", value: "tipoUsuario", ruta: "tipoUsuario" },
+    {
+      label: "Tipos de vehículos",
+      value: "tipoVehiculo",
+      ruta: "tipoVehiculo",
+    },
+    { label: "Vehículos", value: "vehiculo", ruta: "vehiculo" },
   ];
   return (
     <>
@@ -110,7 +131,7 @@ export const BarraLateral = () => {
             <ul>
               <button
                 className="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100 w-full"
-                onClick={() => setAbrirMantenimiento((abrir) => !abrir)}
+                onClick={toggleMantenimiento}
               >
                 <svg
                   aria-hidden="true"
@@ -133,7 +154,7 @@ export const BarraLateral = () => {
                     <li key={index}>
                       <button
                         className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
-                        onClick={navega(item.ruta)}
+                        onClick={() => navega(item.ruta)}
                       >
                         <svg
                           aria-hidden="true"
@@ -246,39 +267,62 @@ export const BarraLateral = () => {
               <Route path="/dashboard" element={<DashBoard />} />
               <Route
                 path="/color"
-                element={
-                  <AdminHome
-                    campos={color}
-                    link={"color"}
-                  />
-                }
+                element={<AdminHome campos={color} link={"color"} />}
               />
               <Route
                 path="/combustible"
                 element={
-                  <AdminHome
-                    campos={combustible}
-                    link={"combustible"}
-                  />
+                  <AdminHome campos={combustible} link={"combustible"} />
                 }
               />
               <Route
-                path="ciudad"
+                path="/ciudad"
+                element={<AdminHome campos={ciudad} link={"ciudad"} />}
+              />
+              <Route
+                path="/documento"
+                element={<AdminHome campos={documentos} link={"documento"} />}
+              />
+              <Route
+                path="/estado"
+                element={<AdminHome campos={estados} link={"estado"} />}
+              />
+              <Route
+                path="/tipoUsuario"
                 element={
-                  <AdminHome
-                    campos={ciudad}
-                    link={"/ciudad"}
-                  />
+                  <AdminHome campos={tipoUsuario} link={"tipoUsuario"} />
                 }
-              /><Route
-              path="/todo"
-              element={
-                <AdminHome
-                  campos={fields}
-                  link={"todo"}
-                />
-              }
-            />
+              />
+              <Route
+                path="/tipoVehiculo"
+                element={
+                  <AdminHome campos={tipoVehiculo} link={"tipoVehiculo"} />
+                }
+              />
+              <Route
+                path="/marca"
+                element={<AdminHome campos={marca} link={"marca"} />}
+              />
+              <Route
+                path="/modelo"
+                element={<AdminHome campos={modelo} link={"modelo"} />}
+              />
+              <Route
+                path="/pais"
+                element={<AdminHome campos={pais} link={"pais"} />}
+              />
+              <Route
+                path="/seguro"
+                element={<AdminHome campos={seguro} link={"seguro"} />}
+              />
+              <Route
+                path="/pieza"
+                element={<AdminHome campos={pieza} link={"v"} />}
+              />
+              <Route
+                path="/vehiculo"
+                element={<AdminHome campos={vehiculo} link={"vehiculo"} />}
+              />
 
               {/* Agrega más rutas y componentes aquí */}
             </Routes>

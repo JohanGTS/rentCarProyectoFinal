@@ -7,16 +7,18 @@ import { BarraLateral } from "../Components/BarraLateral";
 import Home from "../Pages/Home";
 import Contacto from "../Pages/Contacto";
 import SobreNosotros from "../Pages/SobreNosotros";
-import { useContext,useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { UserContext } from "../Contexts/UserContext";
+import ErrorPage from "../Pages/ErrorPage";
 const MainRouter = () => {
   const userContext = useContext(UserContext);
 
-
   const isUserAuthenticated = () => {
-    return userContext !== null && userContext !== undefined;
+    return false;
+    return (
+      userContext !== null && userContext !== undefined && userContext != ""
+    );
   };
-
 
   return (
     <>
@@ -31,6 +33,7 @@ const MainRouter = () => {
             <Route path="/" element={<Home />} />
             <Route path="/contacto" element={<Contacto />} />
             <Route path="/nosotros" element={<SobreNosotros />} />
+            <Route path="/error" element={<ErrorPage />} />
           </Routes>
           <Footer />
         </>
