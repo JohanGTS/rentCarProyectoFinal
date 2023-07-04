@@ -1,5 +1,4 @@
 import React, { useState, useReducer } from "react";
-import { reducerGeneral } from "../Reducers/reducerGeneral";
 import {
   getData,
   getAllData,
@@ -29,15 +28,14 @@ const FormDinamico = ({ fields, link }) => {
     e.preventDefault();
     const guardar = document.getElementById("guarda");
     guardar.focus();
+    console.log(formValues);
     if (!actualiza) {
       const data = await addData({
         link,
         formValues,
       });
-      console.log(data);
     } else {
       const data = await updateData(link, formValues);
-      console.log(data);
     }
   };
 
@@ -50,6 +48,7 @@ const FormDinamico = ({ fields, link }) => {
 
   const handleBlur = async (e) => {
     const { id, value } = e.target;
+    console.log(formValues)
     const data = await getData(link, formValues);
     if (data) {
       setFormValues(data);
@@ -66,7 +65,16 @@ const FormDinamico = ({ fields, link }) => {
       actualiza = false;
     }
   };
-
+{/* <select
+                  className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id={field.id}
+                >
+                  {field.options.map((option, optionIndex) => (
+                    <option value={option} key={optionIndex}>
+                      {option}
+                    </option>
+                  ))}
+                  </select>*/}
   return (
     <div className="container mx-auto">
       <div className="grid lg:grid-cols-1 gap-4 mt-4">
@@ -89,16 +97,15 @@ const FormDinamico = ({ fields, link }) => {
                 {field.label}
               </label>
               {field.busca ? (
-                <select
-                  className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id={field.id}
-                >
-                  {field.options.map((option, optionIndex) => (
-                    <option value={option} key={optionIndex}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
+                <input
+                className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id={field.id}
+                type={field.type}
+                placeholder={field.placeholder}
+                onChange={handleInputChange}
+                onBlur={handleBlur}
+              />
+               
               ) : (
                 <input
                   className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -106,11 +113,11 @@ const FormDinamico = ({ fields, link }) => {
                   type={field.type}
                   placeholder={field.placeholder}
                   onChange={handleInputChange}
-                  onBlur={handleBlur}
                 />
               )}
             </div>
           ))}
+          
           <div className="flex justify-end py-4">
             <button
               id="guarda"

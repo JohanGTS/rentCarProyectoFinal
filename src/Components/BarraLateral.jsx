@@ -26,7 +26,6 @@ export const BarraLateral = () => {
   const navigate = useNavigate();
   const logOut = () => {
     setUsuario(null);
-    console.log(usuario);
     navigate("/contacto");
   };
   const toggleMantenimiento = () => {
@@ -45,7 +44,7 @@ export const BarraLateral = () => {
     { label: "Color", value: "color", ruta: "color" },
     { label: "Combustible", value: "combustible", ruta: "combustible" },
     { label: "Documentos", value: "documento", ruta: "documento" },
-    { label: "Ciudades", value: "ciudad", ruta: "ciudades" },
+    { label: "Ciudades", value: "ciudad", ruta: "ciudad" },
     { label: "Estados", value: "estado", ruta: "estado" },
     { label: "Marcas", value: "marca", ruta: "marca" },
     { label: "Modelos", value: "modelos", ruta: "modelo" },
@@ -145,7 +144,11 @@ export const BarraLateral = () => {
                 <span className="flex-1 ml-3 whitespace-nowrap  ">
                   Mantenimientos
                 </span>
-                {!abrirMantenimiento ? <ChevronDownIcon /> : <ChevronUpIcon />}
+                {!abrirMantenimiento ? (
+                  <ChevronDownIcon className="w-1/6" />
+                ) : (
+                  <ChevronUpIcon className="w1-1/6" />
+                )}
               </button>
 
               {abrirMantenimiento && (
@@ -317,7 +320,7 @@ export const BarraLateral = () => {
               />
               <Route
                 path="/pieza"
-                element={<AdminHome campos={pieza} link={"v"} />}
+                element={<AdminHome campos={pieza} link={"pieza"} />}
               />
               <Route
                 path="/vehiculo"

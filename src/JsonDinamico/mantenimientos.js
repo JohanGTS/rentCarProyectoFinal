@@ -1,3 +1,11 @@
+import {
+  getData,
+  getAllData,
+  addData,
+  deleteData,
+  updateData,
+} from "../Features/apiCalls";
+
 export const fields = [
   {
     id: "name",
@@ -28,10 +36,10 @@ export const fields = [
     fullWidth: false,
   },
 ];
-
 export const color = [
   {
     id: "idColor_col",
+    busca:"a",
     label: "Id del color",
     type: "text",
     placeholder: "Digite el id del color",
@@ -48,6 +56,7 @@ export const color = [
 export const combustible = [
   {
     id: "idCombustible_com",
+    busca:"a",
     label: "Id del combustible",
     type: "text",
     placeholder: "Digite el id del combustible",
@@ -64,6 +73,7 @@ export const combustible = [
 export const ciudad = [
   {
     id: "idCiudad_ciu",
+    busca:"a",
     label: "Id de la ciudad",
     type: "text",
     placeholder: "Digite el id de la ciudad",
@@ -71,6 +81,7 @@ export const ciudad = [
   },
   {
     id: "idEstado_ciu",
+    busca:"a",
     label: "Id del estado",
     type: "text",
     placeholder: "Digite el id del estado",
@@ -88,6 +99,7 @@ export const documentos = [
   {
     id: "idDocumento_doc",
     label: "Id del documento",
+    busca:"a",
     type: "text",
     placeholder: "Digite el id del documento",
     fullWidth: true,
@@ -103,6 +115,7 @@ export const documentos = [
 export const estados = [
   {
     id: "idEstado_est",
+    busca:"y",
     label: "Id del estado",
     type: "text",
     placeholder: "Digite el id del estado",
@@ -110,6 +123,7 @@ export const estados = [
   },
   {
     id: "idPais_est",
+    busca:" ",
     label: "Id del país",
     type: "text",
     placeholder: "Digite el id del país",
@@ -127,6 +141,7 @@ export const tipoUsuario = [
   {
     id: "idTipoUsuario_tipusu",
     label: "Id del tipo de usuario",
+    busca:"a",
     type: "text",
     placeholder: "Digite el id del tipo de usuario",
     fullWidth: true,
@@ -142,6 +157,7 @@ export const tipoUsuario = [
 export const tipoVehiculo = [
   {
     id: "idTipoVehiculo_tipveh",
+    busca:"a",
     label: "Id del tipo de vehículo",
     type: "text",
     placeholder: "Digite el id del tipo de vehículo",
@@ -158,6 +174,7 @@ export const tipoVehiculo = [
 export const marca = [
   {
     id: "idMarca_mar",
+    busca:"a",
     label: "Id de la marca",
     type: "text",
     placeholder: "Digite el id de la marca",
@@ -174,6 +191,7 @@ export const marca = [
 export const modelo = [
   {
     id: "idModelo_mod",
+    busca:"a",
     label: "Id del modelo",
     type: "text",
     placeholder: "Digite el id del modelo",
@@ -181,6 +199,7 @@ export const modelo = [
   },
   {
     id: "idMarca_mod",
+    busca:"a",
     label: "Id de la marca",
     type: "text",
     placeholder: "Digite el id de la marca",
@@ -188,7 +207,7 @@ export const modelo = [
   },
   {
     id: "Descripcion_mod",
-    label: "Nombre del modelp",
+    label: "Nombre del modelo",
     type: "text",
     placeholder: "Digite el nombre del modelo",
     fullWidth: true,
@@ -197,6 +216,7 @@ export const modelo = [
 export const pais = [
   {
     id: "idPais_pai",
+    busca:"a",
     label: "Id del país",
     type: "text",
     placeholder: "Digite el id del país",
@@ -213,6 +233,7 @@ export const pais = [
 export const seguro = [
   {
     id: "idSeguro_seg",
+    busca:"a",
     label: "Id del seguro",
     type: "text",
     placeholder: "Digite el id del seguro",
@@ -236,6 +257,7 @@ export const seguro = [
 export const pieza = [
   {
     id: "idPieza_pie",
+    busca:"a",
     label: "Id de la pieza",
     type: "text",
     placeholder: "Digite el id de la pieza",
@@ -252,6 +274,7 @@ export const pieza = [
 export const vehiculo = [
   {
     id: "idVehiculo_veh",
+    busca:"a",
     label: "Id del vehiculo",
     type: "text",
     placeholder: "Digite el id del vehiculo",
@@ -259,6 +282,7 @@ export const vehiculo = [
   },
   {
     id: "idTipoVehiculo_veh",
+    busca:"a",
     label: "Id del tipo de vehiculo",
     type: "text",
     placeholder: "Digite el id del tipo de vehiculo",
@@ -266,6 +290,7 @@ export const vehiculo = [
   },
   {
     id: "idMarca_veh",
+    busca:"a",
     label: "Id del tipo de marca",
     type: "text",
     placeholder: "Digite el id del tipo de marca",
@@ -273,6 +298,7 @@ export const vehiculo = [
   },
   {
     id: "idModelo_veh",
+    busca:"a",
     label: "Id del tipo de modelo",
     type: "text",
     placeholder: "Digite el id del tipo de modelo",
@@ -315,6 +341,7 @@ export const vehiculo = [
   },
   {
     id: "idColor_veh",
+    busca:"a",
     label: "Id del color",
     type: "text",
     placeholder: "Digite el id del color",
@@ -322,6 +349,7 @@ export const vehiculo = [
   },
   {
     id: "idSeguro_veh",
+    busca:"a",
     label: "Id del seguro",
     type: "text",
     placeholder: "Digite el id del seguro",
@@ -343,6 +371,7 @@ export const vehiculo = [
   },
   {
     id: "idCombustible_veh",
+    busca:"a",
     label: "Id del combustible",
     type: "text",
     placeholder: "Digite el id del combustible",

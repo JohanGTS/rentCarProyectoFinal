@@ -45,7 +45,7 @@ const Navbar = () => {
           <ul className="hidden md:flex space-x-4">
             <ItemNavbar texto={"Automóviles"} to={"/home"} />
             <ItemNavbar texto={"Sobre nosotros"} to={"/nosotros"} />
-            <ItemNavbar texto={"Informaciones legales"} to={"/"} />
+            <ItemNavbar texto={"Términos y condiciones"} to={"/terminos"} />
             <ItemNavbar texto={"Contacto"} to={"/contacto"} />
           </ul>
         </ul>

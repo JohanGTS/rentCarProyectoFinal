@@ -10,14 +10,12 @@ import SobreNosotros from "../Pages/SobreNosotros";
 import { useContext, useEffect } from "react";
 import { UserContext } from "../Contexts/UserContext";
 import ErrorPage from "../Pages/ErrorPage";
+import TerminosCondiciones from "../Pages/TerminosCondiciones";
 const MainRouter = () => {
   const userContext = useContext(UserContext);
 
   const isUserAuthenticated = () => {
     return false;
-    return (
-      userContext !== null && userContext !== undefined && userContext != ""
-    );
   };
 
   return (
@@ -33,7 +31,8 @@ const MainRouter = () => {
             <Route path="/" element={<Home />} />
             <Route path="/contacto" element={<Contacto />} />
             <Route path="/nosotros" element={<SobreNosotros />} />
-            <Route path="/error" element={<ErrorPage />} />
+            <Route path="/terminos" element={<TerminosCondiciones />} />
+            <Route path="/*" element={<ErrorPage />} />
           </Routes>
           <Footer />
         </>
