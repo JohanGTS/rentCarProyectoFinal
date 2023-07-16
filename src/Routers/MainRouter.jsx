@@ -15,7 +15,9 @@ const MainRouter = () => {
   const userContext = useContext(UserContext);
 
   const isUserAuthenticated = () => {
-    return false;
+    let a = userContext.user != null && userContext.user != undefined && userContext.user!="null" ;
+    console.log(a);
+    return true;
   };
 
   return (

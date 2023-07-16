@@ -10,10 +10,10 @@ let actualiza = false;
 const limpiarForm = () => {
   const element = document.getElementById("formulario");
   element.reset();
-  setFormValues({});
+  setFormValues({})
   actualiza = false;
 };
-const FormDinamico = ({ fields, link }) => {
+const ProcesoDinamico = ({ fields, link }) => {
   const [formValues, setFormValues] = useState({});
   const handleInputChange = (e) => {
     const { id, value, type } = e.target;
@@ -25,9 +25,8 @@ const FormDinamico = ({ fields, link }) => {
   const handleSelectChange = (e) => {
     const { id, value } = e.target;
     const selectId = id; //
-    const optionId =
-      e.target.options[e.target.selectedIndex].getAttribute("data-key");
-
+    const optionId = e.target.options[e.target.selectedIndex].getAttribute("data-key");
+  
     setFormValues({
       ...formValues,
       [selectId]: parseInt(optionId),
@@ -48,7 +47,7 @@ const FormDinamico = ({ fields, link }) => {
     }
     limpiarForm();
   };
-
+  
   const handleEliminar = async (e) => {
     e.preventDefault();
     const eliminar = document.getElementById("elimina");
@@ -56,30 +55,17 @@ const FormDinamico = ({ fields, link }) => {
     const data = await deleteData(link, formValues);
     limpiarForm();
   };
-
+  
   const handleBlur = async (e) => {
     const data = await getData(link, formValues);
     if (data) {
       setFormValues(data);
       actualiza = true;
-      console.log(data);
+      console.log(actualiza)
       setTimeout(() => {
         Object.entries(data).forEach(([key, value]) => {
-
-          const field = document.getElssementById(key);
-          if (field && field.type === "select-one") {
-            const options = field.options;
-            console.log("entra");
-            for (let i = 0; i < options.length; i++) {
-              const option = options[i];
-              console.log(value);
-              if (option.getAttribute("data-key") == value) {
-                option.selected = true;
-                console.log(value);
-                break;
-              }
-            }
-          } else {
+          const field = document.getElementById(key);
+          if (field) {
             field.value = value;
           }
         });
@@ -176,4 +162,4 @@ const FormDinamico = ({ fields, link }) => {
     </div>
   );
 };
-export default FormDinamico;
+export default ProcesoDinamico;

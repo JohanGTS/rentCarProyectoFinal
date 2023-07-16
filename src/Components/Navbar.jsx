@@ -5,6 +5,8 @@ import ItemNavbar from "./ItemNavbar";
 import Boton from "./Boton";
 import LoginPopUp from "./ComponentsEspecificos/LoginPopUp";
 import { UserContext } from "../Contexts/UserContext";
+import RegisterPopUp from "./ComponentsEspecificos/RegisterPopUp";
+import { paises } from "../JsonDinamico/procesos";
 const Navbar = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -17,6 +19,7 @@ const Navbar = () => {
     () => setEstado(false);
   };
   let [estado, setEstado] = useState(false);
+  let [estado2, setEstado2] = useState(false);
   const campos = [
     {
       id: "email",
@@ -58,6 +61,15 @@ const Navbar = () => {
           onclick={() => setEstado(true)}
         />
         <LoginPopUp show={estado} onHide={() => setEstado(false)} />
+      </div>
+
+      <div className="flex justify-end md:justify-between">
+        <Boton
+          texto={"Registro"}
+          color={"red-600"}
+          onclick={() => setEstado2(true)}
+        />
+        <RegisterPopUp show={estado2} onHide={() => setEstado2(false)} paises={paises} />
       </div>
     </header>
   );

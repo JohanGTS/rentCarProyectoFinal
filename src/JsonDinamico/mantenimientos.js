@@ -6,40 +6,11 @@ import {
   updateData,
 } from "../Features/apiCalls";
 
-export const fields = [
-  {
-    id: "name",
-    label: "Name",
-    type: "text",
-    placeholder: "Enter your name",
-    fullWidth: false,
-  },
-  {
-    id: "apellido",
-    label: "Apellido",
-    type: "text",
-    placeholder: "Enter your last name",
-    fullWidth: false,
-  },
-  {
-    id: "country",
-    label: "Country",
-    busca: true,
-    options: ["USA", "Canada", "Mexico"],
-    fullWidth: true,
-  },
-  {
-    id: "email",
-    label: "Email",
-    type: "email",
-    placeholder: "Enter your email",
-    fullWidth: false,
-  },
-];
+
 export const color = [
   {
     id: "idColor_col",
-    busca:"a",
+    busca: "a",
     label: "Id del color",
     type: "text",
     placeholder: "Digite el id del color",
@@ -56,7 +27,7 @@ export const color = [
 export const combustible = [
   {
     id: "idCombustible_com",
-    busca:"a",
+    busca: "a",
     label: "Id del combustible",
     type: "text",
     placeholder: "Digite el id del combustible",
@@ -73,7 +44,7 @@ export const combustible = [
 export const ciudad = [
   {
     id: "idCiudad_ciu",
-    busca:"a",
+    busca: "a",
     label: "Id de la ciudad",
     type: "text",
     placeholder: "Digite el id de la ciudad",
@@ -81,7 +52,7 @@ export const ciudad = [
   },
   {
     id: "idEstado_ciu",
-    busca:"a",
+    retorna: await getAllData("estado"),
     label: "Id del estado",
     type: "text",
     placeholder: "Digite el id del estado",
@@ -99,7 +70,7 @@ export const documentos = [
   {
     id: "idDocumento_doc",
     label: "Id del documento",
-    busca:"a",
+    busca: "a",
     type: "text",
     placeholder: "Digite el id del documento",
     fullWidth: true,
@@ -115,7 +86,7 @@ export const documentos = [
 export const estados = [
   {
     id: "idEstado_est",
-    busca:"y",
+    busca: "y",
     label: "Id del estado",
     type: "text",
     placeholder: "Digite el id del estado",
@@ -123,10 +94,10 @@ export const estados = [
   },
   {
     id: "idPais_est",
-    busca:" ",
     label: "Id del país",
     type: "text",
     placeholder: "Digite el id del país",
+    retorna: await getAllData("pais"),
     fullWidth: true,
   },
   {
@@ -141,7 +112,7 @@ export const tipoUsuario = [
   {
     id: "idTipoUsuario_tipusu",
     label: "Id del tipo de usuario",
-    busca:"a",
+    busca: "a",
     type: "text",
     placeholder: "Digite el id del tipo de usuario",
     fullWidth: true,
@@ -157,7 +128,7 @@ export const tipoUsuario = [
 export const tipoVehiculo = [
   {
     id: "idTipoVehiculo_tipveh",
-    busca:"a",
+    busca: "a",
     label: "Id del tipo de vehículo",
     type: "text",
     placeholder: "Digite el id del tipo de vehículo",
@@ -174,7 +145,7 @@ export const tipoVehiculo = [
 export const marca = [
   {
     id: "idMarca_mar",
-    busca:"a",
+    busca: "a",
     label: "Id de la marca",
     type: "text",
     placeholder: "Digite el id de la marca",
@@ -191,7 +162,7 @@ export const marca = [
 export const modelo = [
   {
     id: "idModelo_mod",
-    busca:"a",
+    busca: "a",
     label: "Id del modelo",
     type: "text",
     placeholder: "Digite el id del modelo",
@@ -199,7 +170,7 @@ export const modelo = [
   },
   {
     id: "idMarca_mod",
-    busca:"a",
+    retorna: await getAllData("marca"),
     label: "Id de la marca",
     type: "text",
     placeholder: "Digite el id de la marca",
@@ -216,7 +187,7 @@ export const modelo = [
 export const pais = [
   {
     id: "idPais_pai",
-    busca:"a",
+    busca: "a",
     label: "Id del país",
     type: "text",
     placeholder: "Digite el id del país",
@@ -233,7 +204,7 @@ export const pais = [
 export const seguro = [
   {
     id: "idSeguro_seg",
-    busca:"a",
+    busca: "a",
     label: "Id del seguro",
     type: "text",
     placeholder: "Digite el id del seguro",
@@ -257,7 +228,7 @@ export const seguro = [
 export const pieza = [
   {
     id: "idPieza_pie",
-    busca:"a",
+    busca: "a",
     label: "Id de la pieza",
     type: "text",
     placeholder: "Digite el id de la pieza",
@@ -271,10 +242,16 @@ export const pieza = [
     fullWidth: true,
   },
 ];
+export const todosVehiculos= [
+  {retorna: await getAllData("vehiculo")}
+]
+export const todosClientes= [
+  {retorna: await getAllData("personal/cliente")}
+]
 export const vehiculo = [
   {
     id: "idVehiculo_veh",
-    busca:"a",
+    busca: "a",
     label: "Id del vehiculo",
     type: "text",
     placeholder: "Digite el id del vehiculo",
@@ -282,7 +259,7 @@ export const vehiculo = [
   },
   {
     id: "idTipoVehiculo_veh",
-    busca:"a",
+    retorna: await getAllData("tipovehiculo"),
     label: "Id del tipo de vehiculo",
     type: "text",
     placeholder: "Digite el id del tipo de vehiculo",
@@ -290,7 +267,7 @@ export const vehiculo = [
   },
   {
     id: "idMarca_veh",
-    busca:"a",
+    retorna: await getAllData("marca"),
     label: "Id del tipo de marca",
     type: "text",
     placeholder: "Digite el id del tipo de marca",
@@ -298,7 +275,7 @@ export const vehiculo = [
   },
   {
     id: "idModelo_veh",
-    busca:"a",
+    retorna: await getAllData("modelo"),
     label: "Id del tipo de modelo",
     type: "text",
     placeholder: "Digite el id del tipo de modelo",
@@ -314,7 +291,7 @@ export const vehiculo = [
   {
     id: "Año_veh",
     label: "Año fabricación",
-    type: "text",
+    type: "number",
     placeholder: "Digite el año del vehículo",
     fullWidth: true,
   },
@@ -327,7 +304,7 @@ export const vehiculo = [
   },
   {
     id: "Matricula_veh",
-    label: "Matrículo",
+    label: "Matrícula",
     type: "text",
     placeholder: "Digite la matrícula",
     fullWidth: true,
@@ -341,7 +318,7 @@ export const vehiculo = [
   },
   {
     id: "idColor_veh",
-    busca:"a",
+    retorna: await getAllData("color"),
     label: "Id del color",
     type: "text",
     placeholder: "Digite el id del color",
@@ -349,7 +326,7 @@ export const vehiculo = [
   },
   {
     id: "idSeguro_veh",
-    busca:"a",
+    retorna: await getAllData("seguro"),
     label: "Id del seguro",
     type: "text",
     placeholder: "Digite el id del seguro",
@@ -371,7 +348,7 @@ export const vehiculo = [
   },
   {
     id: "idCombustible_veh",
-    busca:"a",
+    retorna: await getAllData("combustible"),
     label: "Id del combustible",
     type: "text",
     placeholder: "Digite el id del combustible",
@@ -384,4 +361,125 @@ export const vehiculo = [
     placeholder: "Digite la cantidad de combustible soporta",
     fullWidth: true,
   },
+];
+export const user = [
+  {
+    id: "idTercero_ter",
+    busca: "a",
+    label: "Id del usuario",
+    type: "text",
+    placeholder: "Digite el id del usuario",
+    fullWidth: true,
+  },
+  {
+    id: "Nombre_ter",
+    label: "Nombre completo",
+    type: "text",
+    placeholder: "Digite el nombre completo",
+    fullWidth: true,
+  },
+  {
+    id: "Telefono_ter",
+    label: "Teléfono",
+    type: "text",
+    placeholder: "Digite el teléfono completo",
+    fullWidth: true,
+  },
+  {
+    id: "idDocumento_ter",
+    retorna: await getAllData("documento"),
+    label: "Id del tipo de modelo",
+    type: "text",
+    placeholder: "Digite el id del tipo de modelo",
+    fullWidth: true,
+  },
+  {
+    id: "Documento_ter",
+    label: "Documento",
+    type: "text",
+    placeholder: "Digite el número del documento",
+    fullWidth: true,
+  },
+  {
+    id: "Fecha_Nacimiento_ter",
+    label: "Nombre de la transmisión",
+    type: "date",
+    placeholder: "Digite el nombre de la transmisión",
+    fullWidth: true,
+  },
+  {
+    id: "Correo_ter",
+    label: "Correo electrónico",
+    type: "mail",
+    placeholder: "Digite su correo",
+    fullWidth: true,
+  },
+  {
+    id: "idTipoUsuario_usu",
+    retorna: await getAllData("tipousuario"),
+    label: "Id del tipo de usuario",
+    type: "text",
+    placeholder: "Digite el id del tipo de modelo",
+    fullWidth: true,
+  },
+  {
+    id: "Nombre_usu",
+    label: "Nombre de usuario",
+    type: "mail",
+    placeholder: "Digite su usuario",
+    fullWidth: true,
+  },
+  {
+    id: "Clave_usu",
+    label: "Contraseña",
+    type: "password",
+    placeholder: "Digite la contraseña",
+    fullWidth: true,
+  },
+  {
+    id: "Fecha_Ingreso_usu",
+    label: "Fecha de ingreso",
+    type: "date",
+    placeholder: "Digite la disponibilidad",
+    fullWidth: true,
+  },
+  {
+    id: "Pais_dir",
+    retorna: await getAllData("pais"),
+    label: "Id del pais",
+    type: "text",
+    placeholder: "Digite el id del país",
+    fullWidth: true,
+  },
+  {
+    id: "Ciudad_dir",
+    retorna: await getAllData("ciudad"),
+    label: "Id de la ciudad",
+    type: "text",
+    placeholder: "Digite el id de la ciudad",
+    fullWidth: true,
+  },
+  {
+    id: "Estado_dir",
+    retorna: await getAllData("estado"),
+    label: "Id del estado",
+    type: "text",
+    placeholder: "Digite el id del estado",
+    fullWidth: true,
+  },
+  {
+    id: "CodigoPostal_dir",
+    label: "Código postal",
+    type: "text",
+    placeholder: "Código postal",
+    fullWidth: true,
+  },
+  {
+    id: "Especificacion_terdir",
+    label: "Resto de la dirección",
+    type: "text",
+    placeholder: "Digite el resto de la dirección",
+    fullWidth: true,
+  },
+
 ];

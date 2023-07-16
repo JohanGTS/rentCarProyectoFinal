@@ -1,5 +1,5 @@
 import axios from "axios";
-
+//http://d0878ff6b82c-18129876520898750185.ngrok-free.app/
 const primaryPath = "http://localhost:3000/";
 
 export const getAllData = async (ruta) => {
@@ -14,7 +14,7 @@ export const getAllData = async (ruta) => {
 export const getData = async (ruta, data) => {
   try {
     const id = data[Object.keys(data)[0]];
-    let total=`${primaryPath}${ruta}/${id}`
+    let total = `${primaryPath}${ruta}/${id}`;
     const res = await axios.get(total);
     return res.data;
   } catch (err) {
@@ -23,13 +23,11 @@ export const getData = async (ruta, data) => {
   }
 };
 
-export const addData = async (ruta) => {
+export const addData = async (ruta, data) => {
   try {
-    const data = ruta.formValues;
-    const link = ruta.link;
     data[Object.keys(data)[0]] = 0;
-    console.log(data);
-    const res = await axios.post(`${primaryPath}${link}/`, data);
+    console.log(data)
+    const res = await axios.post(`${primaryPath}${ruta}/`, data);
     return res.data;
   } catch (err) {
     console.log(err);
@@ -49,7 +47,7 @@ export const deleteData = async (ruta, data) => {
 
 export const updateData = async (ruta, data) => {
   try {
-    console.log(data)
+    console.log(data);
     const dataId = data[Object.keys(data)[0]];
     const res = await axios.put(`${primaryPath}${ruta}/` + dataId, data);
     return res.data;

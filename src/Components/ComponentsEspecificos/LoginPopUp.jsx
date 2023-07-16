@@ -21,7 +21,6 @@ const LoginPopUp = (props) => {
     if (usuario) {
       props.onHide();
       navigate("/dashboard");
-      console.log("si");
     }
   };
 

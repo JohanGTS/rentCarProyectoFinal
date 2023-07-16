@@ -4,7 +4,6 @@ import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/solid";
 import { UserContext } from "../Contexts/UserContext";
 import { AdminHome } from "../Pages/AdminHome";
 import {
-  fields,
   color,
   combustible,
   ciudad,
@@ -18,11 +17,19 @@ import {
   seguro,
   pieza,
   vehiculo,
+  todosVehiculos,
+  todosClientes,
+  user,
 } from "../JsonDinamico/mantenimientos";
 import { DashBoard } from "../Pages/DashBoard";
+import { AddImagen } from "./ComponentsEspecificos/AddImagen";
+import ReportePedido from "./Reports/ReportePedidos";
+import { RegistrarCompra } from "./Procesos/RegistrarCompra";
+import ProcesoDinamico from "./ProcesoDinamico";
 export const BarraLateral = () => {
   const { usuario, setUsuario } = useContext(UserContext);
   const [abrirMantenimiento, setAbrirMantenimiento] = useState(false);
+  const [abrirProceso, setAbrirProceso] = useState(false);
   const navigate = useNavigate();
   const logOut = () => {
     setUsuario(null);
@@ -30,6 +37,11 @@ export const BarraLateral = () => {
   };
   const toggleMantenimiento = () => {
     setAbrirMantenimiento((abrir) => !abrir);
+    setAbrirProceso(false);
+  };
+  const toggleProceso = () => {
+    setAbrirProceso((abrir) => !abrir);
+    setAbrirMantenimiento(false);
   };
   const toDashboard = () => {
     navigate("/dashboard");
@@ -40,6 +52,13 @@ export const BarraLateral = () => {
       navigate(`/${ruta}`);
     }
   };
+  const dropDownProcesos = [
+    {
+      label: "Registrar compra",
+      value: "registrarCompra",
+      ruta: "registrarCompra",
+    },
+  ];
   const dropdownItems = [
     { label: "Color", value: "color", ruta: "color" },
     { label: "Combustible", value: "combustible", ruta: "combustible" },
@@ -57,6 +76,7 @@ export const BarraLateral = () => {
       value: "tipoVehiculo",
       ruta: "tipoVehiculo",
     },
+    { label: "Usuarios", value: "usuario", ruta: "usuario" },
     { label: "Vehículos", value: "vehiculo", ruta: "vehiculo" },
   ];
   return (
@@ -178,7 +198,7 @@ export const BarraLateral = () => {
               )}
             </ul>
             <li>
-              <a
+              <button
                 href="#"
                 className="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100 "
               >
@@ -193,12 +213,13 @@ export const BarraLateral = () => {
                   <path d="M3 5a2 2 0 012-2h1a1 1 0 010 2H5v7h2l1 2h4l1-2h2V5h-1a1 1 0 110-2h1a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5z" />
                 </svg>
                 <span className="flex-1 ml-3 whitespace-nowrap">Reportes</span>
-              </a>
+              </button>
             </li>
-            <li>
-              <a
+            <ul>
+              <button
                 href="#"
                 className="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100 "
+                onClick={toggleProceso}
               >
                 <svg
                   aria-hidden="true"
@@ -214,29 +235,42 @@ export const BarraLateral = () => {
                   />
                 </svg>
                 <span className="flex-1 ml-3 whitespace-nowrap">Procesos</span>
-              </a>
-            </li>
-            {/*<li>
-              <a
-                href="#"
-                className="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100 "
-              >
-                <svg
-                  aria-hidden="true"
-                  className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75text-gray-400 group-hover:text-white"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                <span className="flex-1 ml-3 whitespace-nowrap">Products</span>
-              </a>
-  </li>*/}
+                {!abrirMantenimiento ? (
+                  <ChevronDownIcon className="w-1/6" />
+                ) : (
+                  <ChevronUpIcon className="w1-1/6" />
+                )}
+              </button>
+              {abrirProceso && (
+                <div>
+                  {dropDownProcesos.map((item, index) => (
+                    <li key={index}>
+                      <button
+                        className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
+                        onClick={() => navega(item.ruta)}
+                      >
+                        <svg
+                          aria-hidden="true"
+                          className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75text-gray-400 group-hover:text-white"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                        <span className="flex-1 ml-3 whitespace-nowrap">
+                          {item.label}
+                        </span>
+                      </button>
+                    </li>
+                  ))}
+                </div>
+              )}
+            </ul>
             <li>
               <a
                 href="#"
@@ -323,11 +357,19 @@ export const BarraLateral = () => {
                 element={<AdminHome campos={pieza} link={"pieza"} />}
               />
               <Route
+                path="/usuario"
+                element={<AdminHome campos={user} link={"usuario"} />}
+              />
+              <Route
                 path="/vehiculo"
                 element={<AdminHome campos={vehiculo} link={"vehiculo"} />}
               />
-
-              {/* Agrega más rutas y componentes aquí */}
+              <Route
+                path="/vehiculo"
+                element={<AdminHome campos={vehiculo} link={"vehiculo"} />}
+              />
+              <Route path="/prueba" element={<ReportePedido order={order} />} />
+              <Route path="/registrarCompra" element={<RegistrarCompra vehiculos={todosVehiculos} clientes={todosClientes}/>} />
             </Routes>
           </div>
         </div>
@@ -335,4 +377,60 @@ export const BarraLateral = () => {
     </>
   );
   a;
+};
+const order = {
+  orderNumber: "1234567890",
+  date: "01 de julio de 2023",
+  shippingAddress: "Calle Principal 123, Ciudad, Estado, Código Postal",
+  items: [
+    { product: "Producto 1 Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1", price: "$10.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$40.00"},
+    { product: "Producto 2", price: "$20.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$80.00"},
+    { product: "Producto 3", price: "$15.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$60.00"},
+    { product: "Producto 1", price: "$10.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$40.00"},
+    { product: "Producto 2", price: "$20.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$80.00"},
+    { product: "Producto 3", price: "$15.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$60.00"},
+    { product: "Producto 1", price: "$10.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$40.00"},
+    { product: "Producto 2", price: "$20.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$80.00"},
+    { product: "Producto 3", price: "$15.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$60.00"},
+    { product: "Producto 1", price: "$10.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$40.00"},
+    { product: "Producto 2", price: "$20.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$80.00"},
+    { product: "Producto 3", price: "$15.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$60.00"},
+    { product: "Producto 1", price: "$10.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$40.00"},
+    { product: "Producto 2", price: "$20.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$80.00"},
+    { product: "Producto 3", price: "$15.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$60.00"},
+    { product: "Producto 1", price: "$10.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$40.00"},
+    { product: "Producto 2", price: "$20.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$80.00"},
+    { product: "Producto 3", price: "$15.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$60.00"},
+    { product: "Producto 1", price: "$10.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$40.00"},
+    { product: "Producto 2", price: "$20.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$80.00"},
+    { product: "Producto 3", price: "$15.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$60.00"},
+    { product: "Producto 1", price: "$10.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$40.00"},
+    { product: "Producto 2", price: "$20.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$80.00"},
+    { product: "Producto 3", price: "$15.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$60.00"},
+    { product: "Producto 1", price: "$10.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$40.00"},
+    { product: "Producto 2", price: "$20.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$80.00"},
+    { product: "Producto 3", price: "$15.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$60.00"},
+    { product: "Producto 1", price: "$10.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$40.00"},
+    { product: "Producto 2", price: "$20.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$80.00"},
+    { product: "Producto 3", price: "$15.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$60.00"},
+    { product: "Producto 1", price: "$10.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$40.00"},
+    { product: "Producto 2", price: "$20.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$80.00"},
+    { product: "Producto 3", price: "$15.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$60.00"},
+    { product: "Producto 1", price: "$10.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$40.00"},
+    { product: "Producto 2", price: "$20.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$80.00"},
+    { product: "Producto 3", price: "$15.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$60.00"},
+    { product: "Producto 1", price: "$10.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$40.00"},
+    { product: "Producto 2", price: "$20.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$80.00"},
+    { product: "Producto 3", price: "$15.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$60.00"},
+    { product: "Producto 1", price: "$10.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$40.00"},
+    { product: "Producto 2", price: "$20.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$80.00"},
+    { product: "Producto 3", price: "$15.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$60.00"},
+    { product: "Producto 1", price: "$10.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$40.00"},
+    { product: "Producto 2", price: "$20.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$80.00"},
+    { product: "Producto 3", price: "$15.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$60.00"},
+  ],
+  subtotal: "$45.00",
+  taxes: "$4.50",
+  shipping: "$0.00",
+  total: "$49.50",
 };
