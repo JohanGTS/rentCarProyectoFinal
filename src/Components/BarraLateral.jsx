@@ -24,6 +24,11 @@ import { DashBoard } from "../Pages/DashBoard";
 import { AddImagen } from "./ComponentsEspecificos/AddImagen";
 import ReportePedido from "./Reports/ReportePedidos";
 import { RegistrarCompra } from "./Procesos/RegistrarCompra";
+import {
+  ReporteClientesFrecuentes,
+  ReporteOrdenesRecientes,
+  ReporteVehiculosMasRentados,
+} from "../JsonDinamico/reportes"
 import ProcesoDinamico from "./ProcesoDinamico";
 import { Elements } from "@stripe/react-stripe-js";
 export const BarraLateral = () => {
@@ -33,6 +38,7 @@ export const BarraLateral = () => {
   const { usuario, setUsuario } = useContext(UserContext);
   const [abrirMantenimiento, setAbrirMantenimiento] = useState(false);
   const [abrirProceso, setAbrirProceso] = useState(false);
+  const [abrirReporte, setAbrirReporte] = useState(false);
   const navigate = useNavigate();
   const logOut = () => {
     setUsuario(null);
@@ -41,10 +47,17 @@ export const BarraLateral = () => {
   const toggleMantenimiento = () => {
     setAbrirMantenimiento((abrir) => !abrir);
     setAbrirProceso(false);
+    setAbrirReporte(false);
   };
   const toggleProceso = () => {
     setAbrirProceso((abrir) => !abrir);
     setAbrirMantenimiento(false);
+    setAbrirReporte(false);
+  };
+  const toggleReporte = () => {
+    setAbrirReporte((abrir) => !abrir);
+    setAbrirMantenimiento(false);
+    setAbrirProceso(false);
   };
   const toDashboard = () => {
     navigate("/dashboard");
@@ -62,6 +75,25 @@ export const BarraLateral = () => {
       ruta: "registrarCompra",
     },
   ];
+
+  const dropDownReportes = [
+    {
+      label: "Reporte Clientes Frecuentes",
+      value: "reporteClientesFrecuentes",
+      ruta: "reporteClientesFrecuentes",
+    },
+    {
+      label: "Reporte Ordenes Recientes",
+      value: "reporteOrdenesRecientes",
+      ruta: "reporteOrdenesRecientes",
+    },
+    {
+      label: "Reporte Vehiculos Mas Rentados",
+      value: "reporteVehiculosMasRentados",
+      ruta: "reporteVehiculosMasRentados",
+    },
+  ];
+
   const dropdownItems = [
     { label: "Color", value: "color", ruta: "color" },
     { label: "Combustible", value: "combustible", ruta: "combustible" },
@@ -74,11 +106,7 @@ export const BarraLateral = () => {
     { label: "Piezas", value: "pieza", ruta: "pieza" },
     { label: "Seguros", value: "seguro", ruta: "seguro" },
     { label: "Tipos de usuarios", value: "tipoUsuario", ruta: "tipoUsuario" },
-    {
-      label: "Tipos de vehículos",
-      value: "tipoVehiculo",
-      ruta: "tipoVehiculo",
-    },
+    { label: "Tipos de vehículos", value: "tipoVehiculo", ruta: "tipoVehiculo"},
     { label: "Usuarios", value: "usuario", ruta: "usuario" },
     { label: "Vehículos", value: "vehiculo", ruta: "vehiculo" },
   ];
@@ -167,7 +195,7 @@ export const BarraLateral = () => {
                 <span className="flex-1 ml-3 whitespace-nowrap  ">
                   Mantenimientos
                 </span>
-                {!abrirMantenimiento ? (
+                {!abrirProceso || !abrirReporte ? (
                   <ChevronDownIcon className="w-1/6" />
                 ) : (
                   <ChevronUpIcon className="w1-1/6" />
@@ -200,24 +228,6 @@ export const BarraLateral = () => {
                 </div>
               )}
             </ul>
-            <li>
-              <button
-                href="#"
-                className="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100 "
-              >
-                <svg
-                  aria-hidden="true"
-                  className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75text-gray-400 group-hover:text-white"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M8.707 7.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l2-2a1 1 0 00-1.414-1.414L11 7.586V3a1 1 0 10-2 0v4.586l-.293-.293z" />
-                  <path d="M3 5a2 2 0 012-2h1a1 1 0 010 2H5v7h2l1 2h4l1-2h2V5h-1a1 1 0 110-2h1a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5z" />
-                </svg>
-                <span className="flex-1 ml-3 whitespace-nowrap">Reportes</span>
-              </button>
-            </li>
             <ul>
               <button
                 href="#"
@@ -238,7 +248,7 @@ export const BarraLateral = () => {
                   />
                 </svg>
                 <span className="flex-1 ml-3 whitespace-nowrap">Procesos</span>
-                {!abrirMantenimiento ? (
+                {!abrirMantenimiento || !abrirReporte ? (
                   <ChevronDownIcon className="w-1/6" />
                 ) : (
                   <ChevronUpIcon className="w1-1/6" />
@@ -274,6 +284,63 @@ export const BarraLateral = () => {
                 </div>
               )}
             </ul>
+            <ul>
+              <button
+                href="#"
+                className="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100 "
+                onClick={toggleReporte}
+              >
+                <svg
+                  aria-hidden="true"
+                  className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75text-gray-400 group-hover:text-white"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <span className="flex-1 ml-3 whitespace-nowrap">Reportes</span>
+                {!abrirMantenimiento || !abrirProceso ? (
+                  <ChevronDownIcon className="w-1/6" />
+                ) : (
+                  <ChevronUpIcon className="w1-1/6" />
+                )}
+              </button>
+              {abrirReporte && (
+                <div>
+                  {dropDownReportes.map((item, index) => (
+                    <li key={index}>
+                      <button
+                        className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
+                        onClick={() => navega(item.ruta)}
+                      >
+                        <svg
+                          aria-hidden="true"
+                          className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75text-gray-400 group-hover:text-white"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                        <span className="flex-1 ml-3 whitespace-nowrap">
+                          {item.label}
+                        </span>
+                      </button>
+                    </li>
+                  ))}
+                </div>
+              )}
+            </ul>
+
             <li>
               <a
                 href="#"
@@ -304,7 +371,9 @@ export const BarraLateral = () => {
         <div className="p-4   rounded-lg mt-14">
           <div className=" gap-4 mb-4">
             <Routes>
-              <Route path="/dashboard" element={<DashBoard />} />
+              <Route 
+              path="/dashboard" 
+              element={<DashBoard />} />
               <Route
                 path="/color"
                 element={<AdminHome campos={color} link={"color"} />}
@@ -380,6 +449,9 @@ export const BarraLateral = () => {
                   </Elements>
                 }
               />
+              <Route path="/reporteClientesFrecuentes" element={ <ReporteClientesFrecuentes />}/>
+              <Route path="/reporteOrdenesRecientes" element={ <ReporteOrdenesRecientes />}/>
+              <Route path="/reporteVehiculosMasRentados" element={ <ReporteVehiculosMasRentados />}/>
             </Routes>
           </div>
         </div>
@@ -389,329 +461,329 @@ export const BarraLateral = () => {
   a;
 };
 const order = {
-  orderNumber: "1234567890",
-  date: "01 de julio de 2023",
-  shippingAddress: "Calle Principal 123, Ciudad, Estado, Código Postal",
-  items: [
-    {
-      product:
-        "Producto 1 Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1",
-      price: "$10.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$40.00",
-    },
-    {
-      product: "Producto 2",
-      price: "$20.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$80.00",
-    },
-    {
-      product: "Producto 3",
-      price: "$15.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$60.00",
-    },
-    {
-      product: "Producto 1",
-      price: "$10.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$40.00",
-    },
-    {
-      product: "Producto 2",
-      price: "$20.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$80.00",
-    },
-    {
-      product: "Producto 3",
-      price: "$15.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$60.00",
-    },
-    {
-      product: "Producto 1",
-      price: "$10.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$40.00",
-    },
-    {
-      product: "Producto 2",
-      price: "$20.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$80.00",
-    },
-    {
-      product: "Producto 3",
-      price: "$15.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$60.00",
-    },
-    {
-      product: "Producto 1",
-      price: "$10.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$40.00",
-    },
-    {
-      product: "Producto 2",
-      price: "$20.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$80.00",
-    },
-    {
-      product: "Producto 3",
-      price: "$15.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$60.00",
-    },
-    {
-      product: "Producto 1",
-      price: "$10.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$40.00",
-    },
-    {
-      product: "Producto 2",
-      price: "$20.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$80.00",
-    },
-    {
-      product: "Producto 3",
-      price: "$15.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$60.00",
-    },
-    {
-      product: "Producto 1",
-      price: "$10.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$40.00",
-    },
-    {
-      product: "Producto 2",
-      price: "$20.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$80.00",
-    },
-    {
-      product: "Producto 3",
-      price: "$15.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$60.00",
-    },
-    {
-      product: "Producto 1",
-      price: "$10.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$40.00",
-    },
-    {
-      product: "Producto 2",
-      price: "$20.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$80.00",
-    },
-    {
-      product: "Producto 3",
-      price: "$15.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$60.00",
-    },
-    {
-      product: "Producto 1",
-      price: "$10.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$40.00",
-    },
-    {
-      product: "Producto 2",
-      price: "$20.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$80.00",
-    },
-    {
-      product: "Producto 3",
-      price: "$15.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$60.00",
-    },
-    {
-      product: "Producto 1",
-      price: "$10.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$40.00",
-    },
-    {
-      product: "Producto 2",
-      price: "$20.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$80.00",
-    },
-    {
-      product: "Producto 3",
-      price: "$15.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$60.00",
-    },
-    {
-      product: "Producto 1",
-      price: "$10.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$40.00",
-    },
-    {
-      product: "Producto 2",
-      price: "$20.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$80.00",
-    },
-    {
-      product: "Producto 3",
-      price: "$15.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$60.00",
-    },
-    {
-      product: "Producto 1",
-      price: "$10.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$40.00",
-    },
-    {
-      product: "Producto 2",
-      price: "$20.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$80.00",
-    },
-    {
-      product: "Producto 3",
-      price: "$15.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$60.00",
-    },
-    {
-      product: "Producto 1",
-      price: "$10.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$40.00",
-    },
-    {
-      product: "Producto 2",
-      price: "$20.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$80.00",
-    },
-    {
-      product: "Producto 3",
-      price: "$15.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$60.00",
-    },
-    {
-      product: "Producto 1",
-      price: "$10.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$40.00",
-    },
-    {
-      product: "Producto 2",
-      price: "$20.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$80.00",
-    },
-    {
-      product: "Producto 3",
-      price: "$15.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$60.00",
-    },
-    {
-      product: "Producto 1",
-      price: "$10.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$40.00",
-    },
-    {
-      product: "Producto 2",
-      price: "$20.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$80.00",
-    },
-    {
-      product: "Producto 3",
-      price: "$15.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$60.00",
-    },
-    {
-      product: "Producto 1",
-      price: "$10.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$40.00",
-    },
-    {
-      product: "Producto 2",
-      price: "$20.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$80.00",
-    },
-    {
-      product: "Producto 3",
-      price: "$15.00",
-      fechaI: "02/12/2021",
-      fechaF: "06/12/2021",
-      monto: "$60.00",
-    },
-  ],
-  subtotal: "$45.00",
-  taxes: "$4.50",
-  shipping: "$0.00",
-  total: "$49.50",
+  // orderNumber: "1234567890",
+  // date: "01 de julio de 2023",
+  // shippingAddress: "Calle Principal 123, Ciudad, Estado, Código Postal",
+  // items: [
+  //   {
+  //     product:
+  //       "Producto 1 Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1",
+  //     price: "$10.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$40.00",
+  //   },
+  //   {
+  //     product: "Producto 2",
+  //     price: "$20.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$80.00",
+  //   },
+  //   {
+  //     product: "Producto 3",
+  //     price: "$15.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$60.00",
+  //   },
+  //   {
+  //     product: "Producto 1",
+  //     price: "$10.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$40.00",
+  //   },
+  //   {
+  //     product: "Producto 2",
+  //     price: "$20.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$80.00",
+  //   },
+  //   {
+  //     product: "Producto 3",
+  //     price: "$15.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$60.00",
+  //   },
+  //   {
+  //     product: "Producto 1",
+  //     price: "$10.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$40.00",
+  //   },
+  //   {
+  //     product: "Producto 2",
+  //     price: "$20.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$80.00",
+  //   },
+  //   {
+  //     product: "Producto 3",
+  //     price: "$15.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$60.00",
+  //   },
+  //   {
+  //     product: "Producto 1",
+  //     price: "$10.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$40.00",
+  //   },
+  //   {
+  //     product: "Producto 2",
+  //     price: "$20.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$80.00",
+  //   },
+  //   {
+  //     product: "Producto 3",
+  //     price: "$15.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$60.00",
+  //   },
+  //   {
+  //     product: "Producto 1",
+  //     price: "$10.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$40.00",
+  //   },
+  //   {
+  //     product: "Producto 2",
+  //     price: "$20.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$80.00",
+  //   },
+  //   {
+  //     product: "Producto 3",
+  //     price: "$15.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$60.00",
+  //   },
+  //   {
+  //     product: "Producto 1",
+  //     price: "$10.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$40.00",
+  //   },
+  //   {
+  //     product: "Producto 2",
+  //     price: "$20.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$80.00",
+  //   },
+  //   {
+  //     product: "Producto 3",
+  //     price: "$15.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$60.00",
+  //   },
+  //   {
+  //     product: "Producto 1",
+  //     price: "$10.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$40.00",
+  //   },
+  //   {
+  //     product: "Producto 2",
+  //     price: "$20.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$80.00",
+  //   },
+  //   {
+  //     product: "Producto 3",
+  //     price: "$15.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$60.00",
+  //   },
+  //   {
+  //     product: "Producto 1",
+  //     price: "$10.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$40.00",
+  //   },
+  //   {
+  //     product: "Producto 2",
+  //     price: "$20.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$80.00",
+  //   },
+  //   {
+  //     product: "Producto 3",
+  //     price: "$15.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$60.00",
+  //   },
+  //   {
+  //     product: "Producto 1",
+  //     price: "$10.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$40.00",
+  //   },
+  //   {
+  //     product: "Producto 2",
+  //     price: "$20.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$80.00",
+  //   },
+  //   {
+  //     product: "Producto 3",
+  //     price: "$15.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$60.00",
+  //   },
+  //   {
+  //     product: "Producto 1",
+  //     price: "$10.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$40.00",
+  //   },
+  //   {
+  //     product: "Producto 2",
+  //     price: "$20.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$80.00",
+  //   },
+  //   {
+  //     product: "Producto 3",
+  //     price: "$15.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$60.00",
+  //   },
+  //   {
+  //     product: "Producto 1",
+  //     price: "$10.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$40.00",
+  //   },
+  //   {
+  //     product: "Producto 2",
+  //     price: "$20.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$80.00",
+  //   },
+  //   {
+  //     product: "Producto 3",
+  //     price: "$15.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$60.00",
+  //   },
+  //   {
+  //     product: "Producto 1",
+  //     price: "$10.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$40.00",
+  //   },
+  //   {
+  //     product: "Producto 2",
+  //     price: "$20.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$80.00",
+  //   },
+  //   {
+  //     product: "Producto 3",
+  //     price: "$15.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$60.00",
+  //   },
+  //   {
+  //     product: "Producto 1",
+  //     price: "$10.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$40.00",
+  //   },
+  //   {
+  //     product: "Producto 2",
+  //     price: "$20.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$80.00",
+  //   },
+  //   {
+  //     product: "Producto 3",
+  //     price: "$15.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$60.00",
+  //   },
+  //   {
+  //     product: "Producto 1",
+  //     price: "$10.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$40.00",
+  //   },
+  //   {
+  //     product: "Producto 2",
+  //     price: "$20.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$80.00",
+  //   },
+  //   {
+  //     product: "Producto 3",
+  //     price: "$15.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$60.00",
+  //   },
+  //   {
+  //     product: "Producto 1",
+  //     price: "$10.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$40.00",
+  //   },
+  //   {
+  //     product: "Producto 2",
+  //     price: "$20.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$80.00",
+  //   },
+  //   {
+  //     product: "Producto 3",
+  //     price: "$15.00",
+  //     fechaI: "02/12/2021",
+  //     fechaF: "06/12/2021",
+  //     monto: "$60.00",
+  //   },
+  // ],
+  // subtotal: "$45.00",
+  // taxes: "$4.50",
+  // shipping: "$0.00",
+  // total: "$49.50",
 };
