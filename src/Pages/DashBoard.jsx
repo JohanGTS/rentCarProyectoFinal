@@ -1,12 +1,67 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Seccion from "../Components/Seccion";
+import { getAllData, getData } from "../Features/apiCalls";
 
 export const DashBoard = () => {
   let reservas = 214;
   let usuarios = 26;
   let vehiculos = 15;
   let ventasTotales = 24364.01;
-  let ventas = [
+
+  let [ventas, setVentas] = useState([]);
+  let [clientes, setClientes] = useState([]);
+  let [dashboard, setDashboard] = useState([]);
+  let [vehiculo, setVehiculo] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getAllData("reserva/vehiculoFrecuente");
+        setVehiculo(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getAllData("reserva/dashboard");
+        setDashboard(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getAllData("reserva/ultimasReservas");
+        setVentas(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getAllData("reserva/clienteFrecuente");
+        setClientes(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  let ventas2 = [
     {
       pedido: "1",
       matricula: "G475621",
@@ -48,7 +103,7 @@ export const DashBoard = () => {
       monto: "$80.00",
     },
   ];
-  let clientes = [
+  let clientes2 = [
     {
       id: "1",
       usuario: "Just me ",
@@ -86,7 +141,7 @@ export const DashBoard = () => {
     },
   ];
 
-  let vehiculo = [
+  let vehiculo2 = [
     { matricula: "G156413", reservas: "15", tiempo: "6", precio: "50" },
     { matricula: "G156413", reservas: "15", tiempo: "6", precio: "50" },
     { matricula: "G156413", reservas: "15", tiempo: "6", precio: "50" },
@@ -112,7 +167,7 @@ export const DashBoard = () => {
             />
           </svg>
           <div>
-            <h2>{reservas}</h2>
+            <h2>{dashboard.reservas}</h2>
             <p className="font-bold text-xl">Reservaciones</p>
           </div>
         </div>
@@ -133,7 +188,7 @@ export const DashBoard = () => {
             />
           </svg>
           <div>
-            <h3>{usuarios}</h3>
+            <h3>{dashboard.usuarios}</h3>
             <p className="font-bold text-xl">Usuarios</p>
           </div>
         </div>
@@ -154,7 +209,7 @@ export const DashBoard = () => {
             />
           </svg>
           <div>
-            <h3>{vehiculos}</h3>
+            <h3>{dashboard.vehiculo}</h3>
             <p className="font-bold text-xl">Vehículos</p>
           </div>
         </div>
@@ -174,7 +229,7 @@ export const DashBoard = () => {
             />
           </svg>
           <div>
-            <h3>{ventasTotales}</h3>
+            <h3>{dashboard.total}</h3>
             <p className="font-bold text-xl">Ventas totales</p>
           </div>
         </div>
@@ -184,30 +239,32 @@ export const DashBoard = () => {
         <h2 className="font-bold text-gray-500 py-3">Órdenes recientes</h2>
         <table className="w-full text-sm text-left text-gray-500 table-fixed">
           <thead>
-            <th>No. reservación</th>
-            <th>Matrícula reservada</th>
-            <th>Fecha de inicio</th>
-            <th>Fecha de fin</th>
-            <th>Precio diario</th>
+            <tr>
+              <th>No. reservación</th>
+              <th>Matrícula reservada</th>
+              <th>Fecha de inicio</th>
+              <th>Fecha de fin</th>
+              <th>Precio diario</th>
+            </tr>
           </thead>
           <tbody>
             {ventas.map((item, index) => {
               return (
                 <tr key={index} className="bg-white border-b">
                   <td className="px-1 py-4 font-medium text-gray-900  ">
-                    {item.pedido}
+                    {item.idReserva_res}
                   </td>
                   <td className="px-1 py-4 font-medium text-gray-900  ">
-                    {item.matricula}
+                    {item.Matricula_veh}
                   </td>
                   <td className="px-1 py-4 font-medium text-gray-900 ">
-                    {item.fechaI}
+                    {item.FechaInicio_res.slice(0, 11).replace("T", " ")}
                   </td>
                   <td className="px-1 py-4 font-medium text-gray-900 ">
-                    {item.fechaF}
+                    {item.FechaFin_res.slice(0, 11).replace("T", " ")}
                   </td>
                   <td className="px-1 py-4 font-medium text-gray-900  ">
-                    {item.price}
+                    {item.CostoPorDia_veh}
                   </td>
                 </tr>
               );
@@ -222,18 +279,20 @@ export const DashBoard = () => {
         </h2>
         <table className="w-full text-sm text-left text-gray-500  table-fixed">
           <thead>
-            <th>Id del cliente</th>
-            <th>Usuario</th>
-            <th>Nombre</th>
-            <th>Reservaciones</th>
-            <th>Total gastado</th>
+            <tr>
+              <th>Id del cliente</th>
+              <th>Usuario</th>
+              <th>Nombre</th>
+              <th>Reservaciones</th>
+              <th>Total gastado</th>
+            </tr>
           </thead>
           <tbody>
             {clientes.map((item, index) => {
               return (
                 <tr key={index} className="bg-white border-b">
                   <td className="px-1 py-4 font-medium text-gray-900 ">
-                    {item.id}
+                    {item.idCliente_res}
                   </td>
                   <td className="px-1 py-4 font-medium text-gray-900  ">
                     {item.usuario}
@@ -245,7 +304,7 @@ export const DashBoard = () => {
                     {item.reservaciones}
                   </td>
                   <td className="px-1 py-4 font-medium text-gray-900 ">
-                    {"$ " + item.gastoTotal}
+                    {"$ " + item.suma_montos}
                   </td>
                 </tr>
               );
@@ -255,29 +314,35 @@ export const DashBoard = () => {
       </section>
 
       <section>
-        <h2 className="font-bold text-gray-500 py-3">Vehíuclos más rentados</h2>
+        <h2 className="font-bold text-gray-500 py-3">Vehículos más rentados</h2>
         <table className="w-full text-sm text-left text-gray-500  table-fixed">
           <thead>
-            <th>Matrícula del vehículo</th>
-            <th>Cantidad reservaciones</th>
-            <th>Mayor tiempo reservado</th>
-            <th>Precio</th>
+            <tr>
+              <th>Id del vehículo</th>
+              <th>Matrícula del vehículo</th>
+              <th>Cantidad reservaciones</th>
+              <th>Mayor tiempo reservado</th>
+              <th>Precio</th>
+            </tr>
           </thead>
           <tbody>
             {vehiculo.map((item, index) => {
               return (
                 <tr key={index} className="bg-white border-b">
                   <td className="px-1 py-4 font-medium text-gray-900 ">
+                    {item.idVehiculo_res}
+                  </td>
+                  <td className="px-1 py-4 font-medium text-gray-900 ">
                     {item.matricula}
                   </td>
                   <td className="px-1 py-4 font-medium text-gray-900  ">
-                    {item.reservas}
+                    {item.reservaciones}
                   </td>
                   <td className="px-1 py-4 font-medium text-gray-900 ">
-                    {item.tiempo+ " días"}
+                    {item.diferencia + " días"}
                   </td>
                   <td className="px-1 py-4 font-medium text-gray-900 ">
-                    {"$ " + item.precio}
+                    {"$ " + item.costo}
                   </td>
                 </tr>
               );
@@ -285,7 +350,6 @@ export const DashBoard = () => {
           </tbody>
         </table>
       </section>
-      
     </div>
   );
 };

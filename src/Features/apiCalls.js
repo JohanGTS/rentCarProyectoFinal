@@ -26,8 +26,9 @@ export const getData = async (ruta, data) => {
 export const addData = async (ruta, data) => {
   try {
     data[Object.keys(data)[0]] = 0;
-    console.log(data)
+    console.log(data);
     const res = await axios.post(`${primaryPath}${ruta}/`, data);
+    console.log("Agregado");
     return res.data;
   } catch (err) {
     console.log(err);
@@ -50,6 +51,17 @@ export const updateData = async (ruta, data) => {
     console.log(data);
     const dataId = data[Object.keys(data)[0]];
     const res = await axios.put(`${primaryPath}${ruta}/` + dataId, data);
+    return res.data;
+  } catch (err) {
+    return {
+      error: err,
+    };
+  }
+};
+
+export const pagoTarjeta = async (ruta, data) => {
+  try {
+    const res = await axios.post(`${primaryPath}${ruta}/` , data);
     return res.data;
   } catch (err) {
     return {

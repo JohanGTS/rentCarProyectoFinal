@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../Contexts/UserContext";
@@ -7,21 +7,28 @@ import axios from "axios";
 const RegisterPopUp = (props) => {
   const { usuario, setUsuario } = useContext(UserContext);
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormValues({ ...formValues, [name]: value });
+    const { id, value, type } = e.target;
+    if (id.includes("id") || id.includes("Pais_dir"))
+      setFormValues({ ...formValues, [id]: parseInt(value) });
+    else setFormValues({ ...formValues, [id]: value });
   };
+  const currentDate = new Date();
+  const formattedDate = currentDate
+    .toISOString()
+    .slice(0, 19)
+    .replace("T", " ");
   const valorInicial = {
     idTercero_ter: 0,
     Nombre_ter: "",
     Telefono_ter: "",
-    idDocumento_ter: "",
+    idDocumento_ter: 1,
     Documento_ter: "",
     Fecha_Nacimiento_ter: "",
     Correo_ter: "",
     idTipoUsuario_usu: 3,
     Nombre_usu: "",
     Clave_usu: "",
-    Fecha_Ingreso_usu: "",
+    Fecha_Ingreso_usu: formattedDate.toString(),
     Estado_usu: 1,
     Ciudad_dir: 1,
     Estado_dir: 1,
@@ -36,31 +43,43 @@ const RegisterPopUp = (props) => {
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const guardar = document.getElementById("guardar");
+    guardar.focus();
+    const formulario = document.getElementById("formulario");
     setFormErrors(await validarForm(formValues));
+    console.log("A");
     if (Object.keys(formErrors).length === 0) {
       await addData("personal/Cliente", formValues);
-    }
-    const form = e.target;
-    form.reset();
-    props.onHide;
-    /*const email = form.email.value;
-    const password = form.password.value;
-    setUsuario({ email, password });
-    form.reset();
-    if (usuario) {
+      formulario.reset();
       props.onHide();
-      navigate("/dashboard");
-      console.log("si");
-    }*/
+    }
+  };
+  const handleSelectChange = (e) => {
+    const { id, value } = e.target;
+    const selectId = id; //
+    const optionId =
+      e.target.options[e.target.selectedIndex].getAttribute("data-key");
+
+    setFormValues({
+      ...formValues,
+      [selectId]: parseInt(optionId),
+    });
   };
 
-  async function retornarDatos() {
-    const a = await getAllData("pais");
-    console.log(a);
-    return a;
-  }
-  let paises = props.paises.retorna;
-  console.log(paises);
+  const [paises, setPaises] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getAllData("pais");
+        setPaises(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const validarForm = async (form) => {
     const errors = {};
     if (form.Clave_usu !== form.passwordS || !form.Clave_usu || !form.passwordS)
@@ -98,7 +117,7 @@ const RegisterPopUp = (props) => {
       </Modal.Header>
       <Modal.Body>
         <div className="container">
-          <form onSubmit={handleSubmit}>
+          <form id="formulario">
             <div key={"Nombre_ter"}>
               <label
                 htmlFor={"Nombre_ter"}
@@ -137,6 +156,7 @@ const RegisterPopUp = (props) => {
             <div>
               <label>
                 <input
+                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500  focus:ring-2 "
                   type="radio"
                   name="nacionalidad"
                   value="dominicano"
@@ -147,6 +167,7 @@ const RegisterPopUp = (props) => {
               </label>
               <label>
                 <input
+                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500  focus:ring-2 "
                   type="radio"
                   name="nacionalidad"
                   value="extranjero"
@@ -177,14 +198,19 @@ const RegisterPopUp = (props) => {
             <p className="text-red-700 text-sm font-bold mb-2">
               {formErrors.Documento_ter}
             </p>
-            {}
-            {props.retorna && props.retorna.length > 0 && (
+            <label
+              htmlFor={"Pais_dir"}
+              className="block text-gray-700 text-sm font-bold mb-2"
+            >
+              {"País de nacimiento"}
+            </label>
+            {
               <select
                 className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id={"Paisu"}
+                id={"Pais_dir"}
                 onChange={handleSelectChange}
               >
-                {field.retorna.map((option) => {
+                {paises.map((option) => {
                   const values = Object.values(option);
                   const key = values[0]; // Obtener el primer valor del objeto
                   const descripcion = values[values.length - 1]; // Obtener el último valor del objeto
@@ -195,23 +221,8 @@ const RegisterPopUp = (props) => {
                   );
                 })}
               </select>
-            )}
-            <div key={"pais"}>
-              <label
-                htmlFor={"pais"}
-                className="block text-gray-700 text-sm font-bold mb-2"
-              >
-                {"País de nacimiento"}
-              </label>
-              <input
-                className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                type={"text"}
-                id={"pais"}
-                name={"pais"}
-                placeholder={"Ingrese su email"}
-                onChange={handleInputChange}
-              />
-            </div>
+            }
+
             <div key={"Fecha_Nacimiento_ter"}>
               <label
                 htmlFor={"Fecha_Nacimiento_ter"}
@@ -300,6 +311,8 @@ const RegisterPopUp = (props) => {
               <button
                 className="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 mx-2 rounded"
                 type="submit"
+                onClick={handleSubmit}
+                id="guardar"
               >
                 Registrar
               </button>

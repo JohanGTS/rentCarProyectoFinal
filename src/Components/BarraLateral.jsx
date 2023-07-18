@@ -3,6 +3,7 @@ import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
 import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/solid";
 import { UserContext } from "../Contexts/UserContext";
 import { AdminHome } from "../Pages/AdminHome";
+import { loadStripe } from "@stripe/stripe-js";
 import {
   color,
   combustible,
@@ -17,8 +18,6 @@ import {
   seguro,
   pieza,
   vehiculo,
-  todosVehiculos,
-  todosClientes,
   user,
 } from "../JsonDinamico/mantenimientos";
 import { DashBoard } from "../Pages/DashBoard";
@@ -26,7 +25,11 @@ import { AddImagen } from "./ComponentsEspecificos/AddImagen";
 import ReportePedido from "./Reports/ReportePedidos";
 import { RegistrarCompra } from "./Procesos/RegistrarCompra";
 import ProcesoDinamico from "./ProcesoDinamico";
+import { Elements } from "@stripe/react-stripe-js";
 export const BarraLateral = () => {
+  const llavePublica =
+    "pk_test_51N0m8BFCP7DBw79T3Z288UoIy9LMHLkrjUgQv0YhCTrtiB1xLnCBzjhU4Gz91Stp6xxeDxPN1W37Ei8WmClkddXI0049rggz4N";
+  const stripeTest = loadStripe(llavePublica);
   const { usuario, setUsuario } = useContext(UserContext);
   const [abrirMantenimiento, setAbrirMantenimiento] = useState(false);
   const [abrirProceso, setAbrirProceso] = useState(false);
@@ -369,7 +372,14 @@ export const BarraLateral = () => {
                 element={<AdminHome campos={vehiculo} link={"vehiculo"} />}
               />
               <Route path="/prueba" element={<ReportePedido order={order} />} />
-              <Route path="/registrarCompra" element={<RegistrarCompra vehiculos={todosVehiculos} clientes={todosClientes}/>} />
+              <Route
+                path="/registrarCompra"
+                element={
+                  <Elements stripe={stripeTest}>
+                    <RegistrarCompra />
+                  </Elements>
+                }
+              />
             </Routes>
           </div>
         </div>
@@ -383,51 +393,322 @@ const order = {
   date: "01 de julio de 2023",
   shippingAddress: "Calle Principal 123, Ciudad, Estado, Código Postal",
   items: [
-    { product: "Producto 1 Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1", price: "$10.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$40.00"},
-    { product: "Producto 2", price: "$20.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$80.00"},
-    { product: "Producto 3", price: "$15.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$60.00"},
-    { product: "Producto 1", price: "$10.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$40.00"},
-    { product: "Producto 2", price: "$20.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$80.00"},
-    { product: "Producto 3", price: "$15.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$60.00"},
-    { product: "Producto 1", price: "$10.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$40.00"},
-    { product: "Producto 2", price: "$20.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$80.00"},
-    { product: "Producto 3", price: "$15.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$60.00"},
-    { product: "Producto 1", price: "$10.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$40.00"},
-    { product: "Producto 2", price: "$20.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$80.00"},
-    { product: "Producto 3", price: "$15.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$60.00"},
-    { product: "Producto 1", price: "$10.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$40.00"},
-    { product: "Producto 2", price: "$20.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$80.00"},
-    { product: "Producto 3", price: "$15.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$60.00"},
-    { product: "Producto 1", price: "$10.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$40.00"},
-    { product: "Producto 2", price: "$20.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$80.00"},
-    { product: "Producto 3", price: "$15.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$60.00"},
-    { product: "Producto 1", price: "$10.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$40.00"},
-    { product: "Producto 2", price: "$20.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$80.00"},
-    { product: "Producto 3", price: "$15.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$60.00"},
-    { product: "Producto 1", price: "$10.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$40.00"},
-    { product: "Producto 2", price: "$20.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$80.00"},
-    { product: "Producto 3", price: "$15.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$60.00"},
-    { product: "Producto 1", price: "$10.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$40.00"},
-    { product: "Producto 2", price: "$20.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$80.00"},
-    { product: "Producto 3", price: "$15.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$60.00"},
-    { product: "Producto 1", price: "$10.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$40.00"},
-    { product: "Producto 2", price: "$20.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$80.00"},
-    { product: "Producto 3", price: "$15.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$60.00"},
-    { product: "Producto 1", price: "$10.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$40.00"},
-    { product: "Producto 2", price: "$20.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$80.00"},
-    { product: "Producto 3", price: "$15.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$60.00"},
-    { product: "Producto 1", price: "$10.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$40.00"},
-    { product: "Producto 2", price: "$20.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$80.00"},
-    { product: "Producto 3", price: "$15.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$60.00"},
-    { product: "Producto 1", price: "$10.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$40.00"},
-    { product: "Producto 2", price: "$20.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$80.00"},
-    { product: "Producto 3", price: "$15.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$60.00"},
-    { product: "Producto 1", price: "$10.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$40.00"},
-    { product: "Producto 2", price: "$20.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$80.00"},
-    { product: "Producto 3", price: "$15.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$60.00"},
-    { product: "Producto 1", price: "$10.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$40.00"},
-    { product: "Producto 2", price: "$20.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$80.00"},
-    { product: "Producto 3", price: "$15.00" ,fechaI:"02/12/2021",fechaF:"06/12/2021", monto:"$60.00"},
+    {
+      product:
+        "Producto 1 Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1Producto 1",
+      price: "$10.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$40.00",
+    },
+    {
+      product: "Producto 2",
+      price: "$20.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$80.00",
+    },
+    {
+      product: "Producto 3",
+      price: "$15.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$60.00",
+    },
+    {
+      product: "Producto 1",
+      price: "$10.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$40.00",
+    },
+    {
+      product: "Producto 2",
+      price: "$20.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$80.00",
+    },
+    {
+      product: "Producto 3",
+      price: "$15.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$60.00",
+    },
+    {
+      product: "Producto 1",
+      price: "$10.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$40.00",
+    },
+    {
+      product: "Producto 2",
+      price: "$20.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$80.00",
+    },
+    {
+      product: "Producto 3",
+      price: "$15.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$60.00",
+    },
+    {
+      product: "Producto 1",
+      price: "$10.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$40.00",
+    },
+    {
+      product: "Producto 2",
+      price: "$20.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$80.00",
+    },
+    {
+      product: "Producto 3",
+      price: "$15.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$60.00",
+    },
+    {
+      product: "Producto 1",
+      price: "$10.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$40.00",
+    },
+    {
+      product: "Producto 2",
+      price: "$20.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$80.00",
+    },
+    {
+      product: "Producto 3",
+      price: "$15.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$60.00",
+    },
+    {
+      product: "Producto 1",
+      price: "$10.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$40.00",
+    },
+    {
+      product: "Producto 2",
+      price: "$20.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$80.00",
+    },
+    {
+      product: "Producto 3",
+      price: "$15.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$60.00",
+    },
+    {
+      product: "Producto 1",
+      price: "$10.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$40.00",
+    },
+    {
+      product: "Producto 2",
+      price: "$20.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$80.00",
+    },
+    {
+      product: "Producto 3",
+      price: "$15.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$60.00",
+    },
+    {
+      product: "Producto 1",
+      price: "$10.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$40.00",
+    },
+    {
+      product: "Producto 2",
+      price: "$20.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$80.00",
+    },
+    {
+      product: "Producto 3",
+      price: "$15.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$60.00",
+    },
+    {
+      product: "Producto 1",
+      price: "$10.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$40.00",
+    },
+    {
+      product: "Producto 2",
+      price: "$20.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$80.00",
+    },
+    {
+      product: "Producto 3",
+      price: "$15.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$60.00",
+    },
+    {
+      product: "Producto 1",
+      price: "$10.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$40.00",
+    },
+    {
+      product: "Producto 2",
+      price: "$20.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$80.00",
+    },
+    {
+      product: "Producto 3",
+      price: "$15.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$60.00",
+    },
+    {
+      product: "Producto 1",
+      price: "$10.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$40.00",
+    },
+    {
+      product: "Producto 2",
+      price: "$20.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$80.00",
+    },
+    {
+      product: "Producto 3",
+      price: "$15.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$60.00",
+    },
+    {
+      product: "Producto 1",
+      price: "$10.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$40.00",
+    },
+    {
+      product: "Producto 2",
+      price: "$20.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$80.00",
+    },
+    {
+      product: "Producto 3",
+      price: "$15.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$60.00",
+    },
+    {
+      product: "Producto 1",
+      price: "$10.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$40.00",
+    },
+    {
+      product: "Producto 2",
+      price: "$20.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$80.00",
+    },
+    {
+      product: "Producto 3",
+      price: "$15.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$60.00",
+    },
+    {
+      product: "Producto 1",
+      price: "$10.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$40.00",
+    },
+    {
+      product: "Producto 2",
+      price: "$20.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$80.00",
+    },
+    {
+      product: "Producto 3",
+      price: "$15.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$60.00",
+    },
+    {
+      product: "Producto 1",
+      price: "$10.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$40.00",
+    },
+    {
+      product: "Producto 2",
+      price: "$20.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$80.00",
+    },
+    {
+      product: "Producto 3",
+      price: "$15.00",
+      fechaI: "02/12/2021",
+      fechaF: "06/12/2021",
+      monto: "$60.00",
+    },
   ],
   subtotal: "$45.00",
   taxes: "$4.50",

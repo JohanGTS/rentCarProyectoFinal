@@ -69,7 +69,7 @@ const Navbar = () => {
           color={"red-600"}
           onclick={() => setEstado2(true)}
         />
-        <RegisterPopUp show={estado2} onHide={() => setEstado2(false)} paises={paises} />
+        <RegisterPopUp show={estado2} onHide={() => setEstado2(false)} />
       </div>
     </header>
   );
