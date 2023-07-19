@@ -3,7 +3,7 @@ import {
     getAllData,
   } from "../Features/apiCalls";
   import React, { useState, useEffect } from "react";
-
+  import { DataGrid } from "@mui/x-data-grid";
 
   export const ReporteClientesFrecuentes = () => {
     let [clientes, setClientes] = useState([]);
@@ -22,7 +22,7 @@ import {
     <div>
         <section>
         <h2 className="font-bold text-gray-500 py-3">
-          Clientes más frecuentes
+          Clientes frecuentes
         </h2>
         <table className="w-full text-sm text-left text-gray-500  table-fixed">
           <thead>
@@ -51,7 +51,7 @@ import {
                     {item.reservaciones}
                   </td>
                   <td className="px-1 py-4 font-medium text-gray-900 ">
-                    {"$ " + item.suma_montos}
+                    {item.suma_montos}
                   </td>
                 </tr>
               );
@@ -86,7 +86,7 @@ import {
               <th>Matrícula reservada</th>
               <th>Fecha de inicio</th>
               <th>Fecha de fin</th>
-              <th>Precio diario</th>
+              <th>Costo de Uso por Dia</th>
             </tr>
           </thead>
           <tbody>
@@ -162,7 +162,7 @@ return (
                     {item.diferencia + " días"}
                   </td>
                   <td className="px-1 py-4 font-medium text-gray-900 ">
-                    {"$ " + item.costo}
+                    {item.costo}
                   </td>
                 </tr>
               );
@@ -171,4 +171,45 @@ return (
         </table>
       </section>
   </div>
+)}
+export const ReporteVehiculosMUI = () => {
+  let [vehiculo, setVehiculo] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getAllData("dashboard/vehiculoFrecuente");
+        setVehiculo(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const columns = [
+    { field: "idVehiculo_res", headerName: "VEHICULO", width: 150 },
+    { field: "reservaciones", headerName: "reservaciones", width: 150 },
+    { field: "matricula", headerName: "matricula", width: 150 },
+    { field: "diferencia", headerName: "diferencia", width: 150 },
+    { field: "costo", headerName: "costo", width: 150 },
+]
+
+return (
+<div>
+    <section>
+    <DataGrid
+          rows={vehiculo}
+          columns={columns}
+          getRowId = {(vehiculo) => vehiculo.idVehiculo_res}
+          initialState={{
+            pagination: {
+              paginationModel: { page: 0, pageSize: 5 },
+            },
+          }}
+          pageSizeOptions={[5, 10]}
+          checkboxSelection
+        />
+    </section>
+</div>
 )}

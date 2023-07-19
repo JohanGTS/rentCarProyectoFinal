@@ -28,7 +28,8 @@ import {
   ReporteClientesFrecuentes,
   ReporteOrdenesRecientes,
   ReporteVehiculosMasRentados,
-} from "../JsonDinamico/reportes"
+  ReporteVehiculosMUI,
+} from "../Pages/reportes"
 import ProcesoDinamico from "./ProcesoDinamico";
 import { Elements } from "@stripe/react-stripe-js";
 export const BarraLateral = () => {
@@ -91,6 +92,11 @@ export const BarraLateral = () => {
       label: "Reporte Vehiculos Mas Rentados",
       value: "reporteVehiculosMasRentados",
       ruta: "reporteVehiculosMasRentados",
+    },
+    {
+      label: "Reporte VehiculosMUI",
+      value: "reporteVehiculosMUI",
+      ruta: "reporteVehiculosMUI",
     },
   ];
 
@@ -452,6 +458,7 @@ export const BarraLateral = () => {
               <Route path="/reporteClientesFrecuentes" element={ <ReporteClientesFrecuentes />}/>
               <Route path="/reporteOrdenesRecientes" element={ <ReporteOrdenesRecientes />}/>
               <Route path="/reporteVehiculosMasRentados" element={ <ReporteVehiculosMasRentados />}/>
+              <Route path="/reporteVehiculosMUI" element={ <ReporteVehiculosMUI />}/>
             </Routes>
           </div>
         </div>
