@@ -2,35 +2,13 @@ import React, { useContext, useState } from "react";
 import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
 import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/solid";
 import { UserContext } from "../Contexts/UserContext";
-import { AdminHome } from "../Pages/AdminHome";
 import { loadStripe } from "@stripe/stripe-js";
-import { CrudDinamico } from "./CrudDinamico";
-import {
-  color,
-  combustible,
-  ciudad,
-  documentos,
-  estados,
-  tipoUsuario,
-  tipoVehiculo,
-  marca,
-  modelo,
-  pais,
-  seguro,
-  pieza,
-  vehiculo,
-  user,
-} from "../JsonDinamico/mantenimientos";
-import { DashBoard } from "../Pages/DashBoard";
 import { RegistrarCompra } from "./Procesos/RegistrarCompra";
-import {
-  ReporteClientesFrecuentes,
-  ReporteOrdenesRecientes,
-  ReporteVehiculosMasRentados,
-} from "../Pages/reportes"
 import { Elements } from "@stripe/react-stripe-js";
-import CancelarRervacion from "./Procesos/CancelarRervacion";
-export const BarraLateral = () => {
+
+import RegistrarReservaUsuario from "./Procesos/RegistrarReservaUsuario";
+import CancelarRervacionCliente from "./Procesos/CancelarRervacionCliente";
+export const BarraLateralUsuario = () => {
   const llavePublica =
     "pk_test_51N0m8BFCP7DBw79T3Z288UoIy9LMHLkrjUgQv0YhCTrtiB1xLnCBzjhU4Gz91Stp6xxeDxPN1W37Ei8WmClkddXI0049rggz4N";
   const stripeTest = loadStripe(llavePublica);
@@ -69,13 +47,14 @@ export const BarraLateral = () => {
   };
   const dropDownProcesos = [
     {
-      label: "Reservar Vehiculo",
-      value: "registrarCompra",
-      ruta: "registrarCompra",
-    },{
-      label: "Cancelar reservacion",
-      value: "cancelarReserva",
-      ruta: "cancelarReserva",
+      label: "Reservar vehículo",
+      value: "reservarVehiculo",
+      ruta: "reservarVehiculo",
+    },
+    {
+      label: "Cancelar reserva",
+      value: "cancelaReserva",
+      ruta: "cancelaReserva",
     },
   ];
 
@@ -90,11 +69,6 @@ export const BarraLateral = () => {
       value: "reporteOrdenesRecientes",
       ruta: "reporteOrdenesRecientes",
     },
-    // {
-    //   label: "Reporte Vehiculos Mas Rentados",
-    //   value: "reporteVehiculosMasRentados",
-    //   ruta: "reporteVehiculosMasRentados",
-    // },
     {
       label: "Reporte Vehiculos Mas Rentados",
       value: "reporteVehiculosMasRentados",
@@ -114,7 +88,11 @@ export const BarraLateral = () => {
     { label: "Piezas", value: "pieza", ruta: "pieza" },
     { label: "Seguros", value: "seguro", ruta: "seguro" },
     { label: "Tipos de usuarios", value: "tipoUsuario", ruta: "tipoUsuario" },
-    { label: "Tipos de vehículos", value: "tipoVehiculo", ruta: "tipoVehiculo"},
+    {
+      label: "Tipos de vehículos",
+      value: "tipoVehiculo",
+      ruta: "tipoVehiculo",
+    },
     { label: "Usuarios", value: "usuario", ruta: "usuario" },
     { label: "Vehículos", value: "vehiculo", ruta: "vehiculo" },
   ];
@@ -188,56 +166,6 @@ export const BarraLateral = () => {
             </li>
             <ul>
               <button
-                className="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100 w-full"
-                onClick={toggleMantenimiento}
-              >
-                <svg
-                  aria-hidden="true"
-                  className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75text-gray-400 group-hover:text-white"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                </svg>
-                <span className="flex-1 ml-3 whitespace-nowrap  ">
-                  Mantenimientos
-                </span>
-                {!abrirProceso || !abrirReporte ? (
-                  <ChevronDownIcon className="w-1/6" />
-                ) : (
-                  <ChevronUpIcon className="w1-1/6" />
-                )}
-              </button>
-
-              {abrirMantenimiento && (
-                <div>
-                  {dropdownItems.map((item, index) => (
-                    <li key={index}>
-                      <button
-                        className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
-                        onClick={() => navega(item.ruta)}
-                      >
-                        <svg
-                          aria-hidden="true"
-                          className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75text-gray-400 group-hover:text-white"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                        </svg>
-                        <span className="flex-1 ml-3 whitespace-nowrap">
-                          {item.label}
-                        </span>
-                      </button>
-                    </li>
-                  ))}
-                </div>
-              )}
-            </ul>
-            <ul>
-              <button
                 href="#"
                 className="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100 "
                 onClick={toggleProceso}
@@ -281,8 +209,6 @@ export const BarraLateral = () => {
                             fillRule="evenodd"
                             d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
                             clipRule="evenodd"
-
-                            
                           />
                         </svg>
                         <span className="flex-1 ml-3 whitespace-nowrap">
@@ -309,7 +235,7 @@ export const BarraLateral = () => {
                 >
                   <path
                     fillRule="evenodd"
-                    d="M12 2h4a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h4m6 0v3H6V2m6 0a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1M5 5h8m-5 5h5m-8 0h.01M5 14h.01M8 14h5"
+                    d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
                     clipRule="evenodd"
                   />
                 </svg>
@@ -337,7 +263,7 @@ export const BarraLateral = () => {
                         >
                           <path
                             fillRule="evenodd"
-                            d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2Zm-3 14H5a1 1 0 0 1 0-2h8a1 1 0 0 1 0 2Zm0-4H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Zm0-5H5a1 1 0 0 1 0-2h2V2h4v2h2a1 1 0 1 1 0 2Z"
+                            d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
                             clipRule="evenodd"
                           />
                         </svg>
@@ -381,167 +307,6 @@ export const BarraLateral = () => {
         <div className="p-4   rounded-lg mt-14">
           <div className=" gap-4 mb-4">
             <Routes>
-              <Route 
-              path="/dashboard" 
-              element={<DashBoard />} />
-                            <Route
-                path="/color"
-                element={
-                  <CrudDinamico
-                    campos={color}
-                    link={"color"}
-                    titulo={"Color"}
-                    valorInicial={{}}
-                  />
-                }
-              />
-              <Route
-                path="/combustible"
-                element={
-                  <CrudDinamico
-                    campos={combustible}
-                    link={"combustible"}
-                    titulo={"Combustible"}
-                    valorInicial={{}}
-                  />
-                }
-              />
-              <Route
-                path="/ciudad"
-                element={
-                  <CrudDinamico
-                    campos={ciudad}
-                    link={"ciudad"}
-                    titulo={"Ciudades"}
-                    valorInicial={{}}
-                  />
-                }
-              />
-              <Route
-                path="/documento"
-                element={
-                  <CrudDinamico
-                    campos={documentos}
-                    link={"documento"}
-                    titulo={"Documento"}
-                    valorInicial={{}}
-                  />
-                }
-              />
-              <Route
-                path="/estado"
-                element={
-                  <CrudDinamico
-                    campos={color}
-                    link={"color"}
-                    titulo={"Colores"}
-                    valorInicial={{}}
-                  />
-                }
-              />
-              <Route
-                path="/tipoUsuario"
-                element={
-                  <CrudDinamico
-                    campos={tipoUsuario}
-                    link={"tipoUsuario"}
-                    titulo={"Tipo de usuario"}
-                    valorInicial={{}}
-                  />
-                }
-              />
-              <Route
-                path="/tipoVehiculo"
-                element={
-                  <CrudDinamico
-                    campos={tipoVehiculo}
-                    link={"tipoVehiculo"}
-                    titulo={"Tipo de vehiculos"}
-                    valorInicial={{}}
-                  />
-                }
-              />
-              <Route
-                path="/marca"
-                element={
-                  <CrudDinamico
-                    campos={marca}
-                    link={"marca"}
-                    titulo={"Marca"}
-                    valorInicial={{}}
-                  />
-                }
-              />
-              <Route
-                path="/modelo"
-                element={
-                  <CrudDinamico
-                    campos={modelo}
-                    link={"modelo"}
-                    titulo={"Modelo"}
-                    valorInicial={{}}
-                  />
-                }
-              />
-              <Route
-                path="/pais"
-                element={
-                  <CrudDinamico
-                    campos={pais}
-                    link={"pais"}
-                    titulo={"Pais"}
-                    valorInicial={{}}
-                  />
-                }
-              />
-              <Route
-                path="/seguro"
-                element={
-                  <CrudDinamico
-                    campos={seguro}
-                    link={"seguro"}
-                    titulo={"seguro"}
-                    valorInicial={{}}
-                  />
-                }
-              />
-              <Route
-                path="/pieza"
-                element={
-                  <CrudDinamico
-                    campos={pieza}
-                    link={"pieza"}
-                    titulo={"Pieza"}
-                    valorInicial={{}}
-                  />
-                }
-              />
-              <Route
-                path="/usuario"
-                element={
-                  <CrudDinamico
-                    campos={user}
-                    link={"personal/cliente"}
-                    titulo={"Usuario"}
-                    valorInicial={{}}
-                  />
-                }
-              />
-              <Route
-                path="/vehiculo"
-                element={<AdminHome campos={vehiculo} link={"vehiculo"} />}
-              />
-              <Route
-                path="/crud"
-                element={
-                  <CrudDinamico
-                    campos={color}
-                    link={"color"}
-                    titulo={"Colores"}
-                    valorInicial={{}}
-                  />
-                }
-              />
               <Route
                 path="/registrarCompra"
                 element={
@@ -550,10 +315,16 @@ export const BarraLateral = () => {
                   </Elements>
                 }
               />
-              <Route path="/cancelarReserva" element={<CancelarRervacion />} />
-              <Route path="/reporteClientesFrecuentes" element={ <ReporteClientesFrecuentes />}/>
-              <Route path="/reporteOrdenesRecientes" element={ <ReporteOrdenesRecientes />}/>
-              <Route path="/reporteVehiculosMasRentados" element={ <ReporteVehiculosMasRentados />}/>
+
+              <Route
+                path="/reservarVehiculo"
+                element={<RegistrarReservaUsuario />}
+              />
+
+              <Route
+                path="/cancelaReserva"
+                element={<CancelarRervacionCliente />}
+              />
             </Routes>
           </div>
         </div>
@@ -561,3 +332,4 @@ export const BarraLateral = () => {
     </>
   );
 };
+const order = {};

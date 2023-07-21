@@ -1,14 +1,17 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   addData,
   getAllData,
   getData,
   pagoTarjeta,
 } from "../../Features/apiCalls";
+import { UserContext } from "../../Contexts/UserContext";
 import logo from "../../assets/rrlogo.jpg";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import easyinvoice from "easyinvoice";
 export const RegistrarCompra = () => {
+  const userContext = useContext(UserContext);
+
   const stripe = useStripe();
   const elements = useElements();
   const initial = {
@@ -25,18 +28,14 @@ export const RegistrarCompra = () => {
   const [formValues, setFormValues] = useState(initial);
   const [formErrors, setFormErrors] = useState({});
 
-  /*
-  easyinvoice.createInvoice(dataCorreo, function (result) {
-    console.log("PDF base64 string: ", result.pdf);
-  });*/
-
   const enviarEmail = (prueba) => {
     //puerto:2525
+    console.log("Envia correo");
     Email.send({
       Host: "smtp.elasticemail.com",
       Username: "quitomiguel56@gmail.com",
       Password: "EAC635C56878709AEA14A25537D4F24BEAF9",
-      To: "lewag69356@sparkroi.com",
+      To: userContext.usuario.correo,
       From: "quitomiguel56@gmail.com",
       Subject: "Recibo de reservación",
       Body: "Confirmación de reservación de vehículo adjuntada",
@@ -75,7 +74,7 @@ export const RegistrarCompra = () => {
       const dateActual = Date.now();
       const date1 = new Date(formValues.FechaInicio_Res);
       const date2 = new Date(formValues.FechaFin_Res);
-      date1.setDate(date1.getDate() );
+      date1.setDate(date1.getDate());
       date2.setDate(date2.getDate());
       const diffTime = Math.abs(date2 - date1);
 
@@ -105,8 +104,6 @@ export const RegistrarCompra = () => {
         errors.FechaFin_Res = "Menor de 3 días no es posible";
       }
       valor = parseFloat(formValues.costoPorDia_fac) * diferenciaDias;
-
-      
 
       formValues.FechaInicio_Res = date1.toISOString().split("T")[0];
       formValues.FechaFin_Res = date2.toISOString().split("T")[0];
@@ -151,7 +148,7 @@ export const RegistrarCompra = () => {
     //guardar.focus();
     e.preventDefault();
     setFormErrors(validarForm());
-
+    console.log(formValues);
     if (Object.keys(formErrors).length == 0) {
       const { error, paymentMethod } = await stripe.createPaymentMethod({
         type: "card",
@@ -184,9 +181,9 @@ export const RegistrarCompra = () => {
                 country: "República Dominicana",
               },
               client: {
-                company: "Client Corp",
-                address: "",
-                zip: "",
+                company: userContext.usuario.Nombre_ter,
+                address: userContext.usuario.Especificacion_terdir,
+                zip: userContext.usuario.CodigoPostal_dir,
                 city: "",
                 country: "",
               },
@@ -249,6 +246,8 @@ export const RegistrarCompra = () => {
   };
   const handleSelectChange = (e) => {
     const { id, value } = e.target;
+    console.log(e.target);
+    console.log(formValues);
     const selectId = id; //
     const optionId =
       e.target.options[e.target.selectedIndex].getAttribute("data-key");
@@ -262,6 +261,8 @@ export const RegistrarCompra = () => {
   const handleSelectChange2 = (e) => {
     const { id, value } = e.target;
     const selectId = id; //
+    console.log(e.target);
+    console.log(formValues);
     const optionId =
       e.target.options[e.target.selectedIndex].getAttribute("data-key");
     const precio =
@@ -299,7 +300,6 @@ export const RegistrarCompra = () => {
 
     fetchData();
   }, []);
-
   return (
     <div>
       <form id="formulario">
@@ -312,13 +312,16 @@ export const RegistrarCompra = () => {
           </label>
 
           <select
+            key={"joda"}
             className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id={"idCliente_res"}
             onChange={handleSelectChange}
           >
-            <option data-key={""}>Seleccione un valor</option>
+            <option key={"none"} data-key={""}>
+              Seleccione un valor
+            </option>
             {clientes.map((values) => {
-              const key = values["Codigo"];
+              const key = values["idTercero_ter"];
               const descripcion =
                 values["Nombre_usu"] + " : " + values["Nombre_ter"];
               return (
@@ -419,14 +422,6 @@ export const RegistrarCompra = () => {
             id="guardar"
           >
             Pagar
-          </button>
-          <button
-            className="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 mx-2 rounded"
-            type="submit"
-            onClick={enviarEmail}
-            id="guardar"
-          >
-            Correo
           </button>
         </div>
       </form>

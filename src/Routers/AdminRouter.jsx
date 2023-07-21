@@ -6,7 +6,7 @@ import { BarraLateral } from "../Components/BarraLateral";
 const AdminRouter = () => {
   return (
     <div>
-      <BarraLateral/>
+      <BarraLateral />
     </div>
   );
 };

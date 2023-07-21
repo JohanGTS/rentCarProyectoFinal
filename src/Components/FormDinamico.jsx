@@ -6,22 +6,20 @@ import {
   deleteData,
   updateData,
 } from "../Features/apiCalls";
-let actualiza = false;
-const limpiarForm = () => {
-  const element = document.getElementById("formulario");
-  element.reset();
-  setFormValues({});
-  actualiza = false;
-};
 const FormDinamico = ({ fields, link }) => {
   const [formValues, setFormValues] = useState({});
   const handleInputChange = (e) => {
     const { id, value, type } = e.target;
     if (id.includes("id"))
-      setFormValues({ ...formValues, [id]: parseInt(value) });
+    setFormValues({ ...formValues, [id]: parseInt(value) });
     else setFormValues({ ...formValues, [id]: value });
   };
-
+  const limpiarForm = () => {
+    const element = document.getElementById("formulario");
+    element.reset();
+    setFormValues({});
+  };
+  
   const handleSelectChange = (e) => {
     const { id, value } = e.target;
     const selectId = id; //
@@ -38,6 +36,7 @@ const FormDinamico = ({ fields, link }) => {
     e.preventDefault();
     const guardar = document.getElementById("guarda");
     guardar.focus();
+
     if (!actualiza) {
       const data = await addData({
         link,
@@ -66,10 +65,9 @@ const FormDinamico = ({ fields, link }) => {
       setTimeout(() => {
         Object.entries(data).forEach(([key, value]) => {
 
-          const field = document.getElssementById(key);
+          const field = document.getElementById(key);
           if (field && field.type === "select-one") {
             const options = field.options;
-            console.log("entra");
             for (let i = 0; i < options.length; i++) {
               const option = options[i];
               console.log(value);

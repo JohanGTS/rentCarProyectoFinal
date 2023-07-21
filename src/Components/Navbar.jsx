@@ -38,6 +38,7 @@ const Navbar = () => {
       required: true,
     },
   ];
+  
   return (
     <header className="header sticky top-0 bg-white shadow-md flex flex-wrap items-center justify-between px-8 ">
       <div className="w-full md:w-auto">

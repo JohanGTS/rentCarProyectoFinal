@@ -1,32 +1,36 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Route, Routes } from "react-router-dom";
 import Navbar from "../Components/Navbar";
-import { AdminHome } from "../Pages/AdminHome";
 import Footer from "../Components/Footer";
 import { BarraLateral } from "../Components/BarraLateral";
 import Home from "../Pages/Home";
 import Contacto from "../Pages/Contacto";
 import SobreNosotros from "../Pages/SobreNosotros";
-import { useContext, useEffect } from "react";
 import { UserContext } from "../Contexts/UserContext";
 import ErrorPage from "../Pages/ErrorPage";
 import TerminosCondiciones from "../Pages/TerminosCondiciones";
+import { BarraLateralUsuario } from "../Components/BarraLateralUsuario";
+
 const MainRouter = () => {
   const userContext = useContext(UserContext);
 
-  const isUserAuthenticated = () => {
-    let a =
-      userContext.user != null &&
-      userContext.user != undefined &&
-      userContext.user != "null";
-    return true;
-  };
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    setIsAuthenticated(
+      userContext.usuario !== null &&
+      userContext.usuario !== undefined &&
+      userContext.usuario !== "null"
+    );
+    console.log("Aut: " + isAuthenticated);
+    console.log(userContext)
+  }, [userContext]);
 
   return (
     <>
-      {isUserAuthenticated() ? (
+      {isAuthenticated ? (
         <>
-          <BarraLateral />
+          {userContext.usuario?.rol === 1 ? <BarraLateral /> : <BarraLateralUsuario />}
         </>
       ) : (
         <>

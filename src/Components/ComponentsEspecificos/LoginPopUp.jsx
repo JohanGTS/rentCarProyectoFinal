@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../Contexts/UserContext";
+import { getData, getAllDataUsuario } from "../../Features/apiCalls";
 const LoginPopUp = (props) => {
   const [formValues, setFormValues] = useState({});
   const { usuario, setUsuario } = useContext(UserContext);
@@ -11,16 +12,32 @@ const LoginPopUp = (props) => {
   };
 
   const navigate = useNavigate();
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
     const email = form.email.value;
     const password = form.password.value;
-    setUsuario({ email, password });
-    form.reset();
-    if (usuario) {
-      props.onHide();
-      navigate("/dashboard");
+    const data = {
+      correo: email,
+      password: password,
+      idCliente: 2,
+      rol: 1,
+    };
+    try {
+      //const response = await getAllDataUsuario("/personal/usuario", data);
+
+      //const usuario = response.data;
+
+      if (data) {
+        form.reset();
+        setUsuario(data);
+        console.log(data);
+        navigate("/dashboard");
+      } else {
+        console.log("Usuario no encontrado.");
+      }
+    } catch (error) {
+      console.error("Error al llamar al API:", error);
     }
   };
 
@@ -48,7 +65,7 @@ const LoginPopUp = (props) => {
               </label>
               <input
                 className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                type={"email"}
+                type={"text"}
                 id={"email"}
                 name={"email"}
                 placeholder={"Ingrese su email"}
