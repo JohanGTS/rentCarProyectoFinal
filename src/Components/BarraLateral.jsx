@@ -28,7 +28,6 @@ import {
   ReporteClientesFrecuentes,
   ReporteOrdenesRecientes,
   ReporteVehiculosMasRentados,
-  ReporteVehiculosMUI,
 } from "../Pages/reportes"
 import ProcesoDinamico from "./ProcesoDinamico";
 import { Elements } from "@stripe/react-stripe-js";
@@ -71,7 +70,7 @@ export const BarraLateral = () => {
   };
   const dropDownProcesos = [
     {
-      label: "Registrar compra",
+      label: "Reservar Vehiculo",
       value: "registrarCompra",
       ruta: "registrarCompra",
     },
@@ -88,15 +87,15 @@ export const BarraLateral = () => {
       value: "reporteOrdenesRecientes",
       ruta: "reporteOrdenesRecientes",
     },
+    // {
+    //   label: "Reporte Vehiculos Mas Rentados",
+    //   value: "reporteVehiculosMasRentados",
+    //   ruta: "reporteVehiculosMasRentados",
+    // },
     {
       label: "Reporte Vehiculos Mas Rentados",
       value: "reporteVehiculosMasRentados",
       ruta: "reporteVehiculosMasRentados",
-    },
-    {
-      label: "Reporte VehiculosMUI",
-      value: "reporteVehiculosMUI",
-      ruta: "reporteVehiculosMUI",
     },
   ];
 
@@ -279,6 +278,8 @@ export const BarraLateral = () => {
                             fillRule="evenodd"
                             d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
                             clipRule="evenodd"
+
+                            
                           />
                         </svg>
                         <span className="flex-1 ml-3 whitespace-nowrap">
@@ -305,7 +306,7 @@ export const BarraLateral = () => {
                 >
                   <path
                     fillRule="evenodd"
-                    d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                    d="M12 2h4a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h4m6 0v3H6V2m6 0a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1M5 5h8m-5 5h5m-8 0h.01M5 14h.01M8 14h5"
                     clipRule="evenodd"
                   />
                 </svg>
@@ -333,7 +334,7 @@ export const BarraLateral = () => {
                         >
                           <path
                             fillRule="evenodd"
-                            d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                            d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2Zm-3 14H5a1 1 0 0 1 0-2h8a1 1 0 0 1 0 2Zm0-4H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Zm0-5H5a1 1 0 0 1 0-2h2V2h4v2h2a1 1 0 1 1 0 2Z"
                             clipRule="evenodd"
                           />
                         </svg>
@@ -458,7 +459,6 @@ export const BarraLateral = () => {
               <Route path="/reporteClientesFrecuentes" element={ <ReporteClientesFrecuentes />}/>
               <Route path="/reporteOrdenesRecientes" element={ <ReporteOrdenesRecientes />}/>
               <Route path="/reporteVehiculosMasRentados" element={ <ReporteVehiculosMasRentados />}/>
-              <Route path="/reporteVehiculosMUI" element={ <ReporteVehiculosMUI />}/>
             </Routes>
           </div>
         </div>
