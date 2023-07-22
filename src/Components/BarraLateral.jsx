@@ -27,9 +27,12 @@ import {
   ReporteClientesFrecuentes,
   ReporteOrdenesRecientes,
   ReporteVehiculosMasRentados,
-} from "../Pages/reportes"
+} from "../Pages/reportes";
 import { Elements } from "@stripe/react-stripe-js";
 import CancelarRervacion from "./Procesos/CancelarRervacion";
+import Checklist from "./CheckList";
+import { CrudEntregaVehiculo } from "./CrudEntregaVehiculo";
+import { CrudRecibirVehiculo } from "./CrudRecibirVehiculo";
 export const BarraLateral = () => {
   const llavePublica =
     "pk_test_51N0m8BFCP7DBw79T3Z288UoIy9LMHLkrjUgQv0YhCTrtiB1xLnCBzjhU4Gz91Stp6xxeDxPN1W37Ei8WmClkddXI0049rggz4N";
@@ -72,11 +75,20 @@ export const BarraLateral = () => {
       label: "Reservar Vehiculo",
       value: "registrarCompra",
       ruta: "registrarCompra",
-    },{
+    },
+    {
       label: "Cancelar reservacion",
       value: "cancelarReserva",
       ruta: "cancelarReserva",
     },
+    {
+      label: "Entrega de vehículo",
+      value: "entregaVehiculo",
+      ruta: "entregaVehiculo",
+    },
+    { label: "Recibimiento de vehículo",
+    value: "recibirVehiculo",
+    ruta: "recibirVehiculo",}
   ];
 
   const dropDownReportes = [
@@ -90,11 +102,6 @@ export const BarraLateral = () => {
       value: "reporteOrdenesRecientes",
       ruta: "reporteOrdenesRecientes",
     },
-    // {
-    //   label: "Reporte Vehiculos Mas Rentados",
-    //   value: "reporteVehiculosMasRentados",
-    //   ruta: "reporteVehiculosMasRentados",
-    // },
     {
       label: "Reporte Vehiculos Mas Rentados",
       value: "reporteVehiculosMasRentados",
@@ -114,7 +121,11 @@ export const BarraLateral = () => {
     { label: "Piezas", value: "pieza", ruta: "pieza" },
     { label: "Seguros", value: "seguro", ruta: "seguro" },
     { label: "Tipos de usuarios", value: "tipoUsuario", ruta: "tipoUsuario" },
-    { label: "Tipos de vehículos", value: "tipoVehiculo", ruta: "tipoVehiculo"},
+    {
+      label: "Tipos de vehículos",
+      value: "tipoVehiculo",
+      ruta: "tipoVehiculo",
+    },
     { label: "Usuarios", value: "usuario", ruta: "usuario" },
     { label: "Vehículos", value: "vehiculo", ruta: "vehiculo" },
   ];
@@ -281,8 +292,6 @@ export const BarraLateral = () => {
                             fillRule="evenodd"
                             d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
                             clipRule="evenodd"
-
-                            
                           />
                         </svg>
                         <span className="flex-1 ml-3 whitespace-nowrap">
@@ -381,10 +390,8 @@ export const BarraLateral = () => {
         <div className="p-4   rounded-lg mt-14">
           <div className=" gap-4 mb-4">
             <Routes>
-              <Route 
-              path="/dashboard" 
-              element={<DashBoard />} />
-                            <Route
+              <Route path="/dashboard" element={<DashBoard />} />
+              <Route
                 path="/color"
                 element={
                   <CrudDinamico
@@ -543,6 +550,13 @@ export const BarraLateral = () => {
                 }
               />
               <Route
+                path="/entregaVehiculo"
+                element={<CrudEntregaVehiculo />}
+              /><Route
+              path="/recibirVehiculo"
+              element={<CrudRecibirVehiculo />}
+            />
+              <Route
                 path="/registrarCompra"
                 element={
                   <Elements stripe={stripeTest}>
@@ -551,9 +565,18 @@ export const BarraLateral = () => {
                 }
               />
               <Route path="/cancelarReserva" element={<CancelarRervacion />} />
-              <Route path="/reporteClientesFrecuentes" element={ <ReporteClientesFrecuentes />}/>
-              <Route path="/reporteOrdenesRecientes" element={ <ReporteOrdenesRecientes />}/>
-              <Route path="/reporteVehiculosMasRentados" element={ <ReporteVehiculosMasRentados />}/>
+              <Route
+                path="/reporteClientesFrecuentes"
+                element={<ReporteClientesFrecuentes />}
+              />
+              <Route
+                path="/reporteOrdenesRecientes"
+                element={<ReporteOrdenesRecientes />}
+              />
+              <Route
+                path="/reporteVehiculosMasRentados"
+                element={<ReporteVehiculosMasRentados />}
+              />
             </Routes>
           </div>
         </div>

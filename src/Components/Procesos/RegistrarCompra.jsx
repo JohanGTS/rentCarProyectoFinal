@@ -1,17 +1,14 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   addData,
   getAllData,
   getData,
   pagoTarjeta,
 } from "../../Features/apiCalls";
-import { UserContext } from "../../Contexts/UserContext";
 import logo from "../../assets/rrlogo.jpg";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import easyinvoice from "easyinvoice";
 export const RegistrarCompra = () => {
-  const userContext = useContext(UserContext);
-
   const stripe = useStripe();
   const elements = useElements();
   const initial = {
@@ -23,19 +20,32 @@ export const RegistrarCompra = () => {
     estado_res: "A",
     costoPorDia_fac: 1.0,
     idRecepcionOnline_fac: "",
+    Nota_Res: "Local en Santiago",
+    Hora_res: "08:00",
   };
 
   const [formValues, setFormValues] = useState(initial);
   const [formErrors, setFormErrors] = useState({});
+  const lugares = [
+    { Nota_Res: "Local en Santiago" },
+    { Nota_Res: "Aeropuerto Internacional de las Américas" },
+    { Nota_Res: "Aeropuerto Internacional del Cibao" },
+    { Nota_Res: "Aeropuerto Internacional de Punta Cana" },
+    { Nota_Res: "Aeropuerto Internacional de las Américas" },
+  ];
+
+  /*
+  easyinvoice.createInvoice(dataCorreo, function (result) {
+    console.log("PDF base64 string: ", result.pdf);
+  });*/
 
   const enviarEmail = (prueba) => {
     //puerto:2525
-    console.log("Envia correo");
     Email.send({
       Host: "smtp.elasticemail.com",
       Username: "quitomiguel56@gmail.com",
       Password: "EAC635C56878709AEA14A25537D4F24BEAF9",
-      To: userContext.usuario.correo,
+      To: "lewag69356@sparkroi.com",
       From: "quitomiguel56@gmail.com",
       Subject: "Recibo de reservación",
       Body: "Confirmación de reservación de vehículo adjuntada",
@@ -48,7 +58,7 @@ export const RegistrarCompra = () => {
     });
   };
 
-  const validarForm = () => {
+  const validarForm = async () => {
     let fechaValidada = true;
     const errors = {};
     if (formValues.idVehiculo_res == "" || isNaN(formValues.idVehiculo_res)) {
@@ -103,6 +113,14 @@ export const RegistrarCompra = () => {
         console.log("Menor de 3 días no es posible");
         errors.FechaFin_Res = "Menor de 3 días no es posible";
       }
+      const res = await pagoTarjeta("reserva/disponible", {
+        inicio: date1.toISOString().split("T")[0],
+        fin: date2.toISOString().split("T")[0],
+        id: formValues.idVehiculo_res,
+      });
+      if (res == 1) {
+        errors.FechaInicio_Res = "Vehículo no disponible en esta fecha";
+      }
       valor = parseFloat(formValues.costoPorDia_fac) * diferenciaDias;
 
       formValues.FechaInicio_Res = date1.toISOString().split("T")[0];
@@ -141,14 +159,16 @@ export const RegistrarCompra = () => {
       const dateValue = new Date(value).toISOString().split("T")[0];
       setFormValues({ ...formValues, [id]: dateValue });
     } else setFormValues({ ...formValues, [id]: value });
+    console.log(formValues);
   };
   const guardar = document.getElementById("guarda");
 
   const handleGuardar = async (e) => {
     //guardar.focus();
     e.preventDefault();
-    setFormErrors(validarForm());
-    console.log(formValues);
+    const error = await validarForm();
+    setFormErrors(error);
+
     if (Object.keys(formErrors).length == 0) {
       const { error, paymentMethod } = await stripe.createPaymentMethod({
         type: "card",
@@ -162,7 +182,6 @@ export const RegistrarCompra = () => {
             amount: valor * 100,
             id,
           });
-          console.log(res);
           if (res.id) {
             console.log("Se hizo");
             formValues.idRecepcionOnline_fac = res.id;
@@ -181,9 +200,9 @@ export const RegistrarCompra = () => {
                 country: "República Dominicana",
               },
               client: {
-                company: userContext.usuario.Nombre_ter,
-                address: userContext.usuario.Especificacion_terdir,
-                zip: userContext.usuario.CodigoPostal_dir,
+                company: "Client Corp",
+                address: "",
+                zip: "",
                 city: "",
                 country: "",
               },
@@ -233,11 +252,6 @@ export const RegistrarCompra = () => {
     }
   };
 
-  const CUSTOMERS = [
-    { stripeId: "cus_123456789", email: "jenny.rosen@example.com" },
-  ];
-  const PRICES = { basic: "price_123456789", professional: "price_987654321" };
-
   const limpiarForm = () => {
     const element = document.getElementById("formulario");
     element.reset();
@@ -246,8 +260,6 @@ export const RegistrarCompra = () => {
   };
   const handleSelectChange = (e) => {
     const { id, value } = e.target;
-    console.log(e.target);
-    console.log(formValues);
     const selectId = id; //
     const optionId =
       e.target.options[e.target.selectedIndex].getAttribute("data-key");
@@ -261,8 +273,6 @@ export const RegistrarCompra = () => {
   const handleSelectChange2 = (e) => {
     const { id, value } = e.target;
     const selectId = id; //
-    console.log(e.target);
-    console.log(formValues);
     const optionId =
       e.target.options[e.target.selectedIndex].getAttribute("data-key");
     const precio =
@@ -300,6 +310,7 @@ export const RegistrarCompra = () => {
 
     fetchData();
   }, []);
+
   return (
     <div>
       <form id="formulario">
@@ -312,20 +323,18 @@ export const RegistrarCompra = () => {
           </label>
 
           <select
-            key={"joda"}
+            key={"nose"}
             className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id={"idCliente_res"}
             onChange={handleSelectChange}
           >
-            <option key={"none"} data-key={""}>
-              Seleccione un valor
-            </option>
-            {clientes.map((values) => {
+            <option data-key={""}>Seleccione un valor</option>
+            {clientes.map((values, index) => {
               const key = values["idTercero_ter"];
               const descripcion =
                 values["Nombre_usu"] + " : " + values["Nombre_ter"];
               return (
-                <option key={key} data-key={key} value={descripcion}>
+                <option key={index} data-key={key} value={descripcion}>
                   {descripcion}
                 </option>
               );
@@ -409,6 +418,51 @@ export const RegistrarCompra = () => {
 
           <p className="text-red-700 text-sm font-bold mb-2">
             {formErrors.FechaFin_Res}
+          </p>
+        </div>
+        <div key={"Hora_res"}>
+          <label
+            htmlFor={"Hora_res"}
+            className="block text-gray-700 text-sm font-bold mb-2"
+          >
+            {"Hora de entrega"}
+          </label>
+          <input
+            className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+            type={"time"}
+            id={"Hora_res"}
+            name={"Hora_res"}
+            placeholder={"Seleccione la hora de entrega"}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        <div key={"Nota_Res"}>
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor={"Nota_Res"}
+          >
+            {"Lugar de entrega"}
+          </label>
+
+          <select
+            key={"nose"}
+            className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id={"Nota_Res"}
+            onChange={handleSelectChange}
+          >
+            {lugares.map((values, index) => {
+              const key = values["Nota_Res"];
+              const descripcion = values["Nota_Res"];
+              return (
+                <option key={index} data-key={key} value={descripcion}>
+                  {descripcion}
+                </option>
+              );
+            })}
+          </select>
+          <p className="text-red-700 text-sm font-bold mb-2">
+            {formErrors.idCliente_res}
           </p>
         </div>
         <div className="py-2">

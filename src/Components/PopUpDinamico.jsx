@@ -33,8 +33,9 @@ const PopUpDinamico = ({
     guardar.focus();
     const formulario = document.getElementById("formulario");
     setFormErrors(validarForm(formValues));
+
     if (Object.keys(formErrors).length === 0) {
-      if (actualiza) await addData(link, formValues);
+      if (actualiza) await addDataLista(link, formValues);
       else await updateData(link, formValues);
       formulario.reset();
       props.onHide();
@@ -54,11 +55,9 @@ const PopUpDinamico = ({
   };
   const handleBlur = () => {
     if (valorInicial) {
-      // Esperar a que los elementos estén disponibles en el DOM
       setTimeout(() => {
         Object.entries(valorInicial).forEach(([key, value]) => {
           const field = document.getElementById(key);
-          console.log("key falla: ");
           if (field && field.type === "select-one") {
             const options = field.options;
             for (let i = 0; i < options.length; i++) {
@@ -69,9 +68,7 @@ const PopUpDinamico = ({
               }
             }
           } else {
-            // Verificamos si el tipo es "date"
             if (field && field.type === "date") {
-              // Formateamos la fecha al formato "yyyy-MM-dd"
               const formattedDate = new Date(value).toISOString().split("T")[0];
               field.value = formattedDate;
               const id = field.id;
@@ -88,12 +85,7 @@ const PopUpDinamico = ({
       }, 0);
     }
   };
-  
-  // Observar los cambios en el estado formValues
-  useEffect(() => {
-    console.log("formValues actualizado:", formValues);
-  }, [formValues]);
-  
+
   const validarForm = () => {
     const errors = {};
 

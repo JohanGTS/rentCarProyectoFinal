@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
 import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/solid";
 import { UserContext } from "../Contexts/UserContext";
+import { AdminHome } from "../Pages/AdminHome";
 import { loadStripe } from "@stripe/stripe-js";
 import { RegistrarCompra } from "./Procesos/RegistrarCompra";
 import { Elements } from "@stripe/react-stripe-js";
@@ -320,7 +321,7 @@ export const BarraLateralUsuario = () => {
                 path="/reservarVehiculo"
                 element={<RegistrarReservaUsuario />}
               />
-
+              
               <Route
                 path="/cancelaReserva"
                 element={<CancelarRervacionCliente />}

@@ -9,6 +9,7 @@ import {
 
 import { cancelacion } from "../../JsonDinamico/mantenimientos";
 import {UserContext} from "../../Contexts/UserContext"
+import { Await } from "react-router-dom";
 const CancelarRervacion = () => {
   let actualiza;
   const userContext = useContext(UserContext); 
@@ -55,6 +56,7 @@ const CancelarRervacion = () => {
     guardar.focus();
     row.estado_can = "C";
     await updateData("cancelacion", row);
+    await updateData("entrega/reserva",{idReserva_res:row.idReserva_can,estado_res:"C"})
     await fetchData();
   };
   const handleEliminar = async (row) => {
@@ -64,6 +66,7 @@ const CancelarRervacion = () => {
     await updateData("cancelacion", row);
     await fetchData();
   };
+  console.log(cancelaciones)
   return (
     <div className="container mx-auto">
       <h2 className="font-bold text-gray-500 py-3">Cancelaciones</h2>

@@ -7,11 +7,12 @@ import {
   updateData,
 } from "../Features/apiCalls";
 const FormDinamico = ({ fields, link }) => {
+  let actualiza = false;
   const [formValues, setFormValues] = useState({});
   const handleInputChange = (e) => {
     const { id, value, type } = e.target;
     if (id.includes("id"))
-    setFormValues({ ...formValues, [id]: parseInt(value) });
+      setFormValues({ ...formValues, [id]: parseInt(value) });
     else setFormValues({ ...formValues, [id]: value });
   };
   const limpiarForm = () => {
@@ -19,7 +20,7 @@ const FormDinamico = ({ fields, link }) => {
     element.reset();
     setFormValues({});
   };
-  
+
   const handleSelectChange = (e) => {
     const { id, value } = e.target;
     const selectId = id; //
@@ -64,7 +65,6 @@ const FormDinamico = ({ fields, link }) => {
       console.log(data);
       setTimeout(() => {
         Object.entries(data).forEach(([key, value]) => {
-
           const field = document.getElementById(key);
           if (field && field.type === "select-one") {
             const options = field.options;

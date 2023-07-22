@@ -3,7 +3,6 @@ import { Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../Contexts/UserContext";
 import { addData, getAllData } from "../../Features/apiCalls";
-import axios from "axios";
 const RegisterPopUp = (props) => {
   const { usuario, setUsuario } = useContext(UserContext);
   const handleInputChange = (e) => {
@@ -47,7 +46,6 @@ const RegisterPopUp = (props) => {
     guardar.focus();
     const formulario = document.getElementById("formulario");
     setFormErrors(await validarForm(formValues));
-    console.log("A");
     if (Object.keys(formErrors).length === 0) {
       await addData("personal/Cliente", formValues);
       formulario.reset();
@@ -64,9 +62,12 @@ const RegisterPopUp = (props) => {
       ...formValues,
       [selectId]: parseInt(optionId),
     });
+    console.log(formValues)
   };
 
   const [paises, setPaises] = useState([]);
+  const [estados, setEstados] = useState([]);
+  const [ciudades, setCiudades] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -76,7 +77,30 @@ const RegisterPopUp = (props) => {
         console.log(error);
       }
     };
+    fetchData();
+  }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getAllData("estado");
+        setEstados(data)
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getAllData("ciudad");
+        setCiudades(data)
+      } catch (error) {
+        console.log(error);
+      }
+    };
     fetchData();
   }, []);
 
@@ -153,6 +177,7 @@ const RegisterPopUp = (props) => {
                 onChange={handleInputChange}
               />
             </div>
+
             <div>
               <label>
                 <input
@@ -222,6 +247,64 @@ const RegisterPopUp = (props) => {
                 })}
               </select>
             }
+            <p className="text-red-700 text-sm font-bold mb-2">
+              {formErrors.Pais_dir}
+            </p>
+
+            <label
+              htmlFor={"Estado_dir"}
+              className="block text-gray-700 text-sm font-bold mb-2"
+            >
+              {"Estado"}
+            </label>
+            {
+              <select
+                className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id={"Estado_dir"}
+                onChange={handleSelectChange}
+              >
+                {estados.map((option) => {
+                  const values = Object.values(option);
+                  const key = values[0]; // Obtener el primer valor del objeto
+                  const descripcion = values[values.length - 1]; // Obtener el último valor del objeto
+                  return (
+                    <option key={"pais"+key} data-key={key} value={descripcion}>
+                      {descripcion}
+                    </option>
+                  );
+                })}
+              </select>
+            }
+            <p className="text-red-700 text-sm font-bold mb-2">
+              {formErrors.Estado_dir}
+            </p>
+            <label
+              htmlFor={"Ciudad_dir"}
+              className="block text-gray-700 text-sm font-bold mb-2"
+            >
+              {"Ciudad"}
+            </label>
+            {
+              <select
+                className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id={"Ciudad_dir"}
+                onChange={handleSelectChange}
+              >
+                {ciudades.map((option) => {
+                  const values = Object.values(option);
+                  const key = values[0]; // Obtener el primer valor del objeto
+                  const descripcion = values[values.length - 1]; // Obtener el último valor del objeto
+                  return (
+                    <option key={"ciudad"+key} data-key={key} value={descripcion}>
+                      {descripcion}
+                    </option>
+                  );
+                })}
+              </select>
+            }
+            <p className="text-red-700 text-sm font-bold mb-2">
+              {formErrors.Ciudad_dir}
+            </p>
 
             <div key={"Fecha_Nacimiento_ter"}>
               <label
@@ -307,6 +390,39 @@ const RegisterPopUp = (props) => {
             <p className="text-red-700 text-sm font-bold mb-2">
               {formErrors.Clave_usu}
             </p>
+            <div>
+              <label
+                htmlFor={"CodigoPostal_dir"}
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                {"Codigo postal"}
+              </label>
+              <input
+                className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                type={"text"}
+                id={"CodigoPostal_dir"}
+                name={"CodigoPostal_dir"}
+                placeholder={"Ingrese su licencia de conducir"}
+                onChange={handleInputChange}
+                required
+              />
+            </div><div>
+              <label
+                htmlFor={"Especificacion_terdir"}
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                {"Especificacion direccion"}
+              </label>
+              <input
+                className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                type={"text"}
+                id={"Especificacion_terdir"}
+                name={"Especificacion_terdir"}
+                placeholder={"Espeficique mejor su dirección"}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
             <div className="flex justify-end">
               <button
                 className="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 mx-2 rounded"

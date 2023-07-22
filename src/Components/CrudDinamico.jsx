@@ -33,7 +33,6 @@ export const CrudDinamico = ({
   useEffect(() => {
     fetchData();
   }, [campos]);
-
   let cabeceraHeader = campos.map((obj) => obj.nombre);
   let cabeceraBody = campos.map((obj) => obj.id);
   let cabeceraLocal;
@@ -81,7 +80,9 @@ export const CrudDinamico = ({
   const handleEliminar = async (valor) => {
     const eliminar = document.getElementById("elimina");
     eliminar.focus();
+    console.log(valor);
     const data = await deleteData(link, valor);
+    console.log(data);
     await fetchData();
   };
   return (
@@ -144,7 +145,10 @@ export const CrudDinamico = ({
         link={link}
         actualiza={actualiza}
         valorInicial={selectedRow}
-        onHide={() => setShowModal(false)}
+        onHide={() => {
+          setShowModal(false);
+          fetchData();
+        }}
       />
     </div>
   );

@@ -1,9 +1,12 @@
-import React from 'react'
+import React from "react";
+import ContainerComponent from "../ContainerComponent";
 
 const RegistrarReservaUsuario = () => {
   return (
-    <div>RegistrarReservaUsuario</div>
-  )
-}
+    <div className="">
+      <ContainerComponent />
+    </div>
+  );
+};
 
-export default RegistrarReservaUsuario
+export default RegistrarReservaUsuario;

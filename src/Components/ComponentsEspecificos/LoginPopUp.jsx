@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../Contexts/UserContext";
-import { getData, getAllDataUsuario } from "../../Features/apiCalls";
+import { pagoTarjeta } from "../../Features/apiCalls";
 const LoginPopUp = (props) => {
   const [formValues, setFormValues] = useState({});
   const { usuario, setUsuario } = useContext(UserContext);
@@ -18,20 +18,18 @@ const LoginPopUp = (props) => {
     const email = form.email.value;
     const password = form.password.value;
     const data = {
-      correo: email,
-      password: password,
-      idCliente: 2,
-      rol: 1,
+      usuario: email,
+      password: password, rol :1
     };
     try {
-      //const response = await getAllDataUsuario("/personal/usuario", data);
+      //const response = await pagoTarjeta("/personal/usuario", data);
 
-      //const usuario = response.data;
+     // const usuario = response.data;
 
       if (data) {
         form.reset();
         setUsuario(data);
-        console.log(data);
+        console.log(usuario)
         navigate("/dashboard");
       } else {
         console.log("Usuario no encontrado.");
