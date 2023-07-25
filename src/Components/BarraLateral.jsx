@@ -27,6 +27,7 @@ import {
   ReporteClientesFrecuentes,
   ReporteOrdenesRecientes,
   ReporteVehiculosMasRentados,
+  ReporteOrdenesRecientesxCliente,
 } from "../Pages/reportes";
 import { Elements } from "@stripe/react-stripe-js";
 import CancelarRervacion from "./Procesos/CancelarRervacion";
@@ -86,24 +87,31 @@ export const BarraLateral = () => {
       value: "entregaVehiculo",
       ruta: "entregaVehiculo",
     },
-    { label: "Recibimiento de vehículo",
-    value: "recibirVehiculo",
-    ruta: "recibirVehiculo",}
+    {
+      label: "Recibimiento de vehículo",
+      value: "recibirVehiculo",
+      ruta: "recibirVehiculo",
+    },
   ];
 
   const dropDownReportes = [
     {
-      label: "Reporte Clientes Frecuentes",
+      label: "Clientes Frecuentes",
       value: "reporteClientesFrecuentes",
       ruta: "reporteClientesFrecuentes",
     },
     {
-      label: "Reporte Ordenes Recientes",
+      label: "Ordenes Recientes",
       value: "reporteOrdenesRecientes",
       ruta: "reporteOrdenesRecientes",
     },
     {
-      label: "Reporte Vehiculos Mas Rentados",
+      label: "Ordenes",
+      value: "reporteOrdenesRecientesxCliente",
+      ruta: "reporteOrdenesRecientesxCliente",
+    },
+    {
+      label: "Vehiculos Mas Rentados",
       value: "reporteVehiculosMasRentados",
       ruta: "reporteVehiculosMasRentados",
     },
@@ -552,10 +560,11 @@ export const BarraLateral = () => {
               <Route
                 path="/entregaVehiculo"
                 element={<CrudEntregaVehiculo />}
-              /><Route
-              path="/recibirVehiculo"
-              element={<CrudRecibirVehiculo />}
-            />
+              />
+              <Route
+                path="/recibirVehiculo"
+                element={<CrudRecibirVehiculo />}
+              />
               <Route
                 path="/registrarCompra"
                 element={
@@ -576,6 +585,10 @@ export const BarraLateral = () => {
               <Route
                 path="/reporteVehiculosMasRentados"
                 element={<ReporteVehiculosMasRentados />}
+              />
+              <Route
+                path="/reporteVehiculosMasRentados"
+                element={<ReporteOrdenesRecientesxCliente />}
               />
             </Routes>
           </div>

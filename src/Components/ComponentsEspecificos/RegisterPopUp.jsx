@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../Contexts/UserContext";
-import { addData, getAllData } from "../../Features/apiCalls";
+import { addData, getAllData, getData } from "../../Features/apiCalls";
 const RegisterPopUp = (props) => {
   const { usuario, setUsuario } = useContext(UserContext);
   const handleInputChange = (e) => {
@@ -45,7 +45,9 @@ const RegisterPopUp = (props) => {
     const guardar = document.getElementById("guardar");
     guardar.focus();
     const formulario = document.getElementById("formulario");
-    setFormErrors(await validarForm(formValues));
+    const errores = await validarForm(formValues);
+    console.log(errores);
+    setFormErrors(errores);
     if (Object.keys(formErrors).length === 0) {
       await addData("personal/Cliente", formValues);
       formulario.reset();
@@ -62,7 +64,7 @@ const RegisterPopUp = (props) => {
       ...formValues,
       [selectId]: parseInt(optionId),
     });
-    console.log(formValues)
+    console.log(formValues);
   };
 
   const [paises, setPaises] = useState([]);
@@ -84,7 +86,7 @@ const RegisterPopUp = (props) => {
     const fetchData = async () => {
       try {
         const data = await getAllData("estado");
-        setEstados(data)
+        setEstados(data);
       } catch (error) {
         console.log(error);
       }
@@ -96,7 +98,7 @@ const RegisterPopUp = (props) => {
     const fetchData = async () => {
       try {
         const data = await getAllData("ciudad");
-        setCiudades(data)
+        setCiudades(data);
       } catch (error) {
         console.log(error);
       }
@@ -106,12 +108,16 @@ const RegisterPopUp = (props) => {
 
   const validarForm = async (form) => {
     const errors = {};
+    console.log(form);
     if (form.Clave_usu !== form.passwordS || !form.Clave_usu || !form.passwordS)
       errors.Clave_usu = "Las contraseñas no coinciden";
 
     if (!form.Documento_ter)
       errors.Documento_ter = "Debe introducir su licencia de conducir";
-
+    if (!form.Nombre_ter) errors.Nombre_ter = "Debe introducir su nombre";
+    if (!form.Telefono_ter) errors.Telefono_ter = "Debe introducir su teléfono";
+    if (!form.Fecha_Nacimiento_ter)
+      errors.Fecha_Nacimiento_ter = "Debe introducir su fecha de nacimiento ";
     if (!esExtranjero) {
       const validarCedula = await fetch(
         `https://api.digital.gob.do/v3/cedulas/${form.Documento_ter}/validate`
@@ -121,9 +127,15 @@ const RegisterPopUp = (props) => {
       if (res.valid == false)
         errors.Documento_ter = "Licencia de conducir inválida";
     }
-
-    // if form.
-
+    if (form.Nombre_usu) {
+      const usuarioExistente = await getData("personal/usuario", {
+        Nombre_usu: formValues.Nombre_usu.toLowerCase(),
+      });
+      if (usuarioExistente)
+        errors.Nombre_usu = "Este nombre de usuario no está disponible";
+    } else {
+      errors.Nombre_usu = "Debe de especificar un nombre de usuario";
+    }
     return errors;
   };
 
@@ -175,9 +187,12 @@ const RegisterPopUp = (props) => {
                 name={"Telefono_ter"}
                 placeholder={"Teléfono"}
                 onChange={handleInputChange}
+                required
               />
             </div>
-
+            <p className="text-red-700 text-sm font-bold mb-2">
+              {formErrors.Telefono_ter}
+            </p>
             <div>
               <label>
                 <input
@@ -268,7 +283,11 @@ const RegisterPopUp = (props) => {
                   const key = values[0]; // Obtener el primer valor del objeto
                   const descripcion = values[values.length - 1]; // Obtener el último valor del objeto
                   return (
-                    <option key={"pais"+key} data-key={key} value={descripcion}>
+                    <option
+                      key={"pais" + key}
+                      data-key={key}
+                      value={descripcion}
+                    >
                       {descripcion}
                     </option>
                   );
@@ -295,7 +314,11 @@ const RegisterPopUp = (props) => {
                   const key = values[0]; // Obtener el primer valor del objeto
                   const descripcion = values[values.length - 1]; // Obtener el último valor del objeto
                   return (
-                    <option key={"ciudad"+key} data-key={key} value={descripcion}>
+                    <option
+                      key={"ciudad" + key}
+                      data-key={key}
+                      value={descripcion}
+                    >
                       {descripcion}
                     </option>
                   );
@@ -313,7 +336,9 @@ const RegisterPopUp = (props) => {
               >
                 {"Fecha de nacimiento"}
               </label>
-              <p>{formErrors.Fecha_Nacimiento_ter}</p>
+              <p className="text-red-700 text-sm font-bold mb-2">
+                {formErrors.Fecha_Nacimiento_ter}
+              </p>
               <input
                 className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
                 type={"date"}
@@ -406,7 +431,8 @@ const RegisterPopUp = (props) => {
                 onChange={handleInputChange}
                 required
               />
-            </div><div>
+            </div>
+            <div>
               <label
                 htmlFor={"Especificacion_terdir"}
                 className="block text-gray-700 text-sm font-bold mb-2"

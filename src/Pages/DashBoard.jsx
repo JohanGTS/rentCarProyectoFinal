@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Seccion from "../Components/Seccion";
 import { getAllData, getData } from "../Features/apiCalls";
+import LinesChart from "../Components/Charts/LineChart";
+import BarsChart from "../Components/Charts/BarsChart";
+import PiesChart from "../Components/Charts/PiesChart";
 
 export const DashBoard = () => {
   let [dashboard, setDashboard] = useState([]);
@@ -35,7 +38,10 @@ export const DashBoard = () => {
             />
           </svg>
           <div>
-            <h2>{dashboard.reservas}</h2>
+            {/* <h2>{dashboard.reservas}</h2> */}
+            <p class="font-serif hover:font-bold text-xl">
+              {dashboard.reservas}
+            </p>
             <p className="font-bold text-xl">Reservaciones</p>
           </div>
         </div>
@@ -56,7 +62,10 @@ export const DashBoard = () => {
             />
           </svg>
           <div>
-            <h3>{dashboard.usuarios}</h3>
+            {/* <h3>{dashboard.usuarios}</h3> */}
+            <p class="font-serif hover:font-bold text-xl">
+              {dashboard.usuarios}
+            </p>
             <p className="font-bold text-xl">Usuarios</p>
           </div>
         </div>
@@ -77,7 +86,9 @@ export const DashBoard = () => {
             />
           </svg>
           <div>
-            <h3>{dashboard.vehiculo}</h3>
+            <p class="font-serif hover:font-bold text-xl">
+              {dashboard.vehiculo}
+            </p>
             <p className="font-bold text-xl">Vehículos</p>
           </div>
         </div>
@@ -97,11 +108,43 @@ export const DashBoard = () => {
             />
           </svg>
           <div>
-            <h3>{dashboard.total}</h3>
+            <p class="font-serif hover:font-bold text-xl">
+              US$ {dashboard.total}
+            </p>
             <p className="font-bold text-xl">Ventas totales</p>
           </div>
         </div>
       </section>
+      <div style={{ flexWrap: "wrap" }}>
+        <center>
+          <p class="font-serif hover:font-bold text-xl">Nuevos Clientes</p>
+        </center>
+        <br></br>
+        <div
+          className="bg-light mx-auto px-2 border border-2 border-primary"
+          style={{ width: "850px", height: "450px" }}
+        >
+          <LinesChart />
+        </div>
+        <br></br>
+        <center>
+          <p class="font-serif hover:font-bold text-xl">
+            Vehiculos mas rentados
+          </p>
+        </center>
+        <br></br>
+        <div
+          className="bg-light mx-auto px-2 border border-2 border-primary"
+          style={{ width: "850px", height: "450px" }}
+        >
+          <BarsChart />
+        </div>
+        {/* <div className="bg-light mx-auto border border-2 border-primary" style={{width:"850px", height:"450px"}}>
+                    <div style={{width:"100%", height:"100%", padding:"10px 0"}}>
+                        <PiesChart />                       
+                    </div>
+                </div> */}
+      </div>
     </div>
   );
 };

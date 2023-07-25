@@ -519,6 +519,12 @@ export const user = [
   },
 ];
 
+
+export const reservaCancelacion = [
+  { id: "idReserva_can", nombre: "Id reservacion" },
+  { id: "FechaInicio_res", nombre: "Fecha de inicio" },
+  { id: "idRecepcionOnline_fac", nombre: "Id Stripe" },]
+
 export const cancelacion = [
   { id: "idCancelacion_reserva_can", nombre: "Id cancelacion" },
   { id: "idReserva_can", nombre: "Id reservacion" },

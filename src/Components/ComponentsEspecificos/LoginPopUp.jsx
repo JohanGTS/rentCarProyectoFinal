@@ -19,7 +19,7 @@ const LoginPopUp = (props) => {
     const password = form.password.value;
     const data = {
       usuario: email,
-      password: password, rol :1
+      password: password, rol :2, idCliente:2
     };
     try {
       //const response = await pagoTarjeta("/personal/usuario", data);

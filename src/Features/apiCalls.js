@@ -23,12 +23,9 @@ export const getAllDataSP = async (ruta, data) => {
   }
 };
 
-
 export const getData = async (ruta, data) => {
   try {
     const id = data[Object.keys(data)[0]];
-    console.log(ruta);
-    console.log(id);
     let total = `${primaryPath}${ruta}/${id}`;
     const res = await axios.get(total);
     return res.data;
@@ -96,6 +93,8 @@ export const deleteData = async (ruta, data) => {
 
 export const updateData = async (ruta, data) => {
   try {
+    console.log(ruta);
+    console.log(data);
     const dataId = data[Object.keys(data)[0]];
     const res = await axios.put(`${primaryPath}${ruta}/` + dataId, data);
     return res.data;

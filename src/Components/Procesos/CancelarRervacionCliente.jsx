@@ -16,7 +16,7 @@ const CancelarRervacionCliente = () => {
   console.log(userContext.usuario);
   const fetchData = async () => {
     try {
-      const data = await getData("cancelacion", {
+      const data = await getData("reserva/cliente", {
         id: userContext.usuario.idCliente,
       });
       console.log(data);
@@ -45,8 +45,7 @@ const CancelarRervacionCliente = () => {
     return obj;
   }, {});
   const handleModifica = async (row) => {
-    const guardar = document.getElementById("guarda");
-    guardar.focus();
+    console.log("first")
     row.estado_can = "C";
     await updateData("cancelacion", row);
     await fetchData();
