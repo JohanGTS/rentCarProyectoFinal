@@ -10,7 +10,7 @@ import {
   Legend,
   Filler,
 } from "chart.js";
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 
 ChartJS.register(
   CategoryScale,
@@ -34,7 +34,7 @@ var options = {
   scales: {
     y: {
       min: 0,
-      max: 10,
+      max: 100,
     },
     x: {
       ticks: { color: "rgba(0, 220, 195)" },
@@ -42,7 +42,7 @@ var options = {
   },
 };
 
-const Bars =() => {
+const Bars = () => {
   const [data, setData] = useState({
     labels: ["vehiculos"],
     datasets: [
@@ -53,40 +53,43 @@ const Bars =() => {
       },
     ],
   });
-  useEffect(()=> {
-    const fetchData= async()=> {
-        const url = 'http://localhost:3000/dashboard/cantVehiculoRentado'
-        const dataSet1 = [];
-        const dataSet2 = [];
-      await fetch(url).then((data)=> {
-          console.log("Api data", data)
+  useEffect(() => {
+    const fetchData = async () => {
+      const url = "http://localhost:3000/dashboard/cantVehiculoRentado";
+      const dataSet1 = [];
+      const dataSet2 = [];
+      await fetch(url)
+        .then((data) => {
+          console.log("Api data", data);
           const res = data.json();
-          return res
-      }).then((res) => {
-          console.log("ressss", res)
-         for (const val of res) {
-             dataSet1.push(val.Vehiculo);
-             dataSet2.push(val.cantidad)
-         }
-    setData({
-        labels: dataSet1,
-        datasets: [
-          {
-            label: "Vehiculos",
-            data: dataSet2,
-            backgroundColor: "rgba(0, 220, 195, 0.5)",
-          },
-        ],
-      })
-      console.log("arrData", dataSet1, dataSet2)
-    }).catch(e => {
-           console.log("error", e)
-       })
-   }
-   
-   fetchData();
-},[])
+          return res;
+        })
+        .then((res) => {
+          console.log("ressss", res);
+          for (const val of res) {
+            dataSet1.push(val.Vehiculo);
+            dataSet2.push(val.cantidad);
+          }
+          setData({
+            labels: dataSet1,
+            datasets: [
+              {
+                label: "Vehiculos",
+                data: dataSet2,
+                backgroundColor: "rgba(0, 220, 195, 0.5)",
+              },
+            ],
+          });
+          console.log("arrData", dataSet1, dataSet2);
+        })
+        .catch((e) => {
+          console.log("error", e);
+        });
+    };
+
+    fetchData();
+  }, []);
   return <Bar data={data} options={options} />;
-}
+};
 
 export default Bars;

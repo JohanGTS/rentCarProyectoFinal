@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { Box } from "@mui/material";
 import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
 import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/solid";
 import { UserContext } from "../Contexts/UserContext";
@@ -24,10 +25,11 @@ import {
 import { DashBoard } from "../Pages/DashBoard";
 import { RegistrarCompra } from "./Procesos/RegistrarCompra";
 import {
-  ReporteClientesFrecuentes,
+  ReporteClientesFrecuentes,  
   ReporteOrdenesRecientes,
   ReporteVehiculosMasRentados,
   ReporteOrdenesRecientesxCliente,
+  ReportesFacturasActivas,
 } from "../Pages/reportes";
 import { Elements } from "@stripe/react-stripe-js";
 import CancelarRervacion from "./Procesos/CancelarRervacion";
@@ -106,7 +108,7 @@ export const BarraLateral = () => {
       ruta: "reporteOrdenesRecientes",
     },
     {
-      label: "Ordenes",
+      label: "Ultimas Ordenes",
       value: "reporteOrdenesRecientesxCliente",
       ruta: "reporteOrdenesRecientesxCliente",
     },
@@ -114,6 +116,11 @@ export const BarraLateral = () => {
       label: "Vehiculos Mas Rentados",
       value: "reporteVehiculosMasRentados",
       ruta: "reporteVehiculosMasRentados",
+    },
+    {
+      label: "Facturas Activas",
+      value: "reportesFacturasActivas",
+      ruta: "reportesFacturasActivas",
     },
   ];
 
@@ -139,7 +146,7 @@ export const BarraLateral = () => {
   ];
   return (
     <>
-      <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+      <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800">
         <div className="px-3 py-3 lg:px-5 lg:pl-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-start">
@@ -181,7 +188,7 @@ export const BarraLateral = () => {
       </nav>
       <aside
         id="logo-sidebar"
-        className="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r sm:translate-x-0  border-gray-700"
+        className="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r sm:translate-x-0"
         aria-label="Sidebar"
       >
         <div className="h-full px-3 pb-4 overflow-y-auto bg-white ">
@@ -587,8 +594,12 @@ export const BarraLateral = () => {
                 element={<ReporteVehiculosMasRentados />}
               />
               <Route
-                path="/reporteVehiculosMasRentados"
+                path="/reporteOrdenesRecientesxCliente"
                 element={<ReporteOrdenesRecientesxCliente />}
+              />
+              <Route
+                path="/reportesFacturasActivas"
+                element={<ReportesFacturasActivas />}
               />
             </Routes>
           </div>

@@ -1,8 +1,8 @@
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import MainRouter from "./Routers/MainRouter";
 import { UserContext } from "./Contexts/UserContext";
-import AdminRouter from "./Routers/AdminRouter";
+
 export default function App() {
   const [usuario, setUsuario] = useState(() => {
     const user = localStorage.getItem("user");

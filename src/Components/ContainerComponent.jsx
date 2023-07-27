@@ -66,7 +66,7 @@ const ContainerComponent = () => {
   const uniqueColors = [...new Set(vehicles.map((vehicle) => vehicle.Color))];
 
   return (
-    <div>
+    <Box sx={{background: "#F8F9F9"}}>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="md:col-span-1">
           <label className="block">
@@ -137,7 +137,7 @@ const ContainerComponent = () => {
           <CardComponent key={index} data={vehicle} />
         ))}
       </div>
-    </div>
+    </Box>
   );
 };
 
