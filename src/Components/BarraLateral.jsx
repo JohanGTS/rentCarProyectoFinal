@@ -142,7 +142,6 @@ export const BarraLateral = () => {
     { label: "Vehículos", value: "vehiculo", ruta: "vehiculo" },
   ];
 
-  console.log(UserContext.usuario);
   return (
     <>
       <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800">

@@ -39,7 +39,7 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
   segundaFecha.setDate(segundaFecha.getDate() + 4);
   const initial = {
     idReserva_res: 0,
-    idCliente_res: userContext.usuario.idCliente,
+    idCliente_res: userContext.usuario.idTercero_ter,
     FechaInicio_Res: fechaInicial.toISOString().split("T")[0],
     FechaFin_Res: segundaFecha.toISOString().split("T")[0],
     idVehiculo_res: vehiculo.idVehiculo_veh,
@@ -212,7 +212,7 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
             id,
           });
           if (res.id) {
-            console.log("Se hizo");
+            console.log("Se recibió el pago");
             formValues.idRecepcionOnline_fac = res.id;
             await addData("reserva", formValues);
             let dataCorreo = {
@@ -229,11 +229,11 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
                 country: "República Dominicana",
               },
               client: {
-                company: userContext.usuario.correo, //userContext.usuario.Nombre_ter,
+                company: userContext.usuario.Nombre_ter, 
                 address: formValues.Nota_Res,
-                zip: "",
+                zip: userContext.usuario.Telefono_ter,
                 city: "",
-                country: "",
+                country: ""
               },
               information: {
                 number: id,
@@ -269,6 +269,7 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
             console.log(dataCorreo);
             await easyinvoice.createInvoice(dataCorreo, function (result) {
               enviarEmail(result.pdf);
+              console.log("Se envió el correo")
             });
             props.onHide();
           }
@@ -390,7 +391,7 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
               </p>
             </div>
             <div>
-              <label className="block text-gray-700 text-sm font-bold mb-2">
+              <label className="block text-gray-700 text-lg font-bold mb-2">
                 Valor de la reserva: ${valor}
               </label>
             </div>

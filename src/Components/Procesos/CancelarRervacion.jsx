@@ -29,7 +29,6 @@ const CancelarRervacion = () => {
   }, []);
 
   let cabeceraHeader = cancelacion.map((obj) => obj.nombre);
-  console.log("cab: " + cabeceraHeader);
   let cabeceraBody = cancelacion.map((obj) => obj.id);
   let cabeceraLocal;
   const limpiarForm = () => {

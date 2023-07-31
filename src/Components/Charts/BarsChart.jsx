@@ -60,12 +60,10 @@ const Bars = () => {
       const dataSet2 = [];
       await fetch(url)
         .then((data) => {
-          console.log("Api data", data);
           const res = data.json();
           return res;
         })
         .then((res) => {
-          console.log("ressss", res);
           for (const val of res) {
             dataSet1.push(val.Vehiculo);
             dataSet2.push(val.cantidad);
@@ -80,7 +78,6 @@ const Bars = () => {
               },
             ],
           });
-          console.log("arrData", dataSet1, dataSet2);
         })
         .catch((e) => {
           console.log("error", e);

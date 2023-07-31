@@ -69,7 +69,6 @@ export const BarraLateralUsuario = () => {
       ruta: "reportesFacturasActivas",
     },
   ];
-console.log(usuario)
   const dropdownItems = [
     { label: "Color", value: "color", ruta: "color" },
     { label: "Combustible", value: "combustible", ruta: "combustible" },

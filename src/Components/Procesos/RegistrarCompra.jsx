@@ -452,7 +452,7 @@ export const RegistrarCompra = () => {
           </p>
         </div>
         <div key={"Precio"}>
-          <label className="block text-gray-700 text-sm font-bold mb-2">
+          <label className="block text-gray-700 text-lg font-bold mb-2">
             Valor de la reserva: ${valor}
           </label>
         </div>
