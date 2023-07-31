@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import {
   addData,
   getAllData,
@@ -32,11 +32,16 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
       },
     },
   };
+
+  let fechaInicial = new Date(Date.now());
+  fechaInicial.setDate(fechaInicial.getDate() + 1);
+  let segundaFecha = new Date();
+  segundaFecha.setDate(segundaFecha.getDate() + 4);
   const initial = {
     idReserva_res: 0,
     idCliente_res: userContext.usuario.idCliente,
-    FechaInicio_Res: "",
-    FechaFin_Res: "",
+    FechaInicio_Res: fechaInicial.toISOString().split("T")[0],
+    FechaFin_Res: segundaFecha.toISOString().split("T")[0],
     idVehiculo_res: vehiculo.idVehiculo_veh,
     estado_res: "A",
     costoPorDia_fac: vehiculo.CostoPorDia_veh,
@@ -44,8 +49,14 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
     Nota_Res: "Local en Santiago",
     Hora_res: "08:00",
   };
+
+  const [valor, setValor] = useState(1);
   const [formValues, setFormValues] = useState(initial);
+  console.log(formValues);
   const [formErrors, setFormErrors] = useState({});
+  const [showModal, setShowModal] = useState(false);
+
+  let diferenciaDias = 0;
   const lugares = [
     { Nota_Res: "Local en Santiago" },
     { Nota_Res: "Aeropuerto Internacional de las Américas" },
@@ -53,8 +64,6 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
     { Nota_Res: "Aeropuerto Internacional de Punta Cana" },
     { Nota_Res: "Aeropuerto Internacional de las Américas" },
   ];
-  let diferenciaDias = 0;
-  let valor = 1;
   const handleInputChange = (e) => {
     const { id, value, type } = e.target;
     if (id.includes("id"))
@@ -64,6 +73,22 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
       setFormValues({ ...formValues, [id]: dateValue });
     } else setFormValues({ ...formValues, [id]: value });
   };
+
+  useEffect(() => {
+    const date1 = new Date(formValues.FechaInicio_Res);
+    const date2 = new Date(formValues.FechaFin_Res);
+    date1.setDate(date1.getDate());
+    date2.setDate(date2.getDate());
+    const diffTime = Math.abs(date2 - date1);
+    diferenciaDias = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diferenciaDias < 0) {
+      setValor(1);
+    } else {
+      setValor(parseFloat(formValues.costoPorDia_fac) * diferenciaDias);
+    }
+  }, [formValues.FechaInicio_Res, formValues.FechaFin_Res]);
+
   const guardar = document.getElementById("guarda");
   const enviarEmail = (prueba) => {
     //puerto:2525
@@ -102,7 +127,6 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
         [selectId]: optionId,
       });
     }
-    console.log(formValues);
   };
   const validarForm = async () => {
     let fechaValidada = true;
@@ -140,14 +164,11 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
       }
 
       if (date2 < date1) {
-        console.log("La fecha de fin no puede ser anterior a la inicial");
         errors.FechaFin_Res =
           "La fecha de fin no puede ser anterior a la inicial";
       }
 
       if (date1 < dateActual || date1 == dateActual) {
-        console.log("date1:" + date1);
-        console.log("dateActual:" + dateActual);
         errors.FechaInicio_Res =
           "La fecha de inicio no puede ser anterior a la actual";
       }
@@ -155,7 +176,7 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
       if (diferenciaDias < 3) {
         errors.FechaFin_Res = "Menor de 3 días no es posible";
       }
-      valor = parseFloat(formValues.costoPorDia_fac) * diferenciaDias;
+      setValor(parseFloat(formValues.costoPorDia_fac) * diferenciaDias);
       const res = await pagoTarjeta("reserva/disponible", {
         inicio: date1.toISOString().split("T")[0],
         fin: date2.toISOString().split("T")[0],
@@ -174,9 +195,10 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
     console.log("Entra");
     const error = await validarForm();
     setFormErrors(error);
-    console.log(formErrors);
+    setShowModal(true);
     console.log(Object.keys(formErrors).length);
     if (Object.keys(formErrors).length == 0) {
+      console.log("Paga")
       const { error, paymentMethod } = await stripe.createPaymentMethod({
         type: "card",
         card: elements.getElement(CardElement),
@@ -255,9 +277,12 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
         }
       } else {
         console.log(error.message);
+        setShowModal(false);
       }
-      props.onHide();
-    }
+      
+    } 
+      setShowModal(false);
+    
   };
   return (
     <Modal
@@ -286,8 +311,9 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
                 type={"date"}
                 id={"FechaInicio_Res"}
                 name={"FechaInicio_Res"}
-                placeholder={"Seleccione su fecha de nacimiento"}
+                placeholder={"Seleccione la fecha inicial"}
                 onChange={handleInputChange}
+                value={formValues.FechaInicio_Res}
                 required
               />
 
@@ -309,6 +335,7 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
                 name={"FechaFin_Res"}
                 placeholder={"Seleccione su fecha de nacimiento"}
                 onChange={handleInputChange}
+                value={formValues.FechaFin_Res}
                 required
               />
 
@@ -328,6 +355,7 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
                 type={"time"}
                 id={"Hora_res"}
                 name={"Hora_res"}
+                value={formValues.Hora_res}
                 placeholder={"Seleccione la hora de entrega"}
                 onChange={handleInputChange}
                 required
@@ -361,6 +389,11 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
                 {formErrors.idCliente_res}
               </p>
             </div>
+            <div>
+              <label className="block text-gray-700 text-sm font-bold mb-2">
+                Valor de la reserva: ${valor}
+              </label>
+            </div>
             <div className="py-2">
               <CardElement options={opcionTarjetas} />
             </div>
@@ -377,6 +410,11 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
             </div>
           </form>
         </div>
+        {showModal && (
+          <div className="modal-backdrop w-1/2">
+            <div className="modal-content">Esperando respuesta...</div>
+          </div>
+        )}
       </Modal.Body>
       <Modal.Footer></Modal.Footer>
     </Modal>

@@ -240,6 +240,7 @@ export const seguro = [
   },
   {
     id: "Plan_seg",
+    nombre:"Plan del seguro",
     label: "Nombre del plan",
     type: "text",
     placeholder: "Digite el nombre del plan",
@@ -281,7 +282,6 @@ export const vehiculo = [
   },
   {
     id: "idTipoVehiculo_veh",
-    nombre: "Id tipo vehiculo",
     retorna: await getAllData("tipovehiculo"),
     label: "Id del tipo de vehiculo",
     type: "text",
@@ -290,7 +290,6 @@ export const vehiculo = [
   },
   {
     id: "idMarca_veh",
-    nombre: "Id marca",
     retorna: await getAllData("marca"),
     label: "Id del tipo de marca",
     type: "text",
@@ -299,7 +298,6 @@ export const vehiculo = [
   },
   {
     id: "idModelo_veh",
-    nombre: "Id modelo",
     retorna: await getAllData("modelo"),
     label: "Id del tipo de modelo",
     type: "text",
@@ -340,7 +338,6 @@ export const vehiculo = [
   },
   {
     id: "idColor_veh",
-    nombre: "Id color",
     retorna: await getAllData("color"),
     label: "Id del color",
     type: "text",
@@ -349,7 +346,6 @@ export const vehiculo = [
   },
   {
     id: "idSeguro_veh",
-    nombre: "Id color",
     retorna: await getAllData("seguro"),
     label: "Id del seguro",
     type: "text",
@@ -374,7 +370,6 @@ export const vehiculo = [
   },
   {
     id: "idCombustible_veh",
-    nombre: "Id combustible",
     retorna: await getAllData("combustible"),
     label: "Id del combustible",
     type: "text",
@@ -410,7 +405,6 @@ export const user = [
   },
   {
     id: "idDocumento_ter",
-    nombre: "Tipo de documento",
     retorna: await getAllData("documento"),
     label: "Id del tipo de modelo",
     type: "text",
@@ -435,7 +429,6 @@ export const user = [
   },
   {
     id: "Correo_ter",
-    nombre: "Correo",
     label: "Correo electrónico",
     type: "mail",
     placeholder: "Digite su correo",
@@ -443,7 +436,6 @@ export const user = [
   },
   {
     id: "idTipoUsuario_usu",
-    nombre: "Tipo usuario",
     retorna: await getAllData("tipousuario"),
     label: "Id del tipo de usuario",
     type: "text",
@@ -460,7 +452,6 @@ export const user = [
   },
   {
     id: "Clave_usu",
-    nombre: "Clave",
     label: "Contraseña",
     type: "password",
     placeholder: "Digite la contraseña",
@@ -468,7 +459,6 @@ export const user = [
   },
   {
     id: "Fecha_Ingreso_usu",
-    nombre: "Ingreso",
     label: "Fecha de ingreso",
     type: "date",
     placeholder: "Digite la disponibilidad",
@@ -476,7 +466,6 @@ export const user = [
   },
   {
     id: "idPais_pai",
-    nombre: "Pais",
     retorna: await getAllData("pais"),
     label: "Id del pais",
     type: "text",
@@ -485,7 +474,6 @@ export const user = [
   },
   {
     id: "idCiudad_ciu",
-    nombre: "Ciudad",
     retorna: await getAllData("ciudad"),
     label: "Id de la ciudad",
     type: "text",
@@ -495,7 +483,6 @@ export const user = [
   {
     id: "idEstado_est",
     retorna: await getAllData("estado"),
-    nombre: "Estado",
     label: "Id del estado",
     type: "text",
     placeholder: "Digite el id del estado",
@@ -519,11 +506,11 @@ export const user = [
   },
 ];
 
-
-export const reservaCancelacion = [
-  { id: "idReserva_can", nombre: "Id reservacion" },
+export const cancelacion2 = [
+  { id: "idReserva_res", nombre: "Id reservacion" },
   { id: "FechaInicio_res", nombre: "Fecha de inicio" },
-  { id: "idRecepcionOnline_fac", nombre: "Id Stripe" },]
+  { id: "FechaFin_res", nombre: "Fecha de fin" },
+];
 
 export const cancelacion = [
   { id: "idCancelacion_reserva_can", nombre: "Id cancelacion" },

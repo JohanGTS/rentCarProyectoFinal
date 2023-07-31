@@ -69,9 +69,9 @@ export const deleteDataLista = async (ruta, dataArray) => {
   try {
     dataArray.forEach(async (data) => {
       try {
-        const res = await axios.delete(`${primaryPath}${ruta}/`, {
-          data: data,
-        });
+        const id = data[Object.keys(data)[0]];
+        const res = await axios.delete(`${primaryPath}${ruta}/`, data);
+        return res.data;
       } catch (err) {
         console.log(err);
       }
@@ -93,10 +93,10 @@ export const deleteData = async (ruta, data) => {
 
 export const updateData = async (ruta, data) => {
   try {
-    console.log(ruta);
     console.log(data);
     const dataId = data[Object.keys(data)[0]];
     const res = await axios.put(`${primaryPath}${ruta}/` + dataId, data);
+    console.log(res.data);
     return res.data;
   } catch (err) {
     return {

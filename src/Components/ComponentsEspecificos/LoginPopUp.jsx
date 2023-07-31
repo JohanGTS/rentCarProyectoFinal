@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../Contexts/UserContext";
@@ -11,25 +11,33 @@ const LoginPopUp = (props) => {
     setFormValues({ ...formValues, [name]: value });
   };
 
+  useEffect(() => {
+    navigate("/dashboard");
+
+    const auxUser = usuario;
+    console.log(usuario);
+  }, [usuario]);
+
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
-    const email = form.email.value;
+    const user = form.usuario.value;
     const password = form.password.value;
     const data = {
-      usuario: email,
-      password: password, rol :1, idCliente:2
+      usuario: user,
+      pass: password,
+      correo: "mafeb93256@quipas.com",
+      idCliente: 2,
     };
     try {
-      //const response = await pagoTarjeta("/personal/usuario", data);
+      const response = await pagoTarjeta("personal/getusuario", data);
 
-     // const usuario = response.data;
-
-      if (data) {
+      if (response[0].Correo_ter) {
         form.reset();
-        setUsuario(data);
-        console.log(usuario)
+        await setUsuario(response[0]);
+        console.log(response[0]);
+        console.log(usuario);
         navigate("/dashboard");
       } else {
         console.log("Usuario no encontrado.");
@@ -54,19 +62,19 @@ const LoginPopUp = (props) => {
       <Modal.Body>
         <div className="container">
           <form onSubmit={handleSubmit}>
-            <div key={"email"}>
+            <div key={"usuario"}>
               <label
-                htmlFor={"email"}
+                htmlFor={"usuario"}
                 className="block text-gray-700 text-sm font-bold mb-2"
               >
-                {"Email"}
+                {"Usuario"}
               </label>
               <input
                 className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
                 type={"text"}
-                id={"email"}
-                name={"email"}
-                placeholder={"Ingrese su email"}
+                id={"usuario"}
+                name={"usuario"}
+                placeholder={"Ingrese su usuario"}
                 required
                 onChange={handleInputChange}
               />
@@ -76,7 +84,7 @@ const LoginPopUp = (props) => {
                 htmlFor={"password"}
                 className="block text-gray-700 text-sm font-bold mb-2"
               >
-                {"password"}{" "}
+                {"Contraseña"}{" "}
               </label>
               <input
                 className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"

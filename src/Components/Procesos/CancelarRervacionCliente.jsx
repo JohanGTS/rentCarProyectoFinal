@@ -8,29 +8,29 @@ import {
 } from "../../Features/apiCalls";
 import { UserContext } from "../../Contexts/UserContext";
 
-import { cancelacion } from "../../JsonDinamico/mantenimientos";
+import { cancelacion2 } from "../../JsonDinamico/mantenimientos";
 const CancelarRervacionCliente = () => {
   let actualiza;
   const userContext = useContext(UserContext);
   const [cancelaciones, setCancelaciones] = useState([]);
-  console.log(userContext.usuario);
   const fetchData = async () => {
     try {
       const data = await getData("reserva/cliente", {
         id: userContext.usuario.idCliente,
       });
       console.log(data);
-      setCancelaciones(data);
+      data == "" ? setCancelaciones([]) : setCancelaciones([data]);
     } catch (error) {
       console.log(error);
+      setCancelaciones([]);
     }
   };
   useEffect(() => {
     fetchData();
   }, []);
 
-  let cabeceraHeader = cancelacion.map((obj) => obj.nombre);
-  let cabeceraBody = cancelacion.map((obj) => obj.id);
+  let cabeceraHeader = cancelacion2.map((obj) => obj.nombre);
+  let cabeceraBody = cancelacion2.map((obj) => obj.id);
   actualiza = false;
 
   const handleGuardar = async (e) => {
@@ -45,16 +45,19 @@ const CancelarRervacionCliente = () => {
     return obj;
   }, {});
   const handleModifica = async (row) => {
-    console.log("first")
-    row.estado_can = "C";
-    await updateData("cancelacion", row);
-    await fetchData();
-  };
-  const handleEliminar = async (row) => {
-    const eliminar = document.getElementById("elimina");
-    eliminar.focus();
-    row.estado_can = "D";
-    await updateData("cancelacion", row);
+    await addData("cancelacion", {
+      fake: row.idReserva_res,
+      idReserva_can: row.idReserva_res,
+      estado_can: "P",
+    });
+    await updateData("cancelacion/reserva", {
+      idReserva_can: row.idReserva_res,
+      estado_can: "P",
+    });
+    await updateData("cancelacion/factura", {
+      idReserva_can: row.idReserva_res,
+      estado_can: "P",
+    });
     await fetchData();
   };
   return (
@@ -74,13 +77,12 @@ const CancelarRervacionCliente = () => {
             <tr key={index} className="bg-white border-b">
               {cabeceraBody.map((campo) => (
                 <td key={campo} className="px-1 py-4 font-medium text-gray-900">
-                  {campo == "fechaCancelacion_can"
+                  {campo.includes("Fecha") && typeof objeto[campo] === "string"
                     ? objeto[campo].split("T")[0]
                     : objeto[campo]}
                 </td>
               ))}
               <td>
-                
                 <button
                   id="elimina"
                   className="flex-shrink-0 bg-red-500 hover:bg-red-700 border-red-500 hover:border-red-700 text-sm border-4 text-white py-1 px-2  rounded"

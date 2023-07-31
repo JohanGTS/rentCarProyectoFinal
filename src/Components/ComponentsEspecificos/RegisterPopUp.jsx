@@ -45,6 +45,8 @@ const RegisterPopUp = (props) => {
     const guardar = document.getElementById("guardar");
     guardar.focus();
     const formulario = document.getElementById("formulario");
+
+    setShowModal(true);
     const errores = await validarForm(formValues);
     console.log(errores);
     setFormErrors(errores);
@@ -53,6 +55,8 @@ const RegisterPopUp = (props) => {
       formulario.reset();
       props.onHide();
     }
+
+    setShowModal(false);
   };
   const handleSelectChange = (e) => {
     const { id, value } = e.target;
@@ -70,6 +74,7 @@ const RegisterPopUp = (props) => {
   const [paises, setPaises] = useState([]);
   const [estados, setEstados] = useState([]);
   const [ciudades, setCiudades] = useState([]);
+  const [showModal, setShowModal] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -468,6 +473,11 @@ const RegisterPopUp = (props) => {
             </div>
           </form>
         </div>
+        {showModal && (
+          <div className="modal-backdrop">
+            <div className="modal-content">Esperando respuesta...</div>
+          </div>
+        )}
       </Modal.Body>
       <Modal.Footer></Modal.Footer>
     </Modal>

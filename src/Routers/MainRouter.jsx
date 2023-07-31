@@ -23,12 +23,13 @@ const MainRouter = () => {
       userContext.usuario !== "null"
     );
   }, [userContext]);
-
+  console.log(userContext.usuario)
   return (
     <>
+    
       {isAuthenticated ? (
         <>
-          {userContext.usuario?.rol === 1 ? <BarraLateral /> : <BarraLateralUsuario />}
+          {userContext.usuario?.idTipoUsuario_usu === 1 ? <BarraLateral  /> : <BarraLateralUsuario  />}
         </>
       ) : (
         <>

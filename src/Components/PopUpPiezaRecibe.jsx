@@ -8,51 +8,49 @@ import {
   addData,
   deleteData,
   updateData,
+  getAllDataSP,
   addDataLista,
   deleteDataLista,
 } from "../Features/apiCalls";
 const PopUpPiezaRecibe = ({ valorInicial, ...props }) => {
   const [checklistData, setChecklistData] = useState([]);
   const [checkedTasks, setCheckedTasks] = useState([]);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getAllDataSP("recibir/pieza",{id:valorInicial.idReserva_res});
+        const data = await getData("recibir/pieza", {
+          id: valorInicial.idReserva_rp,
+        });
         setChecklistData(data);
       } catch (err) {
         console.log(err);
       }
     };
     fetchData();
-  }, []);
-
+  }, [valorInicial]);
   const handleCheckboxChange = (taskId) => {
+    console.log(taskId)
     const updatedChecklistData = checklistData.map((task) =>
-      task.idPieza_pie === taskId
+      task.idPieza_rp === taskId
         ? { ...task, completed: !task.completed }
         : task
     );
     setChecklistData(updatedChecklistData);
 
-    // Agregar o eliminar la tarea marcada del estado checkedTasks
     const taskIndex = checkedTasks.findIndex(
-      (task) => task.idPieza_pie === taskId
+      (task) => task.idPieza_rp === taskId
     );
     if (taskIndex !== -1) {
-      // La tarea está marcada, eliminarla de checkedTasks
       setCheckedTasks((prev) =>
-        prev.filter((task) => task.idPieza_pie !== taskId)
+        prev.filter((task) => task.idPieza_rp !== taskId)
       );
     } else {
-      // La tarea no está marcada, agregarla a checkedTasks
       setCheckedTasks((prev) => [
         ...prev,
-        updatedChecklistData.find((task) => task.idPieza_pie === taskId),
+        updatedChecklistData.find((task) => task.idPieza_rp === taskId),
       ]);
     }
   };
-
   const handleSave = async (e) => {
     try {
       e.preventDefault();
@@ -60,11 +58,11 @@ const PopUpPiezaRecibe = ({ valorInicial, ...props }) => {
       const checkedItems = checklistData.filter((task) => task.completed);
       const itemsToAdd = checkedItems.map((item) => ({
         ...item,
-        idReserva_res: valorInicial.idReserva_res,
+        idReserva_rp: valorInicial.idReserva_rp,
       }));
       await deleteDataLista("entrega", itemsToAdd);
       await updateData("entrega/reserva", {
-        idReserva_res: valorInicial.idReserva_res,
+        idReserva_rp: valorInicial.idReserva_rp,
         estado_res: "F",
       });
       console.log(itemsToAdd);
@@ -97,7 +95,7 @@ const PopUpPiezaRecibe = ({ valorInicial, ...props }) => {
                       className="m-2"
                       type="checkbox"
                       checked={task?.completed ? task.completed : false}
-                      onChange={() => handleCheckboxChange(task.idPieza_pie)}
+                      onChange={() => handleCheckboxChange(task.idPieza_rp)}
                     />
                     <label>{task.Descripcion_pie}</label>
                   </div>

@@ -8,14 +8,19 @@ import {
 import logo from "../../assets/rrlogo.jpg";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import easyinvoice from "easyinvoice";
+
 export const RegistrarCompra = () => {
   const stripe = useStripe();
   const elements = useElements();
+  let fechaInicial = new Date(Date.now());
+  fechaInicial.setDate(fechaInicial.getDate() + 1);
+  let segundaFecha = new Date();
+  segundaFecha.setDate(segundaFecha.getDate() + 4);
   const initial = {
     idReserva_res: 0,
     idCliente_res: "",
-    FechaInicio_Res: "",
-    FechaFin_Res: "",
+    FechaInicio_Res: fechaInicial.toISOString().split("T")[0],
+    FechaFin_Res: segundaFecha.toISOString().split("T")[0],
     idVehiculo_res: "",
     estado_res: "A",
     costoPorDia_fac: 1.0,
@@ -24,8 +29,10 @@ export const RegistrarCompra = () => {
     Hora_res: "08:00",
   };
 
+  const [valor, setValor] = useState(1);
   const [formValues, setFormValues] = useState(initial);
   const [formErrors, setFormErrors] = useState({});
+  const [showModal, setShowModal] = useState(false);
   const lugares = [
     { Nota_Res: "Local en Santiago" },
     { Nota_Res: "Aeropuerto Internacional de las Américas" },
@@ -33,6 +40,25 @@ export const RegistrarCompra = () => {
     { Nota_Res: "Aeropuerto Internacional de Punta Cana" },
     { Nota_Res: "Aeropuerto Internacional de las Américas" },
   ];
+
+  useEffect(() => {
+    const date1 = new Date(formValues.FechaInicio_Res);
+    const date2 = new Date(formValues.FechaFin_Res);
+    date1.setDate(date1.getDate());
+    date2.setDate(date2.getDate());
+    const diffTime = Math.abs(date2 - date1);
+    diferenciaDias = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diferenciaDias < 0) {
+      setValor(1);
+    } else {
+      setValor(parseFloat(formValues.costoPorDia_fac) * diferenciaDias);
+    }
+  }, [
+    formValues.FechaInicio_Res,
+    formValues.FechaFin_Res,
+    formValues.costoPorDia_fac,
+  ]);
 
   /*
   easyinvoice.createInvoice(dataCorreo, function (result) {
@@ -121,7 +147,7 @@ export const RegistrarCompra = () => {
       if (res == 1) {
         errors.FechaInicio_Res = "Vehículo no disponible en esta fecha";
       }
-      valor = parseFloat(formValues.costoPorDia_fac) * diferenciaDias;
+      setValor(parseFloat(formValues.costoPorDia_fac) * diferenciaDias);
 
       formValues.FechaInicio_Res = date1.toISOString().split("T")[0];
       formValues.FechaFin_Res = date2.toISOString().split("T")[0];
@@ -150,7 +176,6 @@ export const RegistrarCompra = () => {
     },
   };
   let diferenciaDias = 0;
-  let valor = 1;
   const handleInputChange = (e) => {
     const { id, value, type } = e.target;
     if (id.includes("id"))
@@ -166,6 +191,8 @@ export const RegistrarCompra = () => {
   const handleGuardar = async (e) => {
     //guardar.focus();
     e.preventDefault();
+    
+    setShowModal(true);
     const error = await validarForm();
     setFormErrors(error);
 
@@ -249,6 +276,8 @@ export const RegistrarCompra = () => {
       } else {
         console.log(error.message);
       }
+      
+    setShowModal(false);
     }
   };
 
@@ -392,6 +421,7 @@ export const RegistrarCompra = () => {
             name={"FechaInicio_Res"}
             placeholder={"Seleccione su fecha de nacimiento"}
             onChange={handleInputChange}
+            value={formValues.FechaInicio_Res}
             required
           />
 
@@ -413,12 +443,18 @@ export const RegistrarCompra = () => {
             name={"FechaFin_Res"}
             placeholder={"Seleccione su fecha de nacimiento"}
             onChange={handleInputChange}
+            value={formValues.FechaFin_Res}
             required
           />
 
           <p className="text-red-700 text-sm font-bold mb-2">
             {formErrors.FechaFin_Res}
           </p>
+        </div>
+        <div key={"Precio"}>
+          <label className="block text-gray-700 text-sm font-bold mb-2">
+            Valor de la reserva: ${valor}
+          </label>
         </div>
         <div key={"Hora_res"}>
           <label
@@ -434,6 +470,7 @@ export const RegistrarCompra = () => {
             name={"Hora_res"}
             placeholder={"Seleccione la hora de entrega"}
             onChange={handleInputChange}
+            value={formValues.Hora_res}
             required
           />
         </div>
@@ -479,6 +516,11 @@ export const RegistrarCompra = () => {
           </button>
         </div>
       </form>
+      {showModal && (
+        <div className="modal-backdrop w-1/2">
+          <div className="modal-content">Esperando respuesta...</div>
+        </div>
+      )}
     </div>
   );
 };

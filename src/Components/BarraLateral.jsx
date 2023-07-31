@@ -25,7 +25,7 @@ import {
 import { DashBoard } from "../Pages/DashBoard";
 import { RegistrarCompra } from "./Procesos/RegistrarCompra";
 import {
-  ReporteClientesFrecuentes,  
+  ReporteClientesFrecuentes,
   ReporteOrdenesRecientes,
   ReporteVehiculosMasRentados,
   ReporteOrdenesRecientesxCliente,
@@ -36,6 +36,8 @@ import CancelarRervacion from "./Procesos/CancelarRervacion";
 import Checklist from "./CheckList";
 import { CrudEntregaVehiculo } from "./CrudEntregaVehiculo";
 import { CrudRecibirVehiculo } from "./CrudRecibirVehiculo";
+import { CrudVehiculo } from "./CrudVehiculo";
+import { CrudUsuario } from "./CrudUsuario";
 export const BarraLateral = () => {
   const llavePublica =
     "pk_test_51N0m8BFCP7DBw79T3Z288UoIy9LMHLkrjUgQv0YhCTrtiB1xLnCBzjhU4Gz91Stp6xxeDxPN1W37Ei8WmClkddXI0049rggz4N";
@@ -117,11 +119,6 @@ export const BarraLateral = () => {
       value: "reporteVehiculosMasRentados",
       ruta: "reporteVehiculosMasRentados",
     },
-    {
-      label: "Facturas Activas",
-      value: "reportesFacturasActivas",
-      ruta: "reportesFacturasActivas",
-    },
   ];
 
   const dropdownItems = [
@@ -144,6 +141,8 @@ export const BarraLateral = () => {
     { label: "Usuarios", value: "usuario", ruta: "usuario" },
     { label: "Vehículos", value: "vehiculo", ruta: "vehiculo" },
   ];
+
+  console.log(UserContext.usuario);
   return (
     <>
       <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800">
@@ -538,21 +537,8 @@ export const BarraLateral = () => {
                   />
                 }
               />
-              <Route
-                path="/usuario"
-                element={
-                  <CrudDinamico
-                    campos={user}
-                    link={"personal/cliente"}
-                    titulo={"Usuario"}
-                    valorInicial={{}}
-                  />
-                }
-              />
-              <Route
-                path="/vehiculo"
-                element={<AdminHome campos={vehiculo} link={"vehiculo"} />}
-              />
+              <Route path="/usuario" element={<CrudUsuario />} />
+              <Route path="/vehiculo" element={<CrudVehiculo />} />
               <Route
                 path="/crud"
                 element={

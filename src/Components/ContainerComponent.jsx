@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import CardComponent from "./CardComponent";
 import { getAllData } from "../Features/apiCalls";
 
+import { Box } from "@mui/material";
 const ContainerComponent = () => {
   const [vehicles, setVehicles] = useState([]);
   const [filteredVehicles, setFilteredVehicles] = useState([]);

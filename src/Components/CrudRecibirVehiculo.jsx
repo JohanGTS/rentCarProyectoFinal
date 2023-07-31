@@ -5,6 +5,7 @@ import {
   addData,
   deleteData,
   updateData,
+  getAllDataSP,
 } from "../Features/apiCalls";
 import PopUpDinamico from "./PopUpDinamico";
 import PopUpPiezaRecibe from "./PopUpPiezaRecibe";
@@ -41,17 +42,17 @@ export const CrudRecibirVehiculo = () => {
   }, [clientes]);
   let cabeceraHeader = [
     "Id reserva",
-    "Id cliente",
+    "Nombre del cliente",
     "Fecha inicio",
     "Fecha fin",
-    "Id vehículo",
+    "Matrícula del vehículo",
   ];
   let cabeceraBody = [
-    "idReserva_res",
-    "idCliente_res",
+    "idReserva_rp",
+    "nombreCliente",
     "FechaInicio_res",
     "FechaFin_res",
-    "idVehiculo_res",
+    "matriculaVehiculo",
   ];
   let cabeceraLocal;
   const handleModifica = (row) => {

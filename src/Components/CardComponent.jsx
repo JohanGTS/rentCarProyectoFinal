@@ -170,10 +170,7 @@ const CardComponent = ({ data }) => {
           <button
             className="w-full bg-primary text-white py-3 rounded-lg font-semibold"
             onClick={() => {
-              // Aquí puedes agregar la lógica para el evento onClick del botón
-              // Por ejemplo, redirigir a una página de reserva o mostrar un modal
               setEstado(true);
-              console.log(data);
             }}
           >
             Reserva ya
