@@ -26,13 +26,11 @@ const LoginPopUp = (props) => {
     const password = form.password.value;
     const data = {
       usuario: user,
-      pass: password,
-      correo: "mafeb93256@quipas.com",
-      idCliente: 2,
+      pass: password
     };
     try {
       const response = await pagoTarjeta("personal/getusuario", data);
-
+      
       if (response[0].Correo_ter) {
         form.reset();
         await setUsuario(response[0]);

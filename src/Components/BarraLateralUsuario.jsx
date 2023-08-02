@@ -8,7 +8,8 @@ import { RegistrarCompra } from "./Procesos/RegistrarCompra";
 import { Elements } from "@stripe/react-stripe-js";
 import { Box } from "@mui/material";
 import {
-  ReportesFacturasActivas,
+  ReportesFacturasActivasXCliente,
+  ReporteOrdenesRecientesxCliente,
 } from "../Pages/reportes";
 import RegistrarReservaUsuario from "./Procesos/RegistrarReservaUsuario";
 import CancelarRervacionCliente from "./Procesos/CancelarRervacionCliente";
@@ -65,8 +66,13 @@ export const BarraLateralUsuario = () => {
   const dropDownReportes = [
     {
       label: "Facturas Activas",
-      value: "reportesFacturasActivas",
-      ruta: "reportesFacturasActivas",
+      value: "reportesFacturasActivasXCliente",
+      ruta: "reportesFacturasActivasXCliente",
+    },
+    {
+      label: "Ultimas Ordenes",
+      value: "reporteOrdenesRecientesxCliente",
+      ruta: "reporteOrdenesRecientesxCliente",
     },
   ];
   const dropdownItems = [
@@ -138,7 +144,6 @@ export const BarraLateralUsuario = () => {
       >
         <div className="h-full px-3 pb-4 overflow-y-auto bg-white ">
           <ul className="space-y-2 font-medium">
-            
             <ul>
               <button
                 href="#"
@@ -295,14 +300,17 @@ export const BarraLateralUsuario = () => {
                 path="/reservarVehiculo"
                 element={<RegistrarReservaUsuario />}
               />
-              
               <Route
                 path="/cancelaReserva"
                 element={<CancelarRervacionCliente />}
               />
               <Route
-                path="/reportesFacturasActivas"
-                element={<ReportesFacturasActivas />}
+                path="/reportesFacturasActivasXCliente"
+                element={<ReportesFacturasActivasXCliente />}
+              />
+              <Route
+                path="/reporteOrdenesRecientesxCliente"
+                element={<ReporteOrdenesRecientesxCliente />}
               />
             </Routes>
           </div>

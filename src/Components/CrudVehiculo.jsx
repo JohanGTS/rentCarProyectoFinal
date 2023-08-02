@@ -6,7 +6,7 @@ import {
   deleteData,
   updateData,
 } from "../Features/apiCalls";
-import PopUpDinamico from "./PopUpDinamico";
+import PopUpDinamico from "./PopUpVehiculo";
 import { vehiculo } from "../JsonDinamico/mantenimientos";
 export const CrudVehiculo = ({ ...props }) => {
   let campos = vehiculo;

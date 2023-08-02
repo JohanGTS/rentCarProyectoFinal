@@ -147,7 +147,7 @@ export const ReporteOrdenesRecientesxCliente = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getAllData("dashboard/OrdenxCliente/2");
+        const data = await getAllData(`dashboard/OrdenxCliente/${userContext.usuario.idTercero_ter}`);
         setVentas(data);
       } catch (error) {
         console.log(error);
@@ -156,8 +156,6 @@ export const ReporteOrdenesRecientesxCliente = () => {
 
     fetchData();
   }, []);
-
-  console.log(userContext.usuario.idCliente_res);
   const columns = [
     { field: "VehiculoNom", headerName: "VEHICULO", width: 200 },
     { field: "Matricula_veh", headerName: "MATRICULA", width: 150 },
@@ -198,6 +196,51 @@ export const ReportesFacturasActivas = () => {
     const fetchData = async () => {
       try {
         const data = await getAllData("dashboard/facturasactivas");
+        setFacturas(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+  const columns = [
+    { field: "idFactura_fac", headerName: "No. FACTURA", width: 150 },
+    { field: "CantididadDias_fac", headerName: "CANTIDAD DIAS", width: 250 },
+    { field: "CostoPorDia_fac", headerName: "COSTO POR DIA", width: 250 },
+    { field: "montoTotal_fac", headerName: "MONTO TOTAL", width: 250 },
+    { field: "nombre", headerName: "CLIENTE", width: 250 },
+    { field: "VehiculoNom", headerName: "VEHICULO", width: 250 },
+    { field: "FechaRegistro_fac", headerName: "FECHA", width: 250 },
+  ];
+  return (
+    <div>
+      <section>
+        <DataGrid
+          rows={facturas}
+          columns={columns}
+          getRowId={(facturas) => facturas.idFactura_fac}
+          initialState={{
+            pagination: {
+              paginationModel: { page: 0, pageSize: 5 },
+            },
+          }}
+          slots={{
+            toolbar: GridToolbar,
+          }}
+          pageSizeOptions={[5, 10]}
+        />
+      </section>
+    </div>
+  );
+};
+
+export const ReportesFacturasActivasXCliente = () => {
+  const userContext = useContext(UserContext);
+  let [facturas, setFacturas] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getAllData(`dashboard/facturasactivas/${userContext.usuario.idTercero_ter}`);
         setFacturas(data);
       } catch (error) {
         console.log(error);
