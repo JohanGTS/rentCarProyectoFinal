@@ -7,9 +7,7 @@ const RegisterPopUp = (props) => {
   const { usuario, setUsuario } = useContext(UserContext);
   const handleInputChange = (e) => {
     const { id, value, type } = e.target;
-    if (id.includes("id") || id.includes("Pais_dir"))
-      setFormValues({ ...formValues, [id]: parseInt(value) });
-    else setFormValues({ ...formValues, [id]: value });
+     setFormValues({ ...formValues, [id]: value });
   };
   const currentDate = new Date();
   const formattedDate = currentDate
@@ -29,10 +27,6 @@ const RegisterPopUp = (props) => {
     Clave_usu: "",
     Fecha_Ingreso_usu: formattedDate.toString(),
     Estado_usu: 1,
-    Ciudad_dir: 1,
-    Estado_dir: 1,
-    Pais_dir: 1,
-    CodigoPostal_dir: "",
     Especificacion_terdir: "",
   };
   const [formValues, setFormValues] = useState(valorInicial);
@@ -70,46 +64,7 @@ const RegisterPopUp = (props) => {
     });
     console.log(formValues);
   };
-
-  const [paises, setPaises] = useState([]);
-  const [estados, setEstados] = useState([]);
-  const [ciudades, setCiudades] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getAllData("pais");
-        setPaises(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getAllData("estado");
-        setEstados(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getAllData("ciudad");
-        setCiudades(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
-  }, []);
 
   const validarForm = async (form) => {
     const errors = {};
@@ -242,96 +197,6 @@ const RegisterPopUp = (props) => {
             </div>
             <p className="text-red-700 text-sm font-bold mb-2">
               {formErrors.Documento_ter}
-            </p>
-            <label
-              htmlFor={"Pais_dir"}
-              className="block text-gray-700 text-sm font-bold mb-2"
-            >
-              {"País de nacimiento"}
-            </label>
-            {
-              <select
-                className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id={"Pais_dir"}
-                onChange={handleSelectChange}
-              >
-                {paises.map((option) => {
-                  const values = Object.values(option);
-                  const key = values[0]; // Obtener el primer valor del objeto
-                  const descripcion = values[values.length - 1]; // Obtener el último valor del objeto
-                  return (
-                    <option key={key} data-key={key} value={descripcion}>
-                      {descripcion}
-                    </option>
-                  );
-                })}
-              </select>
-            }
-            <p className="text-red-700 text-sm font-bold mb-2">
-              {formErrors.Pais_dir}
-            </p>
-
-            <label
-              htmlFor={"Estado_dir"}
-              className="block text-gray-700 text-sm font-bold mb-2"
-            >
-              {"Estado"}
-            </label>
-            {
-              <select
-                className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id={"Estado_dir"}
-                onChange={handleSelectChange}
-              >
-                {estados.map((option) => {
-                  const values = Object.values(option);
-                  const key = values[0]; // Obtener el primer valor del objeto
-                  const descripcion = values[values.length - 1]; // Obtener el último valor del objeto
-                  return (
-                    <option
-                      key={"pais" + key}
-                      data-key={key}
-                      value={descripcion}
-                    >
-                      {descripcion}
-                    </option>
-                  );
-                })}
-              </select>
-            }
-            <p className="text-red-700 text-sm font-bold mb-2">
-              {formErrors.Estado_dir}
-            </p>
-            <label
-              htmlFor={"Ciudad_dir"}
-              className="block text-gray-700 text-sm font-bold mb-2"
-            >
-              {"Ciudad"}
-            </label>
-            {
-              <select
-                className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id={"Ciudad_dir"}
-                onChange={handleSelectChange}
-              >
-                {ciudades.map((option) => {
-                  const values = Object.values(option);
-                  const key = values[0]; // Obtener el primer valor del objeto
-                  const descripcion = values[values.length - 1]; // Obtener el último valor del objeto
-                  return (
-                    <option
-                      key={"ciudad" + key}
-                      data-key={key}
-                      value={descripcion}
-                    >
-                      {descripcion}
-                    </option>
-                  );
-                })}
-              </select>
-            }
-            <p className="text-red-700 text-sm font-bold mb-2">
-              {formErrors.Ciudad_dir}
             </p>
 
             <div key={"Fecha_Nacimiento_ter"}>

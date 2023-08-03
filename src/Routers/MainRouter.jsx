@@ -38,6 +38,7 @@ const MainRouter = () => {
             <Route path="/" element={<Home />} />
             <Route path="/contacto" element={<Contacto />} />
             <Route path="/nosotros" element={<SobreNosotros />} />
+            <Route path="/home" element={<Home />} />
             <Route path="/terminos" element={<TerminosCondiciones />} />
             <Route path="/*" element={<ErrorPage />} />
           </Routes>

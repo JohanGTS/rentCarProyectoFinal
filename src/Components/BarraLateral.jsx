@@ -9,14 +9,11 @@ import { CrudDinamico } from "./CrudDinamico";
 import {
   color,
   combustible,
-  ciudad,
   documentos,
-  estados,
   tipoUsuario,
   tipoVehiculo,
   marca,
   modelo,
-  pais,
   seguro,
   pieza,
   vehiculo,
@@ -118,11 +115,8 @@ export const BarraLateral = () => {
     { label: "Color", value: "color", ruta: "color" },
     { label: "Combustible", value: "combustible", ruta: "combustible" },
     { label: "Documentos", value: "documento", ruta: "documento" },
-    { label: "Ciudades", value: "ciudad", ruta: "ciudad" },
-    { label: "Estados", value: "estado", ruta: "estado" },
     { label: "Marcas", value: "marca", ruta: "marca" },
     { label: "Modelos", value: "modelos", ruta: "modelo" },
-    { label: "Países", value: "pais", ruta: "pais" },
     { label: "Piezas", value: "pieza", ruta: "pieza" },
     { label: "Seguros", value: "seguro", ruta: "seguro" },
     { label: "Tipos de usuarios", value: "tipoUsuario", ruta: "tipoUsuario" },
@@ -420,34 +414,12 @@ export const BarraLateral = () => {
                 }
               />
               <Route
-                path="/ciudad"
-                element={
-                  <CrudDinamico
-                    campos={ciudad}
-                    link={"ciudad"}
-                    titulo={"Ciudades"}
-                    valorInicial={{}}
-                  />
-                }
-              />
-              <Route
                 path="/documento"
                 element={
                   <CrudDinamico
                     campos={documentos}
                     link={"documento"}
                     titulo={"Documento"}
-                    valorInicial={{}}
-                  />
-                }
-              />
-              <Route
-                path="/estado"
-                element={
-                  <CrudDinamico
-                    campos={color}
-                    link={"color"}
-                    titulo={"Colores"}
                     valorInicial={{}}
                   />
                 }
@@ -492,17 +464,6 @@ export const BarraLateral = () => {
                     campos={modelo}
                     link={"modelo"}
                     titulo={"Modelo"}
-                    valorInicial={{}}
-                  />
-                }
-              />
-              <Route
-                path="/pais"
-                element={
-                  <CrudDinamico
-                    campos={pais}
-                    link={"pais"}
-                    titulo={"Pais"}
                     valorInicial={{}}
                   />
                 }

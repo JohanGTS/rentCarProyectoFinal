@@ -58,10 +58,13 @@ const PopUpDinamico = ({
       [selectId]: parseInt(optionId),
     });
   };
+
+  console.log(Object.entries(valorInicial))
   const handleBlur = () => {
     if (valorInicial) {
       setTimeout(() => {
         Object.entries(valorInicial).forEach(([key, value]) => {
+          console.log('Llave! '+key)
           const field = document.getElementById(key);
           if (field && field.type === "select-one") {
             const options = field.options;

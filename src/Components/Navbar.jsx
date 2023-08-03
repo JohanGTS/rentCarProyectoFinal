@@ -6,7 +6,6 @@ import Boton from "./Boton";
 import LoginPopUp from "./ComponentsEspecificos/LoginPopUp";
 import { UserContext } from "../Contexts/UserContext";
 import RegisterPopUp from "./ComponentsEspecificos/RegisterPopUp";
-import { paises } from "../JsonDinamico/procesos";
 const Navbar = () => {
   const handleSubmit = (e) => {
     e.preventDefault();

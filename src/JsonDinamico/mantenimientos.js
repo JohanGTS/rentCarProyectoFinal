@@ -44,34 +44,6 @@ export const combustible = [
     fullWidth: true,
   },
 ];
-export const ciudad = [
-  {
-    id: "idCiudad_ciu",
-    busca: "a",
-    nombre: "Id ciudad",
-    label: "Id de la ciudad",
-    type: "text",
-    placeholder: "Digite el id de la ciudad",
-    fullWidth: true,
-  },
-  {
-    id: "idEstado_ciu",
-    retorna: await getAllData("estado"),
-    label: "Id del estado",
-    nombre: "Estado",
-    type: "text",
-    placeholder: "Digite el id del estado",
-    fullWidth: true,
-  },
-  {
-    id: "Descripcion_ciu",
-    label: "Nombre de la ciudad",
-    nombre: "Ciudad",
-    type: "text",
-    placeholder: "Digite la ciudad",
-    fullWidth: true,
-  },
-];
 export const documentos = [
   {
     id: "idDocumento_doc",
@@ -88,31 +60,6 @@ export const documentos = [
     nombre: "Descripcion",
     type: "text",
     placeholder: "Digite el nombre del documento",
-    fullWidth: true,
-  },
-];
-export const estados = [
-  {
-    id: "idEstado_est",
-    busca: "y",
-    label: "Id del estado",
-    type: "text",
-    placeholder: "Digite el id del estado",
-    fullWidth: true,
-  },
-  {
-    id: "idPais_est",
-    label: "Id del país",
-    type: "text",
-    placeholder: "Digite el id del país",
-    retorna: await getAllData("pais"),
-    fullWidth: true,
-  },
-  {
-    id: "Descripcion_est",
-    label: "Nombre del estado",
-    type: "text",
-    placeholder: "Digite el nombre del estado",
     fullWidth: true,
   },
 ];
@@ -198,25 +145,6 @@ export const modelo = [
     label: "Nombre del modelo",
     type: "text",
     placeholder: "Digite el nombre del modelo",
-    fullWidth: true,
-  },
-];
-export const pais = [
-  {
-    id: "idPais_pai",
-    nombre: "Id pais",
-    busca: "a",
-    label: "Id del país",
-    type: "text",
-    placeholder: "Digite el id del país",
-    fullWidth: true,
-  },
-  {
-    id: "Descripcion_pai",
-    nombre: "Descripcion",
-    label: "Nombre del país",
-    type: "text",
-    placeholder: "Digite el nombre del país",
     fullWidth: true,
   },
 ];
@@ -462,38 +390,6 @@ export const user = [
     label: "Fecha de ingreso",
     type: "date",
     placeholder: "Digite la disponibilidad",
-    fullWidth: true,
-  },
-  {
-    id: "idPais_pai",
-    retorna: await getAllData("pais"),
-    label: "Id del pais",
-    type: "text",
-    placeholder: "Digite el id del país",
-    fullWidth: true,
-  },
-  {
-    id: "idCiudad_ciu",
-    retorna: await getAllData("ciudad"),
-    label: "Id de la ciudad",
-    type: "text",
-    placeholder: "Digite el id de la ciudad",
-    fullWidth: true,
-  },
-  {
-    id: "idEstado_est",
-    retorna: await getAllData("estado"),
-    label: "Id del estado",
-    type: "text",
-    placeholder: "Digite el id del estado",
-    fullWidth: true,
-  },
-  {
-    id: "CodigoPostal_dir",
-    nombre: "Cod. postal",
-    label: "Código postal",
-    type: "text",
-    placeholder: "Código postal",
     fullWidth: true,
   },
   {

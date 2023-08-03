@@ -14,7 +14,7 @@ export default function AccordionDash() {
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <Typography>Accordion 1</Typography>
+          <Typography>FAQ</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
@@ -29,7 +29,7 @@ export default function AccordionDash() {
           aria-controls="panel2a-content"
           id="panel2a-header"
         >
-          <Typography>Accordion 2</Typography>
+          <Typography>Manual de Usuario</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
@@ -38,7 +38,7 @@ export default function AccordionDash() {
           </Typography>
         </AccordionDetails>
       </Accordion>
-      <Accordion disabled>
+      {/* <Accordion disabled>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel3a-content"
@@ -46,7 +46,7 @@ export default function AccordionDash() {
         >
           <Typography>Disabled Accordion</Typography>
         </AccordionSummary>
-      </Accordion>
+      </Accordion> */}
     </div>
   );
 }

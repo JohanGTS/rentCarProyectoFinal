@@ -52,7 +52,3 @@ export const registroReserva = [
     fullWidth: true,
   },
 ];
-
-export const paises ={
-  retorna: getAllData("pais")
-}

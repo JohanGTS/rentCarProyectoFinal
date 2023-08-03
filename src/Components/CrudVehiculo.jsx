@@ -73,6 +73,7 @@ export const CrudVehiculo = ({ ...props }) => {
   }, {});
   const handleModifica = (row) => {
     setSelectedRow(row);
+    console.log(row)
     setShowModal(true);
     actualiza = true;
   };

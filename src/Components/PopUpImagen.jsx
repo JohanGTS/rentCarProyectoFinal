@@ -3,8 +3,14 @@ import { Modal } from "react-bootstrap";
 import { UserContext } from "../Contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/material";
-// import { updateData } from "../Features/apiCalls";
-import axios, { formToJSON } from 'axios';
+import axios, { formToJSON } from 'axios';import {
+  getData,
+  getAllData,
+  addData,
+  deleteData,
+  updateData,
+  pagoTarjeta,
+} from "../Features/apiCalls";
 const PopUpImagen = ({
   campos,
   titulo,
@@ -21,25 +27,14 @@ const PopUpImagen = ({
         setFile(e.target.files[0])
     }
 
-    useEffect(() => {
-      axios.get('http://localhost:3000/vehiculo/image')
-      .then(res => console.log(res))
-      .catch(err => console.log(err));
-    }, []) 
-    
+
     const handleUpload = () => {
          const formdata = new FormData();
         formdata.append('vehiculo', id)
          formdata.append('image', file)
-         axios.post('http://localhost:3000/vehiculo/upload', formdata)
-         .then(res =>{ console.log(formToJSON(formdata))
-          if(res.data.status === "Success"){
-            console.log("Succeded")
-          } else {
-            console.log("Failed")
-          }
-         })
-         .catch(err => console.log(err));
+         pagoTarjeta('vehiculo/upload', formdata);
+        //   axios.post('http://localhost:3000/vehiculo/upload', formdata)
+         
     }
   return (
     <Modal
