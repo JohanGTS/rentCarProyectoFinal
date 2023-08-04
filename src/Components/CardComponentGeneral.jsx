@@ -7,16 +7,22 @@ import LoginPopUp from "./ComponentsEspecificos/LoginPopUp";
 import ReservaPopUp from "./ComponentsEspecificos/ReservaPopUp";
 const CardComponent = ({ data }) => {
   let [estado, setEstado] = useState(false);
-  const llavePublica =
-    "pk_test_51N0m8BFCP7DBw79T3Z288UoIy9LMHLkrjUgQv0YhCTrtiB1xLnCBzjhU4Gz91Stp6xxeDxPN1W37Ei8WmClkddXI0049rggz4N";
-  const stripeTest = loadStripe(llavePublica);
   return (
     <>
       <div className="relative mx-auto w-full max-w-sm pt-6">
         <div className="rounded-lg">
           <div className="relative flex h-60 justify-center overflow-hidden rounded-lg">
             <div className="w-full transform transition-transform duration-500 ease-in-out hover:scale-110">
-              <img className="w-full" src={`../src/assets/images/${data.Imagen}`} alt={imgNoEncontrada} />
+              <img
+                className="w-full"
+                src={`../src/assets/images/${data.Imagen}`}
+                alt={"No se pudo encontrar la imagen"}
+                onError={(e) => {
+                  if (e.target.src !== "../src/assets/imgNoEncontrada.jpg") {
+                    e.target.src = "../src/assets/imgNoEncontrada.jpg";
+                  }
+                }}
+              />
             </div>
           </div>
           <div className="">
@@ -167,8 +173,7 @@ const CardComponent = ({ data }) => {
           </div>
         </div>
       </div>
-      <>
-      </>
+      <></>
     </>
   );
 };

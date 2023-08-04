@@ -2,12 +2,14 @@ import React, { useContext, useState, useEffect } from "react";
 import { Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../Contexts/UserContext";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 import { addData, getAllData, getData } from "../../Features/apiCalls";
 const RegisterPopUp = (props) => {
   const { usuario, setUsuario } = useContext(UserContext);
   const handleInputChange = (e) => {
     const { id, value, type } = e.target;
-     setFormValues({ ...formValues, [id]: value });
+    setFormValues({ ...formValues, [id]: value });
   };
   const currentDate = new Date();
   const formattedDate = currentDate
@@ -33,6 +35,7 @@ const RegisterPopUp = (props) => {
   const [esExtranjero, setEsExtranjero] = useState(false);
   const [enviar, setEnviar] = useState(true);
   const [formErrors, setFormErrors] = useState({});
+  const MySwal = withReactContent(Swal);
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -40,17 +43,32 @@ const RegisterPopUp = (props) => {
     guardar.focus();
     const formulario = document.getElementById("formulario");
 
-    setShowModal(true);
     const errores = await validarForm(formValues);
-    console.log(errores);
+    MySwal.fire({
+      icon: "info",
+      title: "Realizando registro",
+      text: "Esperando respuesta del servidor...",
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      willOpen: () => {
+        MySwal.showLoading();
+      },
+    });
     setFormErrors(errores);
-    if (Object.keys(formErrors).length === 0) {
+    if (Object.keys(errores).length === 0) {
       await addData("personal/Cliente", formValues);
       formulario.reset();
       props.onHide();
+      MySwal.close();
+      MySwal.fire({
+        icon: "success",
+        title: "Registro hecho de manera satisfactoria",
+        confirmButtonText: "Aceptar",
+      });
+    } else {
+      MySwal.close();
     }
-
-    setShowModal(false);
+    MySwal.close();
   };
   const handleSelectChange = (e) => {
     const { id, value } = e.target;
@@ -86,6 +104,9 @@ const RegisterPopUp = (props) => {
       console.log(res);
       if (res.valid == false)
         errors.Documento_ter = "Licencia de conducir inválida";
+    }
+    if (!form.Correo_ter || !emailRegex.test(form.Correo_ter)) {
+      errors.Correo_ter = "Debe introducir un correo electrónico válido";
     }
     if (form.Nombre_usu) {
       const usuarioExistente = await getData("personal/usuario", {
@@ -153,10 +174,10 @@ const RegisterPopUp = (props) => {
             <p className="text-red-700 text-sm font-bold mb-2">
               {formErrors.Telefono_ter}
             </p>
-            <div>
-              <label>
+            <div className="mb-2">
+              <label className="ml-2 text-base font-medium text-gray-900">
                 <input
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500  focus:ring-2 "
+                  className="w-3 h-3 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500  "
                   type="radio"
                   name="nacionalidad"
                   value="dominicano"
@@ -165,9 +186,9 @@ const RegisterPopUp = (props) => {
                 />
                 Dominicano
               </label>
-              <label>
+              <label className="ml-2 text-base font-medium text-gray-900">
                 <input
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500  focus:ring-2 "
+                  className="w-3 h-3   text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500  "
                   type="radio"
                   name="nacionalidad"
                   value="extranjero"
@@ -236,6 +257,9 @@ const RegisterPopUp = (props) => {
                 required
               />
             </div>
+            <p className="text-red-700 text-sm font-bold mb-2">
+              {formErrors.Correo_ter}
+            </p>
             <div key={"Nombre_usu"}>
               <label
                 htmlFor={"Nombre_usu"}

@@ -11,7 +11,7 @@ const BotonRedondeado = ({ texto, color, enlace }) => {
   return (
     <button
       onClick={enlace ? visitPage : sendEmail}
-      className={`bg-${color} text-white py-2 px-4 rounded-full w-full font-bold `}
+      className={`bg-gray-600 text-white py-2 px-4 rounded-full w-full font-bold `}
     >
       {texto}
     </button>

@@ -13,7 +13,7 @@ const Home = props => {
     color: "",
     anio: "",
   });
-  const [sortOrder, setSortOrder] = useState("asc"); // "asc" for ascending, "desc" for descending
+  const [sortOrder, setSortOrder] = useState("asc"); 
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,7 +45,6 @@ const Home = props => {
         (vehicle) => vehicle.Color.toLowerCase() === filters.color.toLowerCase()
       );
     }
-    // Apply sorting
     filteredData.sort((a, b) => {
       const order = sortOrder === "asc" ? 1 : -1;
       return order * (a.CostoPorDia_veh - b.CostoPorDia_veh);
@@ -62,7 +61,6 @@ const Home = props => {
     setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
   };
 
-  // Funciones para obtener valores únicos de Marca, Modelo y Color
   const uniqueBrands = [...new Set(vehicles.map((vehicle) => vehicle.Marca))];
   const uniqueModels = [...new Set(vehicles.map((vehicle) => vehicle.Modelo))];
   const uniqueColors = [...new Set(vehicles.map((vehicle) => vehicle.Color))];

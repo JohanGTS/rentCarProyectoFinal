@@ -64,7 +64,7 @@ const PopUpPiezas = ({ valorInicial, ...props }) => {
       await addDataLista("entrega", itemsToAdd);
       await updateData("entrega/reserva", {
         idReserva_res: valorInicial.idReserva_res,
-        estado_res: "F",
+        estado_res: "E",
       });
     } catch (error) {
       console.error("Error al guardar el checklist:", error);

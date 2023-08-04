@@ -9,6 +9,8 @@ import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { UserContext } from "../../Contexts/UserContext";
 import { Modal } from "react-bootstrap";
 import easyinvoice from "easyinvoice";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
   const userContext = useContext(UserContext);
   const stripe = useStripe();
@@ -50,11 +52,11 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
     Hora_res: "08:00",
   };
 
+  const MySwal = withReactContent(Swal);
   const [valor, setValor] = useState(1);
   const [formValues, setFormValues] = useState(initial);
   console.log(formValues);
   const [formErrors, setFormErrors] = useState({});
-  const [showModal, setShowModal] = useState(false);
 
   let diferenciaDias = 0;
   const lugares = [
@@ -149,6 +151,7 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
       errors.FechaFin_Res = "Debe especificar la fecha final";
       fechaValidada = false;
     }
+    console.log(fechaValidada);
     if (fechaValidada) {
       const dateActual = Date.now();
       const date1 = new Date(formValues.FechaInicio_Res);
@@ -182,6 +185,7 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
         fin: date2.toISOString().split("T")[0],
         id: formValues.idVehiculo_res,
       });
+      console.log(res);
       if (res == 1) {
         errors.FechaInicio_Res = "Vehículo no disponible en esta fecha";
       }
@@ -195,10 +199,18 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
     console.log("Entra");
     const error = await validarForm();
     setFormErrors(error);
-    setShowModal(true);
-    console.log(Object.keys(formErrors).length);
+    MySwal.fire({
+      icon: "info",
+      title: "Realizando reserva",
+      text: "Esperando respuesta del servidor...",
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      willOpen: () => {
+        MySwal.showLoading();
+      },
+    });
     if (Object.keys(formErrors).length == 0) {
-      console.log("Paga")
+      console.log("Paga");
       const { error, paymentMethod } = await stripe.createPaymentMethod({
         type: "card",
         card: elements.getElement(CardElement),
@@ -229,11 +241,11 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
                 country: "República Dominicana",
               },
               client: {
-                company: userContext.usuario.Nombre_ter, 
+                company: userContext.usuario.Nombre_ter,
                 address: formValues.Nota_Res,
                 zip: userContext.usuario.Telefono_ter,
                 city: "",
-                country: ""
+                country: "",
               },
               information: {
                 number: id,
@@ -269,21 +281,25 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
             console.log(dataCorreo);
             await easyinvoice.createInvoice(dataCorreo, function (result) {
               enviarEmail(result.pdf);
-              console.log("Se envió el correo")
+              console.log("Se envió el correo");
             });
             props.onHide();
+            MySwal.close();
+            MySwal.fire({
+              icon: "success",
+              title: "Reserva hecha de manera satisfactoria",
+              confirmButtonText: "Aceptar",
+            });
           }
         } catch (error) {
           console.log("Error: " + error);
         }
       } else {
         console.log(error.message);
-        setShowModal(false);
       }
-      
-    } 
-      setShowModal(false);
-    
+    } else {
+      MySwal.close();
+    }
   };
   return (
     <Modal
@@ -411,11 +427,6 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
             </div>
           </form>
         </div>
-        {showModal && (
-          <div className="modal-backdrop w-1/2">
-            <div className="modal-content">Esperando respuesta...</div>
-          </div>
-        )}
       </Modal.Body>
       <Modal.Footer></Modal.Footer>
     </Modal>

@@ -8,6 +8,8 @@ import {
 import logo from "../../assets/rrlogo.jpg";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import easyinvoice from "easyinvoice";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 export const RegistrarCompra = () => {
   const stripe = useStripe();
@@ -29,10 +31,10 @@ export const RegistrarCompra = () => {
     Hora_res: "08:00",
   };
 
+  const MySwal = withReactContent(Swal);
   const [valor, setValor] = useState(1);
   const [formValues, setFormValues] = useState(initial);
   const [formErrors, setFormErrors] = useState({});
-  const [showModal, setShowModal] = useState(false);
   const lugares = [
     { Nota_Res: "Local en Santiago" },
     { Nota_Res: "Aeropuerto Internacional de las Américas" },
@@ -144,7 +146,8 @@ export const RegistrarCompra = () => {
         fin: date2.toISOString().split("T")[0],
         id: formValues.idVehiculo_res,
       });
-      if (res == 1) {
+      console.log(res);
+      if (res.estado_veh == 1) {
         errors.FechaInicio_Res = "Vehículo no disponible en esta fecha";
       }
       setValor(parseFloat(formValues.costoPorDia_fac) * diferenciaDias);
@@ -191,12 +194,20 @@ export const RegistrarCompra = () => {
   const handleGuardar = async (e) => {
     //guardar.focus();
     e.preventDefault();
-    
-    setShowModal(true);
+
     const error = await validarForm();
     setFormErrors(error);
-
-    if (Object.keys(formErrors).length == 0) {
+    MySwal.fire({
+      icon: "info",
+      title: "Realizando reserva",
+      text: "Esperando respuesta del servidor...",
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      willOpen: () => {
+        MySwal.showLoading();
+      },
+    });
+    if (Object.keys(error).length == 0) {
       const { error, paymentMethod } = await stripe.createPaymentMethod({
         type: "card",
         card: elements.getElement(CardElement),
@@ -265,10 +276,15 @@ export const RegistrarCompra = () => {
               },
             };
             await easyinvoice.createInvoice(dataCorreo, function (result) {
-              //The response will contain a base64 encoded PDF file
               enviarEmail(result.pdf);
             });
-            limpiarForm(); //
+            limpiarForm();
+            MySwal.close();
+            MySwal.fire({
+              icon: "success",
+              title: "Reserva hecha de manera satisfactoria",
+              confirmButtonText: "Aceptar",
+            });
           }
         } catch (error) {
           console.log("Error: " + error);
@@ -276,8 +292,8 @@ export const RegistrarCompra = () => {
       } else {
         console.log(error.message);
       }
-      
-    setShowModal(false);
+    } else {
+      MySwal.close();
     }
   };
 
@@ -516,11 +532,6 @@ export const RegistrarCompra = () => {
           </button>
         </div>
       </form>
-      {showModal && (
-        <div className="modal-backdrop w-1/2">
-          <div className="modal-content">Esperando respuesta...</div>
-        </div>
-      )}
     </div>
   );
 };

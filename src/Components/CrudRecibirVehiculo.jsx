@@ -17,18 +17,6 @@ export const CrudRecibirVehiculo = () => {
   const [selectedRow, setSelectedRow] = useState({});
   const [showModal, setShowModal] = useState(false);
 
-  useEffect(() => {
-    const fetchData2 = async () => {
-      try {
-        const data = await getAllData("recibir");
-        setCampos(data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchData2();
-  }, []);
-
   const fetchData = async () => {
     try {
       const data = await getAllData("recibir");

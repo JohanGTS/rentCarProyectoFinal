@@ -16,7 +16,7 @@ const CancelarRervacionCliente = () => {
   const fetchData = async () => {
     try {
       const data = await getData("reserva/cliente", {
-        id: userContext.usuario.idCliente,
+        id: userContext.usuario.idTercero_ter,
       });
       console.log(data);
       data == "" ? setCancelaciones([]) : setCancelaciones([data]);

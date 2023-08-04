@@ -3,6 +3,8 @@ import { Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../Contexts/UserContext";
 import { pagoTarjeta } from "../../Features/apiCalls";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 const LoginPopUp = (props) => {
   const [formValues, setFormValues] = useState({});
   const { usuario, setUsuario } = useContext(UserContext);
@@ -10,6 +12,7 @@ const LoginPopUp = (props) => {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
   };
+  const MySwal = withReactContent(Swal);
 
   useEffect(() => {
     navigate("/dashboard");
@@ -21,16 +24,17 @@ const LoginPopUp = (props) => {
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const MySwal = withReactContent(Swal);
     const form = e.target;
     const user = form.usuario.value;
     const password = form.password.value;
     const data = {
       usuario: user,
-      pass: password
+      pass: password,
     };
     try {
       const response = await pagoTarjeta("personal/getusuario", data);
-      
+
       if (response[0].Correo_ter) {
         form.reset();
         await setUsuario(response[0]);
@@ -38,7 +42,12 @@ const LoginPopUp = (props) => {
         console.log(usuario);
         navigate("/dashboard");
       } else {
-        console.log("Usuario no encontrado.");
+        MySwal.fire({
+          icon: "error",
+          title: "Usuario o contraseña inválido",
+          text: "Verifique los datos y vuelva a intentar",
+          showConfirmButton: true,
+        });
       }
     } catch (error) {
       console.error("Error al llamar al API:", error);
