@@ -138,7 +138,7 @@ export const modelo = [
     type: "text",
     placeholder: "Digite el id de la marca",
     fullWidth: true,
-  },
+  },  
   {
     id: "Descripcion_mod",
     nombre: "Descripcion",
@@ -290,7 +290,7 @@ export const vehiculo = [
   },
   {
     id: "Chasis_veh",
-    nombre: "Chasis",
+    // nombre: "Chasis",
     label: "Chasis",
     type: "text",
     placeholder: "Digite el chasis",

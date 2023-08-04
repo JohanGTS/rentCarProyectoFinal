@@ -8,6 +8,7 @@ import {
 } from "../Features/apiCalls";
 import PopUpDinamico from "./PopUpVehiculo";
 import { vehiculo } from "../JsonDinamico/mantenimientos";
+import PopUpImagen from "./PopUpImagen";
 export const CrudVehiculo = ({ ...props }) => {
   let campos = vehiculo;
   const titulo = "Vehículos";
@@ -18,7 +19,7 @@ export const CrudVehiculo = ({ ...props }) => {
   const [formValues, setFormValues] = useState({});
   const [selectedRow, setSelectedRow] = useState({});
   const [showModal, setShowModal] = useState(false);
-
+  const [showModalIm, setShowModalIm] = useState(false);
   const fetchData = async () => {
     try {
       const data = await getAllData(link);
@@ -30,6 +31,9 @@ export const CrudVehiculo = ({ ...props }) => {
   useEffect(() => {
     fetchData();
   }, [campos]);
+
+// const 
+
   let camposConNombre = campos.filter((obj) => obj.nombre);
   let cabeceraHeader = camposConNombre.map((obj) => obj.nombre);
   let cabeceraBody = campos.map((obj) => obj.id);
@@ -73,8 +77,13 @@ export const CrudVehiculo = ({ ...props }) => {
   }, {});
   const handleModifica = (row) => {
     setSelectedRow(row);
-    console.log(row)
+    console.log(row);
     setShowModal(true);
+    actualiza = true;
+  };
+  const handleImagen = (row) => {
+    setSelectedRow(row);
+    setShowModalIm(true);
     actualiza = true;
   };
   const handleEliminar = async (valor) => {
@@ -110,7 +119,7 @@ export const CrudVehiculo = ({ ...props }) => {
               ))}
               <td className="">
                 <button
-                  id="guarda" 
+                  id="guarda"
                   className="flex-shrink-0 w-4/5 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded"
                   type="submit"
                   onClick={() => handleModifica(objeto)}
@@ -125,6 +134,14 @@ export const CrudVehiculo = ({ ...props }) => {
                 >
                   Eliminar
                 </button>
+                <button
+                className="flex-shrink-0 bg-blue-500 hover:bg-blue-700 border-blue-500 hover:border-blue-700 text-sm border-4 text-white py-1 px-2 rounded"
+                type="button"
+                onClick={
+                  ()=>handleImagen(objeto)}
+              >
+                Imagen
+              </button>
               </td>
             </tr>
           ))}
@@ -151,6 +168,18 @@ export const CrudVehiculo = ({ ...props }) => {
         onHide={() => {
           setShowModal(false);
           fetchData();
+        }}
+      />
+      <PopUpImagen
+        show={showModalIm}
+        campos={campos}
+        titulo={`Registro de ${titulo.toLowerCase()}`}
+        link={link}
+       // id={objeto.idVehiculo_veh}
+        actualiza={actualiza}
+        valorInicial={selectedRow}
+        onHide={() => {
+          setShowModalIm(false);
         }}
       />
     </div>
