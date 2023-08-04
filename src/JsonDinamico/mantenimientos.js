@@ -386,13 +386,6 @@ export const user = [
     fullWidth: true,
   },
   {
-    id: "Fecha_Ingreso_usu",
-    label: "Fecha de ingreso",
-    type: "date",
-    placeholder: "Digite la disponibilidad",
-    fullWidth: true,
-  },
-  {
     id: "Especificacion_terdir",
     nombre: "Direccion",
     label: "Resto de la dirección",
