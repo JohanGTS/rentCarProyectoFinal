@@ -16,7 +16,16 @@ const CardComponent = ({ data }) => {
         <div className="rounded-lg">
           <div className="relative flex h-60 justify-center overflow-hidden rounded-lg">
             <div className="w-full transform transition-transform duration-500 ease-in-out hover:scale-110">
-              <img className="w-full" src={`../src/assets/images/${data.Imagen}`} alt={imgNoEncontrada} />
+              <img
+                className="w-full"
+                src={`../src/assets/images/${data.Imagen}`}
+                alt={imgNoEncontrada}
+                onError={(e) => {
+                  if (e.target.src !== "../src/assets/imgNoEncontrada.jpg") {
+                    e.target.src = "../src/assets/imgNoEncontrada.jpg";
+                  }
+                }}
+              />
             </div>
           </div>
           <div className="">
