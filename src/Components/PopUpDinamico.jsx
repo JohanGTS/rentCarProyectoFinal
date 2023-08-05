@@ -53,10 +53,18 @@ const PopUpDinamico = ({
       [selectId]: parseInt(optionId),
     });
   };
+  useEffect(() => {
+    console.log("Ejecuta");
+    handleBlur();
+  }, [valorInicial]);
   const handleBlur = () => {
     if (valorInicial) {
+      console.log(valorInicial);
+      console.log(Object.entries(valorInicial));
       setTimeout(() => {
         Object.entries(valorInicial).forEach(([key, value]) => {
+          console.log("Campo: " + key);
+          console.log("valor: " + value);
           const field = document.getElementById(key);
           if (field && field.type === "select-one") {
             const options = field.options;
@@ -72,7 +80,6 @@ const PopUpDinamico = ({
               const formattedDate = new Date(value).toISOString().split("T")[0];
               field.value = formattedDate;
               const id = field.id;
-              console.log(id);
               setFormValues((prevFormValues) => ({
                 ...prevFormValues,
                 [id]: formattedDate,

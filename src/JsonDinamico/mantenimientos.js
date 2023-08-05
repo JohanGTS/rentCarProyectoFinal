@@ -138,7 +138,7 @@ export const modelo = [
     type: "text",
     placeholder: "Digite el id de la marca",
     fullWidth: true,
-  },  
+  },
   {
     id: "Descripcion_mod",
     nombre: "Descripcion",
@@ -168,7 +168,7 @@ export const seguro = [
   },
   {
     id: "Plan_seg",
-    nombre:"Plan del seguro",
+    nombre: "Plan del seguro",
     label: "Nombre del plan",
     type: "text",
     placeholder: "Digite el nombre del plan",
@@ -250,7 +250,6 @@ export const vehiculo = [
   },
   {
     id: "CantidadAsiento_veh",
-    nombre: "Asientos",
     label: "Cantidad de asientos",
     type: "number",
     placeholder: "Digite la cantidad de asientos",
@@ -290,7 +289,6 @@ export const vehiculo = [
   },
   {
     id: "Chasis_veh",
-    // nombre: "Chasis",
     label: "Chasis",
     type: "text",
     placeholder: "Digite el chasis",
@@ -305,6 +303,11 @@ export const vehiculo = [
     fullWidth: true,
   },
 ];
+
+export const vistaVehiculo = [
+  { todosVehiculos: await getAllData("vehiculo/vehiculo") },
+];
+
 export const user = [
   {
     id: "idTercero_ter",

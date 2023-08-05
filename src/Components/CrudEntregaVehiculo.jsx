@@ -41,17 +41,17 @@ export const CrudEntregaVehiculo = () => {
   }, [clientes]);
   let cabeceraHeader = [
     "Id reserva",
-    "Id cliente",
+    "Nombre del cliente",
     "Fecha inicio",
     "Fecha fin",
-    "Id vehículo",
+    "Matrícula del vehículo",
   ];
   let cabeceraBody = [
     "idReserva_res",
-    "idCliente_res",
+    "nombreCliente",
     "FechaInicio_res",
     "FechaFin_res",
-    "idVehiculo_res",
+    "matriculaVehiculo",
   ];
   let cabeceraLocal;
   const handleModifica = (row) => {

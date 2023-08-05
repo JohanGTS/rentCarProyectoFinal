@@ -11,7 +11,7 @@ import { user } from "../JsonDinamico/mantenimientos";
 export const CrudUsuario = ({ ...props }) => {
   let campos = user;
   const titulo = "Usuarios";
-  const link = "personal/cliente";
+  const link = "personal/usuario";
   let actualiza;
   let valorInicial = [{}];
   const [clientes, setClientes] = useState([]);
@@ -22,6 +22,7 @@ export const CrudUsuario = ({ ...props }) => {
   const fetchData = async () => {
     try {
       const data = await getAllData(link);
+      console.log(data);
       setClientes(data);
     } catch (error) {
       console.log(error);
@@ -73,6 +74,7 @@ export const CrudUsuario = ({ ...props }) => {
   const handleModifica = (row) => {
     setSelectedRow(row);
     setShowModal(true);
+    console.log(row);
     actualiza = true;
   };
   const handleEliminar = async (valor) => {
@@ -83,6 +85,7 @@ export const CrudUsuario = ({ ...props }) => {
     console.log(data);
     await fetchData();
   };
+  console.log(clientes);
   return (
     <div className="container mx-auto">
       <h2 className="font-bold text-gray-500 py-3">{titulo}</h2>
@@ -97,14 +100,16 @@ export const CrudUsuario = ({ ...props }) => {
         </thead>
         <tbody>
           {clientes.map((objeto, index) => (
-            
-            <tr key={index} className="bg-white border-b">
+            <tr key={objeto.id} className="bg-white border-b">
               {camposConNombre.map((campo) => (
-        <td key={campo.id} className="px-1 py-4 font-medium text-gray-900">
-          {objeto[campo.id]}
-        </td>
-      ))}
-              <td>
+                <td
+                  key={campo.id}
+                  className="px-1 py-4 font-medium text-gray-900"
+                >
+                  {objeto[campo.id]}
+                </td>
+              ))}
+              <td key={"botones" + index}>
                 <button
                   id="guarda"
                   className="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded"
