@@ -18,14 +18,13 @@ const PopUpDinamico = ({
     const { id, value } = e.target;
     const field = document.getElementById(id);
     if (field && field.type === "date") {
-      // Formateamos la fecha al formato "yyyy-MM-dd"
       const formattedDate = new Date(value).toISOString().split("T")[0];
       setFormValues({ ...formValues, [id]: formattedDate });
     } else {
       setFormValues({ ...formValues, [id]: value });
     }
   };
-  const firstInputRef = useRef(null); // Agrega la referencia para el primer input
+  const firstInputRef = useRef(null); 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -54,7 +53,6 @@ const PopUpDinamico = ({
     });
   };
   useEffect(() => {
-    console.log("Ejecuta");
     handleBlur();
   }, [valorInicial]);
   const handleBlur = () => {

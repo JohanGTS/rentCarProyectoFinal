@@ -15,7 +15,7 @@ const LoginPopUp = (props) => {
   const MySwal = withReactContent(Swal);
 
   useEffect(() => {
-    navigate("/dashboard");
+    //navigate("/dashboard");
 
     const auxUser = usuario;
     console.log(usuario);

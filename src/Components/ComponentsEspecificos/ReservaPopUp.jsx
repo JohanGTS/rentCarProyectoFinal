@@ -55,7 +55,6 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
   const MySwal = withReactContent(Swal);
   const [valor, setValor] = useState(1);
   const [formValues, setFormValues] = useState(initial);
-  console.log(formValues);
   const [formErrors, setFormErrors] = useState({});
 
   let diferenciaDias = 0;

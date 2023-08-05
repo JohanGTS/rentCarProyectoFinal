@@ -24,7 +24,7 @@ export const BarraLateralUsuario = () => {
   const navigate = useNavigate();
   const logOut = () => {
     setUsuario(null);
-    navigate("/contacto");
+    navigate("/home");
   };
   const toggleMantenimiento = () => {
     setAbrirMantenimiento((abrir) => !abrir);

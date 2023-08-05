@@ -43,8 +43,8 @@ export const BarraLateral = () => {
   const [abrirReporte, setAbrirReporte] = useState(false);
   const navigate = useNavigate();
   const logOut = () => {
+    navigate("/home");
     setUsuario(null);
-    navigate("/contacto");
   };
   const toggleMantenimiento = () => {
     setAbrirMantenimiento((abrir) => !abrir);
@@ -66,6 +66,7 @@ export const BarraLateral = () => {
   };
 
   const navega = (ruta) => {
+    console.log("navega");
     if (ruta !== undefined && ruta !== null) {
       navigate(`/${ruta}`);
     }

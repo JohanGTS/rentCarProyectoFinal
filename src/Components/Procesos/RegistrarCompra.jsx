@@ -9,7 +9,6 @@ import { Container } from "react-bootstrap";
 import CardComponent from "../CardComponentAdmin";
 import { Box } from "@mui/material";
 
-
 export const RegistrarCompra = () => {
   const [vehicles, setVehicles] = useState([]);
   const [filteredVehicles, setFilteredVehicles] = useState([]);
@@ -19,7 +18,7 @@ export const RegistrarCompra = () => {
     color: "",
     anio: "",
   });
-  const [sortOrder, setSortOrder] = useState("asc"); 
+  const [sortOrder, setSortOrder] = useState("asc");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -72,80 +71,78 @@ export const RegistrarCompra = () => {
   const uniqueColors = [...new Set(vehicles.map((vehicle) => vehicle.Color))];
   return (
     <Container>
-    <Box marginTop="30px" sx={{background: "white"}}>
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="md:col-span-1">
-          <label className="block">
-            Marca:
-            <select
-              name="marca"
-              value={filters.marca}
-              onChange={handleFilterChange}
-              className="mt-1  w-3/6 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200"
+      <Box marginTop="30px" sx={{ background: "white" }}>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="md:col-span-1 container">
+            <label className="inline-block">
+              Marca:
+              <select
+                name="marca"
+                value={filters.marca}
+                onChange={handleFilterChange}
+                className="mt-1  w-3/6 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200"
+              >
+                <option value="">Todos</option>
+                {uniqueBrands.map((brand, index) => (
+                  <option key={index} value={brand}>
+                    {brand}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+          <div className="md:col-span-1">
+            <label className="block">
+              Modelo:
+              <select
+                name="modelo"
+                value={filters.modelo}
+                onChange={handleFilterChange}
+                className="mt-1 w-3/6 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200"
+              >
+                <option value="">Todos</option>
+                {uniqueModels.map((model, index) => (
+                  <option key={index} value={model}>
+                    {model}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+          <div className="md:col-span-1">
+            <label className="block">
+              Color:
+              <select
+                name="color"
+                value={filters.color}
+                onChange={handleFilterChange}
+                className="mt-1  w-3/6  rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200"
+              >
+                <option value="">Todos</option>
+                {uniqueColors.map((color, index) => (
+                  <option key={index} value={color}>
+                    {color}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>{" "}
+          <div className="md:col-span-1 flex items-center">
+            <button
+              onClick={handleSortOrderChange}
+              className="w-full md:w-auto px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
-              <option value="">Todos</option>
-              {uniqueBrands.map((brand, index) => (
-                <option key={index} value={brand}>
-                  {brand}
-                </option>
-              ))}
-            </select>
-          </label>
+              Ordenar {sortOrder === "asc" ? "Ascendente" : "Descendente"}
+            </button>
+          </div>
         </div>
-        <div className="md:col-span-1">
-          <label className="block">
-            Modelo:
-            <select
-              name="modelo"
-              value={filters.modelo}
-              onChange={handleFilterChange}
-              className="mt-1 w-3/6 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200"
-            >
-              <option value="">Todos</option>
-              {uniqueModels.map((model, index) => (
-                <option key={index} value={model}>
-                  {model}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-        <div className="md:col-span-1">
-          <label className="block">
-            Color:
-            <select
-              name="color"
-              value={filters.color}
-              onChange={handleFilterChange}
-              className="mt-1  w-3/6  rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200"
-            >
-              <option value="">Todos</option>
-              {uniqueColors.map((color, index) => (
-                <option key={index} value={color}>
-                  {color}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>{" "}
-        <div className="md:col-span-1 flex items-center">
-          <button
-            onClick={handleSortOrderChange}
-            className="w-full md:w-auto px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
-            Ordenar {sortOrder === "asc" ? "Ascendente" : "Descendente"}
-          </button>
-        </div>
-      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-4">
-        {filteredVehicles.map((vehicle, index) => (
-          <CardComponent key={index} data={vehicle} />
-        ))}
-      </div>
-    </Box>
+        <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-4">
+          {filteredVehicles.map((vehicle, index) => (
+            <CardComponent key={index} data={vehicle} />
+          ))}
+        </div>
+      </Box>
     </Container>
   );
-  };
-
- 
+};

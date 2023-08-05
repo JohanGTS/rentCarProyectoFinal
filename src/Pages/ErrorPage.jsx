@@ -19,10 +19,7 @@ const ErrorPage = () => {
             Pero no te preocupes, puedas encontrar otras cosas en nuestra página
             principal
           </p>
-          <NavLink
-            to={"/nosotros"}
-            className="px-8 py-3 font-semibold rounded "
-          >
+          <NavLink to={"/home"} className="px-8 py-3 font-semibold rounded ">
             De vuelta a la página principal
           </NavLink>
         </div>

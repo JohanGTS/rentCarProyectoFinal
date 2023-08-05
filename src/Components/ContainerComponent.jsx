@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import CardComponent from "./CardComponent";
 import { getAllData } from "../Features/apiCalls";
 
-
 import { Box } from "@mui/material";
 const ContainerComponent = () => {
   const [vehicles, setVehicles] = useState([]);
@@ -68,7 +67,7 @@ const ContainerComponent = () => {
   const uniqueColors = [...new Set(vehicles.map((vehicle) => vehicle.Color))];
 
   return (
-    <Box sx={{background: "#F8F9F9"}}>
+    <Box sx={{ background: "#F8F9F9" }}>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="md:col-span-1">
           <label className="block">

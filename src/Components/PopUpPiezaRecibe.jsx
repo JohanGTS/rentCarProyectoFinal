@@ -29,7 +29,7 @@ const PopUpPiezaRecibe = ({ valorInicial, ...props }) => {
     fetchData();
   }, [valorInicial]);
   const handleCheckboxChange = (taskId) => {
-    console.log(taskId)
+    console.log(taskId);
     const updatedChecklistData = checklistData.map((task) =>
       task.idPieza_rp === taskId
         ? { ...task, completed: !task.completed }
@@ -91,13 +91,15 @@ const PopUpPiezaRecibe = ({ valorInicial, ...props }) => {
               <div className="flex flex-col">
                 {checklistData.map((task, index) => (
                   <div key={index}>
-                    <input
-                      className="m-2"
-                      type="checkbox"
-                      checked={task?.completed ? task.completed : false}
-                      onChange={() => handleCheckboxChange(task.idPieza_rp)}
-                    />
-                    <label>{task.Descripcion_pie}</label>
+                    <label className="flex items-center m-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        className="form-checkbox h-4 w-4"
+                        checked={task?.completed ? task.completed : false}
+                        onChange={() => handleCheckboxChange(task.idPieza_rp)}
+                      />
+                      <span className="ml-2">{task.Descripcion_pie}</span>
+                    </label>
                   </div>
                 ))}
               </div>

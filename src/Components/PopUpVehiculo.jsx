@@ -41,7 +41,7 @@ const PopUpDinamico = ({
     }
   };
 
-  const firstInputRef = useRef(null); 
+  const firstInputRef = useRef(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -69,7 +69,9 @@ const PopUpDinamico = ({
       [selectId]: parseInt(optionId),
     });
   };
-
+  useEffect(() => {
+    handleBlur();
+  }, [valorInicial]);
   const handleBlur = () => {
     if (valorInicial) {
       console.log(valorInicial);
