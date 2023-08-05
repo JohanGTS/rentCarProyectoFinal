@@ -19,10 +19,9 @@ const CancelarRervacionCliente = () => {
         id: userContext.usuario.idTercero_ter,
       });
       console.log(data);
-      data == "" ? setCancelaciones([]) : setCancelaciones([data]);
+      setCancelaciones(data);
     } catch (error) {
       console.log(error);
-      setCancelaciones([]);
     }
   };
   useEffect(() => {
@@ -60,6 +59,7 @@ const CancelarRervacionCliente = () => {
     });
     await fetchData();
   };
+  console.log(cancelaciones);
   return (
     <div className="container mx-auto">
       <h2 className="font-bold text-gray-500 py-3">Cancelaciones</h2>

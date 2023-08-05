@@ -15,9 +15,8 @@ const PopUpDinamico = ({
   let inicia = true;
   const [formValues, setFormValues] = useState(valorInicial);
   const [formErrors, setFormErrors] = useState([]);
-  const [selectedRow,setSelectedRow]= useState(false)
+  const [selectedRow, setSelectedRow] = useState(false);
 
-  
   const [showModal, setShowModal] = useState(false);
   const handleInputChange = (e) => {
     const { id, value } = e.target;
@@ -30,7 +29,19 @@ const PopUpDinamico = ({
       setFormValues({ ...formValues, [id]: value });
     }
   };
-  const firstInputRef = useRef(null); // Agrega la referencia para el primer input
+
+  const handleInputChange2 = (e) => {
+    const { id, value } = e.target;
+    const field = document.getElementById(id);
+    if (field && field.type === "date") {
+      const formattedDate = new Date(value).toISOString().split("T")[0];
+      setFormValues({ ...formValues, [id]: formattedDate });
+    } else {
+      setFormValues({ ...formValues, [id]: value });
+    }
+  };
+
+  const firstInputRef = useRef(null); 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -59,12 +70,11 @@ const PopUpDinamico = ({
     });
   };
 
-  console.log(Object.entries(valorInicial))
   const handleBlur = () => {
     if (valorInicial) {
+      console.log(valorInicial);
       setTimeout(() => {
         Object.entries(valorInicial).forEach(([key, value]) => {
-          console.log('Llave! '+key)
           const field = document.getElementById(key);
           if (field && field.type === "select-one") {
             const options = field.options;
@@ -163,7 +173,22 @@ const PopUpDinamico = ({
                   </select>
                 )}
 
-                {!field.retorna && (
+                {!field.retorna && field.id != "idModelo_veh" && (
+                  <input
+                    className={`appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+                      index == 0 ? "cursor-not-allowed" : ""
+                    }`}
+                    id={field.id}
+                    type={field.type}
+                    placeholder={field.placeholder}
+                    onChange={handleInputChange}
+                    readOnly={index === 0}
+                    onBlur={index === 0 ? handleBlur : null}
+                    ref={index == 0 ? firstInputRef : null}
+                  />
+                )}
+
+                {!field.retorna && field.id == "idModelo_veh" && (
                   <input
                     className={`appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
                       index == 0 ? "cursor-not-allowed" : ""
@@ -199,21 +224,20 @@ const PopUpDinamico = ({
               >
                 Cancelar
               </button>
-
             </div>
           </form>
           <PopUpImagen
-        show={showModal}
-        campos={campos}
-        titulo={`Registro de ${titulo.toLowerCase()}`}
-        link={link}
-        id={formValues.idVehiculo_veh}
-        actualiza={actualiza}
-        valorInicial={selectedRow}
-        onHide={() => {
-          setShowModal(false);
-        }}
-      />
+            show={showModal}
+            campos={campos}
+            titulo={`Registro de ${titulo.toLowerCase()}`}
+            link={link}
+            id={formValues.idVehiculo_veh}
+            actualiza={actualiza}
+            valorInicial={selectedRow}
+            onHide={() => {
+              setShowModal(false);
+            }}
+          />
         </div>
       </Modal.Body>
       <Modal.Footer></Modal.Footer>

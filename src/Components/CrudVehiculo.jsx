@@ -7,7 +7,7 @@ import {
   updateData,
 } from "../Features/apiCalls";
 import PopUpDinamico from "./PopUpVehiculo";
-import { vehiculo } from "../JsonDinamico/mantenimientos";
+import { vehiculo, vistaVehiculo } from "../JsonDinamico/mantenimientos";
 import PopUpImagen from "./PopUpImagen";
 export const CrudVehiculo = ({ ...props }) => {
   let campos = vehiculo;
@@ -32,12 +32,14 @@ export const CrudVehiculo = ({ ...props }) => {
     fetchData();
   }, [campos]);
 
-// const 
-
+  // const
+  let { todosVehiculos } = vistaVehiculo[0];
+  console.log(todosVehiculos);
   let camposConNombre = campos.filter((obj) => obj.nombre);
+  camposConNombre = [...camposConNombre, { nombre: "Descripcion" }];
   let cabeceraHeader = camposConNombre.map((obj) => obj.nombre);
   let cabeceraBody = campos.map((obj) => obj.id);
-  console.log(cabeceraHeader);
+  console.log(cabeceraBody);
   let cabeceraLocal;
   const limpiarForm = () => {
     const element = document.getElementById("formulario");
@@ -94,6 +96,8 @@ export const CrudVehiculo = ({ ...props }) => {
     console.log(data);
     await fetchData();
   };
+  console.log(todosVehiculos[0]["Marca"]);
+  let indice = 0;
   return (
     <div className="container mx-auto">
       <h2 className="font-bold text-gray-500 py-3">{titulo}</h2>
@@ -109,14 +113,27 @@ export const CrudVehiculo = ({ ...props }) => {
         <tbody>
           {clientes.map((objeto, index) => (
             <tr key={index} className="bg-white border-b">
-              {camposConNombre.map((campo) => (
-                <td
-                  key={campo.id}
-                  className="px-1 py-4 font-medium text-gray-900"
-                >
-                  {objeto[campo.id]}
-                </td>
-              ))}
+              {camposConNombre.map((campo) => {
+                return campo.nombre != "Descripcion" ? (
+                  <td
+                    key={campo.id}
+                    className="px-1 py-4 font-medium text-gray-900"
+                  >
+                    {objeto[campo.id]}
+                  </td>
+                ) : (
+                  <td
+                    key={campo.id}
+                    className="px-1 py-4 font-medium text-gray-900"
+                  >
+                    {todosVehiculos[indice]["Marca"] +
+                      " " +
+                      todosVehiculos[indice]["Modelo"] +
+                      " " +
+                      todosVehiculos[indice++]["Color"]}
+                  </td>
+                );
+              })}
               <td className="">
                 <button
                   id="guarda"
@@ -135,13 +152,12 @@ export const CrudVehiculo = ({ ...props }) => {
                   Eliminar
                 </button>
                 <button
-                className="flex-shrink-0 bg-blue-500 hover:bg-blue-700 border-blue-500 hover:border-blue-700 text-sm border-4 text-white py-1 px-2 rounded"
-                type="button"
-                onClick={
-                  ()=>handleImagen(objeto)}
-              >
-                Imagen
-              </button>
+                  className="flex-shrink-0  w-4/5 bg-blue-500 hover:bg-blue-700 border-blue-500 hover:border-blue-700 text-sm border-4 text-white py-1 px-2 rounded"
+                  type="button"
+                  onClick={() => handleImagen(objeto)}
+                >
+                  Imagen
+                </button>
               </td>
             </tr>
           ))}
@@ -175,7 +191,7 @@ export const CrudVehiculo = ({ ...props }) => {
         campos={campos}
         titulo={`Registro de ${titulo.toLowerCase()}`}
         link={link}
-       // id={objeto.idVehiculo_veh}
+        // id={objeto.idVehiculo_veh}
         actualiza={actualiza}
         valorInicial={selectedRow}
         onHide={() => {
