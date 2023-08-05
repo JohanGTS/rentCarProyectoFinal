@@ -9,6 +9,10 @@ import {
 import PopUpDinamico from "./PopUpVehiculo";
 import { vehiculo, vistaVehiculo } from "../JsonDinamico/mantenimientos";
 import PopUpImagen from "./PopUpImagen";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+const MySwal = withReactContent(Swal);
+
 export const CrudVehiculo = ({ ...props }) => {
   let campos = vehiculo;
   const titulo = "Vehículos";
@@ -91,11 +95,42 @@ export const CrudVehiculo = ({ ...props }) => {
   const handleEliminar = async (valor) => {
     const eliminar = document.getElementById("elimina");
     eliminar.focus();
-    console.log(valor);
-    const data = await deleteData(link, valor);
-    console.log(data);
-    await fetchData();
-  };
+    // console.log(valor);
+    // const data = await deleteData(link, valor);
+    // console.log(data);
+
+    MySwal.fire({
+  title: 'El registro será eliminado',
+
+  icon: 'warning',
+  buttons: true,
+  dangerMode: true,
+})
+.then(async (willDelete) => {
+  try {
+    if (willDelete.isConfirmed) {
+      const data = await deleteData(link, valor);
+      console.log(data)
+      MySwal.fire({
+        icon: 'success',
+        text: 'Ha sido eliminado correctamente!', 
+      });
+      await fetchData();
+    } else {
+      MySwal.fire({
+        icon: "info",
+        text: 'No ha sido eliminado!', 
+      });
+    }
+  } catch (error) {
+    console.error("Error al llamar al API:", error);
+    MySwal.fire({
+      icon: 'error',
+      text: 'No se ha podido eliminar el registro', 
+    });
+  }
+});
+};
   console.log(todosVehiculos[0]["Marca"]);
   let indice = 0;
   return (

@@ -95,21 +95,31 @@ export const CrudDinamico = ({
   dangerMode: true,
 })
 .then(async (willDelete) => {
-  if (willDelete.isConfirmed) {
-    const data = await deleteData(link, valor);
+  try {
+    if (willDelete.isConfirmed) {
+      console.log("HOLA")
+      const data = await deleteData(link, valor);
+      console.log(data)
+      MySwal.fire({
+        icon: 'success',
+        text: 'Ha sido eliminado correctamente!', 
+      });
+      await fetchData();
+    } else {
+      MySwal.fire({
+        icon: "info",
+        text: 'No ha sido eliminado!', 
+      });
+    }
+  } catch (error) {
     MySwal.fire({
-      icon: 'success',
-      text: 'Ha sido eliminado correctamente!', 
-    });
-    await fetchData();
-  } else {
-    MySwal.fire({
-      icon: "error",
-      text: 'No ha sido eliminado!', 
+      icon: 'error',
+      text: 'No se ha podido eliminar el registro', 
     });
   }
+
 });
-  };
+};
   return (
     <div className="container mx-auto">
       <h2 className="font-bold text-gray-500 py-3">{titulo}</h2>

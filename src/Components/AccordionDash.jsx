@@ -18,8 +18,7 @@ export default function AccordionDash() {
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget.
+            Dese un 15 a lo que llenamos el FAQ
           </Typography>
         </AccordionDetails>
       </Accordion>
@@ -33,8 +32,7 @@ export default function AccordionDash() {
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget.
+            <a href='http://localhost:5173/src/assets/Propuestaproyecto.pdf' target="_blank" >Abrir Manual de Usuario</a>
           </Typography>
         </AccordionDetails>
       </Accordion>

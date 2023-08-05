@@ -8,6 +8,9 @@ import {
 } from "../Features/apiCalls";
 import PopUpDinamico from "./PopUpDinamico";
 import { user } from "../JsonDinamico/mantenimientos";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+const MySwal = withReactContent(Swal);
 export const CrudUsuario = ({ ...props }) => {
   let campos = user;
   const titulo = "Usuarios";
@@ -80,11 +83,40 @@ export const CrudUsuario = ({ ...props }) => {
   const handleEliminar = async (valor) => {
     const eliminar = document.getElementById("elimina");
     eliminar.focus();
-    console.log(valor);
-    const data = await deleteData(link, valor);
-    console.log(data);
-    await fetchData();
-  };
+    // console.log(valor);
+    // const data = await deleteData(link, valor);
+    // console.log(data);
+
+    MySwal.fire({
+  title: 'El registro será eliminado',
+  icon: 'warning',
+  buttons: true,
+})
+.then(async (willDelete) => {
+
+  try {
+    if (willDelete.isConfirmed) {
+      console.log(willDelete)
+      const data = await deleteData(link, valor);
+      MySwal.fire({
+        icon: 'success',
+        text: 'Ha sido eliminado correctamente!', 
+      });
+      await fetchData();
+    } else {
+      MySwal.fire({
+        icon: "info",
+        text: 'No ha sido eliminado!', 
+      });
+    }
+  } catch (error) {
+    MySwal.fire({
+      icon: 'error',
+      text: 'No se ha podido eliminar el registro', 
+    });
+  }
+});
+};
   console.log(clientes);
   return (
     <div className="container mx-auto">

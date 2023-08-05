@@ -219,7 +219,7 @@ export const BarraLateralUsuario = () => {
                     clipRule="evenodd"
                   />
                 </svg>
-                <span className="flex-1 ml-3 whitespace-nowrap">Reportes</span>
+                <span className="flex-1 ml-3 whitespace-nowrap">Historial</span>
                 {!abrirMantenimiento || !abrirProceso ? (
                   <ChevronDownIcon className="w-1/6" />
                 ) : (

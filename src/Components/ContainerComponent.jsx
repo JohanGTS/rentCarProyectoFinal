@@ -89,7 +89,7 @@ const ContainerComponent = () => {
           </label>
         </div>
         <div className="md:col-span-1">
-          <label className="block">
+          <label className="block font-size: 0.875rem line-height: 1.25rem">
             Modelo:
             <select
               name="modelo"

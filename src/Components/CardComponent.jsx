@@ -32,7 +32,7 @@ const CardComponent = ({ data }) => {
             <div className="mt-4 grid grid-cols-2">
               <div className="flex items-center justify-start ml-1">
                 <div className="relative">
-                  <h2 className="line-clamp-1 text-base font-medium text-gray-800 md:text-lg">
+                  <h2 className="line-clamp-1 font-medium text-gray-800 font-size: 0.875rem line-height: 1.25rem">
                     {data.Marca +
                       " " +
                       data.Modelo +

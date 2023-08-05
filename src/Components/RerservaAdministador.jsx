@@ -69,7 +69,7 @@ const ContainerComponent = () => {
     <div>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="md:col-span-1">
-          <label className="block">
+          <label className="block font-size: 0.875rem line-height: 1.25rem">
             Marca:
             <select
               name="marca"
@@ -87,7 +87,7 @@ const ContainerComponent = () => {
           </label>
         </div>
         <div className="md:col-span-1">
-          <label className="block">
+          <label className="block w-2/5">
             Modelo:
             <select
               name="modelo"
