@@ -7,6 +7,9 @@ import {
   updateData,
 } from "../Features/apiCalls";
 import PopUpDinamico from "./PopUpDinamico";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+const MySwal = withReactContent(Swal);
 
 export const CrudDinamico = ({
   campos,
@@ -80,10 +83,32 @@ export const CrudDinamico = ({
   const handleEliminar = async (valor) => {
     const eliminar = document.getElementById("elimina");
     eliminar.focus();
-    console.log(valor);
+    // console.log(valor);
+    // const data = await deleteData(link, valor);
+    // console.log(data);
+
+    MySwal.fire({
+  title: 'El registro será eliminado',
+
+  icon: 'warning',
+  buttons: true,
+  dangerMode: true,
+})
+.then(async (willDelete) => {
+  if (willDelete.isConfirmed) {
     const data = await deleteData(link, valor);
-    console.log(data);
+    MySwal.fire({
+      icon: 'success',
+      text: 'Ha sido eliminado correctamente!', 
+    });
     await fetchData();
+  } else {
+    MySwal.fire({
+      icon: "error",
+      text: 'No ha sido eliminado!', 
+    });
+  }
+});
   };
   return (
     <div className="container mx-auto">

@@ -4,6 +4,8 @@ import { UserContext } from "../Contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/material";
 import axios, { formToJSON } from "axios";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 import {
   getData,
   getAllData,
@@ -25,18 +27,36 @@ const PopUpImagen = ({
   const [file, setFile] = useState();
   const [selectedRow, setSelectedRow] = useState(false);
 
+
   const handleFile = (e) => {
     setFile(e.target.files[0]);
   };
-  console.log(valorInicial);
+  
+  const sendHandler = () => {
+    const MySwal = withReactContent(Swal);
+    if(!file){
+      MySwal.fire({
+        icon: "error",
+        title: "Debe Seleccionar una imagen",
+        text: "Verifique los datos y vuelva a intentar",
+        showConfirmButton: true,
+      });
+      return
+  }
   const id = valorInicial.idVehiculo_veh;
-  const handleUpload = () => {
     const formdata = new FormData();
     formdata.append("vehiculo", id);
     formdata.append("image", file);
     pagoTarjeta("vehiculo/upload", formdata);
-    //   axios.post('http://localhost:3000/vehiculo/upload', formdata)
-  };
+  document.getElementById('fileinput').value = null
+  setFile(null)
+    MySwal.fire({
+      icon: "success",
+      text: "Imagen guardada Correctamente!",
+      showConfirmButton: true,
+    });
+  props.onHide()
+}
   return (
     <Modal
       {...props}
@@ -50,13 +70,13 @@ const PopUpImagen = ({
       <Modal.Body>
         <div>
           <Box>
-            <input type="file" onChange={handleFile} />
+            <input id="fileinput" type="file" className="form-control" onChange={handleFile} />
             </Box>
-            <Box>
+            <Box marginTop={3}>
             <button
               className="flex-shrink-0 bg-blue-500 hover:bg-blue-700 border-blue-500 hover:border-blue-700 text-sm border-4 text-white py-1 px-2 rounded"
               type="button"
-              onClick={handleUpload}
+              onClick={sendHandler}
             >
               Guardar
             </button>
