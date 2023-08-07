@@ -50,6 +50,7 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
     idRecepcionOnline_fac: "",
     Nota_Res: "Local en Santiago",
     Hora_res: "08:00",
+    idPersonal_res: 0
   };
 
   const MySwal = withReactContent(Swal);
@@ -184,8 +185,8 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
         fin: date2.toISOString().split("T")[0],
         id: formValues.idVehiculo_res,
       });
-      console.log(res);
-      if (res == 1) {
+      console.log(res)
+      if (res.estado_veh == 1) {
         errors.FechaInicio_Res = "Vehículo no disponible en esta fecha";
       }
       formValues.FechaInicio_Res = date1.toISOString().split("T")[0];
@@ -208,7 +209,7 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
         MySwal.showLoading();
       },
     });
-    if (Object.keys(formErrors).length == 0) {
+    if (Object.keys(error).length == 0) {
       console.log("Paga");
       const { error, paymentMethod } = await stripe.createPaymentMethod({
         type: "card",
@@ -294,6 +295,7 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
           console.log("Error: " + error);
         }
       } else {
+        MySwal.close()
         console.log(error.message);
       }
     } else {

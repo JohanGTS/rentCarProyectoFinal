@@ -95,6 +95,49 @@ export const ReporteOrdenesRecientes = () => {
   );
 };
 
+export const ReporteOrdenesRecientesDashboard = () => {
+  let [ventas, setVentas] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getAllData("dashboard/ultimasReservas");
+        setVentas(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const columns = [
+    // { field: "idReserva_res", headerName: "RESERVA", width: 150 },
+    { field: "VehiculoNom", headerName: "DESCRIPCION", width: 200 },
+    { field: "CostoPorDia_veh", headerName: "COSTO POR DIA", width: 150 },
+  ];
+
+  return (
+    <div>
+      <section>
+        <div>
+          <section>
+            <DataGrid
+              rows={ventas}
+              columns={columns}
+              getRowId={(ventas) => ventas.idReserva_res}
+              initialState={{
+                pagination: {
+                  paginationModel: { page: 0, pageSize: 5 },
+                },
+              }}
+              // pageSizeOptions={[5, 10]}
+            />
+          </section>
+        </div>
+      </section>
+    </div>
+  );
+};
+
 export const ReporteVehiculosMasRentados = () => {
   let [vehiculo, setVehiculo] = useState([]);
 
@@ -264,6 +307,52 @@ export const ReportesFacturasActivasXCliente = () => {
           rows={facturas}
           columns={columns}
           getRowId={(facturas) => facturas.idFactura_fac}
+          initialState={{
+            pagination: {
+              paginationModel: { page: 0, pageSize: 5 },
+            },
+          }}
+          slots={{
+            toolbar: GridToolbar,
+          }}
+          pageSizeOptions={[5, 10]}
+        />
+      </section>
+    </div>
+  );
+};
+
+export const ReporteVehiculos = () => {
+  const userContext = useContext(UserContext);
+  let [vehiculos, setVehiculos] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getAllData('vehiculo/vehiculo');
+        setVehiculos(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+  const columns = [
+    { field: "idVehiculo_veh", headerName: "VEHICULO", width: 150 },
+    { field: "Marca", headerName: "MARCA", width: 250 },
+    { field: "Modelo", headerName: "MODELO", width: 250 },
+    { field: "Color", headerName: "COLOR", width: 250 },
+    { field: "Año_veh", headerName: "AÑO", width: 250 },
+    { field: "CantidadAsiento_veh", headerName: "Cant. ASIENTO", width: 250 },
+    { field: "Transmision_veh", headerName: "TRANSMISION", width: 250 },
+    { field: "Combustible", headerName: "COMBUSTIBLE", width: 250 },
+  ];
+  return (
+    <div>
+      <section>
+        <DataGrid
+          rows={vehiculos}
+          columns={columns}
+          getRowId={(vehiculos) => vehiculos.idVehiculo_veh}
           initialState={{
             pagination: {
               paginationModel: { page: 0, pageSize: 5 },

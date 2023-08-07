@@ -25,6 +25,7 @@ import {
   ReporteClientesFrecuentes,
   ReporteOrdenesRecientes,
   ReporteVehiculosMasRentados,
+  ReporteVehiculos,
 } from "../Pages/reportes";
 import { Elements } from "@stripe/react-stripe-js";
 import CancelarRervacion from "./Procesos/CancelarRervacion";
@@ -104,6 +105,11 @@ export const BarraLateral = () => {
       label: "Ordenes Recientes",
       value: "reporteOrdenesRecientes",
       ruta: "reporteOrdenesRecientes",
+    },
+    {
+      label: "Vehiculos",
+      value: "reporteVehiculos",
+      ruta: "reporteVehiculos",
     },
     {
       label: "Vehiculos Mas Rentados",
@@ -532,6 +538,10 @@ export const BarraLateral = () => {
               <Route
                 path="/reporteVehiculosMasRentados"
                 element={<ReporteVehiculosMasRentados />}
+              />
+              <Route
+                path="/reporteVehiculos"
+                element={<ReporteVehiculos />}
               />
             </Routes>
           </div>

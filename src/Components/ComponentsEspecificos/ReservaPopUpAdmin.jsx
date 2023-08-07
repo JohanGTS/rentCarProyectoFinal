@@ -41,7 +41,7 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
   segundaFecha.setDate(segundaFecha.getDate() + 4);
   const initial = {
     idReserva_res: 0,
-    idCliente_res: userContext.usuario.idTercero_ter,
+    idCliente_res: 0,//userContext.usuario.idTercero_ter,
     FechaInicio_Res: fechaInicial.toISOString().split("T")[0],
     FechaFin_Res: segundaFecha.toISOString().split("T")[0],
     idVehiculo_res: vehiculo.idVehiculo_veh,
@@ -50,6 +50,7 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
     idRecepcionOnline_fac: "",
     Nota_Res: "Local en Santiago",
     Hora_res: "08:00",
+    idPersonal_res: 0,
   };
 
   const MySwal = withReactContent(Swal);
@@ -137,8 +138,13 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
       errors.idVehiculo_res = "Debe especificar el vehículo";
       fechaValidada = false;
     }
+    console.log(formValues.idCliente_res)
     if (formValues.idCliente_res == "" || isNaN(formValues.idCliente_res)) {
       errors.idCliente_res = "Debe especificar el cliente";
+      fechaValidada = false;
+    }
+    if (formValues.idPersonal_res == "" || isNaN(formValues.idPersonal_res)) {
+      errors.idPersonal_res = "Debe especificar el empleado";
       fechaValidada = false;
     }
     if (formValues.FechaInicio_Res == "") {
@@ -186,12 +192,13 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
         id: formValues.idVehiculo_res,
       });
       console.log(res);
-      if (res == 1) {
+      if (res.estado_veh == 1) {
         errors.FechaInicio_Res = "Vehículo no disponible en esta fecha";
       }
       formValues.FechaInicio_Res = date1.toISOString().split("T")[0];
       formValues.FechaFin_Res = date2.toISOString().split("T")[0];
     }
+    console.log(errors)
     return errors;
   };
   const handleGuardar = async (e) => {
@@ -209,7 +216,7 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
         MySwal.showLoading();
       },
     });
-    if (Object.keys(formErrors).length == 0) {
+    if (Object.keys(error).length == 0) {
       console.log("Paga");
       const { error, paymentMethod } = await stripe.createPaymentMethod({
         type: "card",
@@ -295,6 +302,7 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
           console.log("Error: " + error);
         }
       } else {
+        MySwal.close()
         console.log(error.message);
       }
     } else {
@@ -311,7 +319,18 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
         console.log(error);
       }
     };
-
+    fetchData();
+  }, []);
+  const [empleados, setEmpleados] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getAllData("personal/empleado");
+        setEmpleados(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
     fetchData();
   }, []);
   return (
@@ -445,10 +464,42 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
                   );
                 })}
               </select>
-              <p className="text-red-700 text-sm font-bold mb-2">
+              {/* <p className="text-red-700 text-sm font-bold mb-2">
                 {formErrors.idCliente_res}
-              </p>
+              </p> */}
             </div>
+            
+          <div>
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor={"idPersonal_res"}
+          >
+            {"Entregar por"}
+          </label>
+
+          <select
+            key={"nose"}
+            className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id={"idPersonal_res"}
+            onChange={handleSelectChange}
+          >
+            <option data-key={""}>Seleccione un valor</option>
+            {empleados.map((values, index) => {
+              const key = values["idTercero_ter"];
+              const descripcion =
+                values["Nombre_usu"] + " : " + values["Nombre_ter"];
+              return (
+                <option key={index} data-key={key} value={descripcion}>
+                  {descripcion}
+                </option>
+              );
+            })}
+          </select>
+          <p className="text-red-700 text-sm font-bold mb-2">
+            {formErrors.idPersonal_res}
+          </p>
+        </div>
+
             <div>
               <label className="block text-gray-700 text-lg font-bold mb-2">
                 Valor de la reserva: ${valor}
