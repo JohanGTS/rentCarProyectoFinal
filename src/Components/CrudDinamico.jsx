@@ -170,7 +170,7 @@ export const CrudDinamico = ({
         </button>
       </div>
 
-      <PopUpDinamicwo
+      <PopUpDinamico
         show={showModal}
         campos={campos}
         titulo={`Registro de ${titulo.toLowerCase()}`}

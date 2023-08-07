@@ -88,35 +88,33 @@ export const CrudUsuario = ({ ...props }) => {
     // console.log(data);
 
     MySwal.fire({
-  title: 'El registro será eliminado',
-  icon: 'warning',
-  buttons: true,
-})
-.then(async (willDelete) => {
-
-  try {
-    if (willDelete.isConfirmed) {
-      console.log(willDelete)
-      const data = await deleteData(link, valor);
-      MySwal.fire({
-        icon: 'success',
-        text: 'Ha sido eliminado correctamente!', 
-      });
-      await fetchData();
-    } else {
-      MySwal.fire({
-        icon: "info",
-        text: 'No ha sido eliminado!', 
-      });
-    }
-  } catch (error) {
-    MySwal.fire({
-      icon: 'error',
-      text: 'No se ha podido eliminar el registro', 
+      title: "El registro será eliminado",
+      icon: "warning",
+      buttons: true,
+    }).then(async (willDelete) => {
+      try {
+        if (willDelete.isConfirmed) {
+          console.log(willDelete);
+          const data = await deleteData(link, valor);
+          MySwal.fire({
+            icon: "success",
+            text: "Ha sido eliminado correctamente!",
+          });
+          await fetchData();
+        } else {
+          MySwal.fire({
+            icon: "info",
+            text: "No ha sido eliminado!",
+          });
+        }
+      } catch (error) {
+        MySwal.fire({
+          icon: "error",
+          text: "No se ha podido eliminar el registro",
+        });
+      }
     });
-  }
-});
-};
+  };
   console.log(clientes);
   return (
     <div className="container mx-auto">
@@ -138,7 +136,9 @@ export const CrudUsuario = ({ ...props }) => {
                   key={campo.id}
                   className="px-1 py-4 font-medium text-gray-900"
                 >
-                  {objeto[campo.id]}
+                  {campo.type === "date"
+                    ? objeto[campo.id]?.split("T")[0]
+                    : objeto[campo.id]}
                 </td>
               ))}
               <td key={"botones" + index}>
