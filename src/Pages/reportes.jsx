@@ -1,8 +1,11 @@
-import { getData, getAllData } from "../Features/apiCalls";
+import { getData, getAllData, pagoTarjeta } from "../Features/apiCalls";
 import React, { useState, useEffect } from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { UserContext } from "../Contexts/UserContext";
 import { useContext } from "react";
+
+let fechaInicial = new Date(Date.now());
+fechaInicial.setDate(fechaInicial.getDate());
 
 export const ReporteClientesFrecuentes = () => {
   let [clientes, setClientes] = useState([]);
@@ -62,11 +65,12 @@ export const ReporteOrdenesRecientes = () => {
 
   const columns = [
     { field: "idReserva_res", headerName: "RESERVA", width: 150 },
+    { field: "Nombre_ter", headerName: "CLIENTE", width: 200 },
     { field: "VehiculoNom", headerName: "DESCRIPCION", width: 200 },
     { field: "Matricula_veh", headerName: "MATRICULA", width: 150 },
     { field: "FechaInicio_res", headerName: "FECHA DE INICO", width: 250 },
     { field: "FechaFin_res", headerName: "FECHA DE ENTREGA", width: 250 },
-    { field: "CostoPorDia_veh", headerName: "COSTO POR DIA", width: 200 },
+    { field: "CostoPorDia_veh", headerName: "COSTO POR DIA", width: 150 },
   ];
 
   return (
@@ -100,7 +104,9 @@ export const ReporteOrdenesRecientesDashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getAllData("dashboard/ultimasReservas");
+        const data = await pagoTarjeta(`dashboard/ultimasReservasDashboard`, {
+          FechaCreacion_res: fechaInicial.toISOString().split("T")[0],
+        });
         setVentas(data);
       } catch (error) {
         console.log(error);
@@ -110,9 +116,10 @@ export const ReporteOrdenesRecientesDashboard = () => {
   }, []);
 
   const columns = [
-    // { field: "idReserva_res", headerName: "RESERVA", width: 150 },
-    { field: "VehiculoNom", headerName: "DESCRIPCION", width: 200 },
-    { field: "CostoPorDia_veh", headerName: "COSTO POR DIA", width: 150 },
+    { field: "Nombre_ter", headerName: "CLIENTE", width: 130 },
+    { field: "Matricula_veh", headerName: "MATRICULA", width: 100 },
+    { field: "VehiculoNom", headerName: "VEHICULO", width: 180 },
+    { field: "CostoPorDia_veh", headerName: "COSTO POR DIA", width: 80 },
   ];
 
   return (
@@ -190,7 +197,9 @@ export const ReporteOrdenesRecientesxCliente = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getAllData(`dashboard/OrdenxCliente/${userContext.usuario.idTercero_ter}`);
+        const data = await getAllData(
+          `dashboard/OrdenxCliente/${userContext.usuario.idTercero_ter}`
+        );
         setVentas(data);
       } catch (error) {
         console.log(error);
@@ -283,7 +292,9 @@ export const ReportesFacturasActivasXCliente = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getAllData(`dashboard/facturasactivas/${userContext.usuario.idTercero_ter}`);
+        const data = await getAllData(
+          `dashboard/facturasactivas/${userContext.usuario.idTercero_ter}`
+        );
         setFacturas(data);
       } catch (error) {
         console.log(error);
@@ -328,7 +339,7 @@ export const ReporteVehiculos = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getAllData('vehiculo/vehiculo');
+        const data = await getAllData("vehiculo/vehiculo");
         setVehiculos(data);
       } catch (error) {
         console.log(error);
@@ -362,6 +373,97 @@ export const ReporteVehiculos = () => {
             toolbar: GridToolbar,
           }}
           pageSizeOptions={[5, 10]}
+        />
+      </section>
+    </div>
+  );
+};
+
+export const ReporteOrdenesXEntregar = () => {
+  const userContext = useContext(UserContext);
+  let [ordenes, setOrdenes] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await pagoTarjeta("dashboard/reservasXempleado", {
+          FechaInicio_res: fechaInicial.toISOString().split("T")[0],
+          idPersonal_res: userContext.usuario.idTercero_ter,
+        });
+        setOrdenes(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+  const columns = [
+    { field: "idReserva_res", headerName: "RESERVA", width: 150 },
+    { field: "Nombre_ter", headerName: "CLIENTE", width: 200 },
+    { field: "FechaInicio_res", headerName: "FECHA DE ENTREGA", width: 210 },
+    { field: "matricula_veh", headerName: "MATRICULA", width: 150 },
+    { field: "VehiculoNom", headerName: "VEHICULO", width: 200 },
+    { field: "Nota_Res", headerName: "SITIO DE ENTREGA", width: 200 },
+    { field: "Hora_res", headerName: "HORA DE ENTREGA", width: 180 },
+  ];
+  return (
+    <div>
+      <section>
+        <DataGrid
+          rows={ordenes}
+          columns={columns}
+          getRowId={(ordenes) => ordenes.idReserva_res}
+          initialState={{
+            pagination: {
+              paginationModel: { page: 0, pageSize: 5 },
+            },
+          }}
+          slots={{
+            toolbar: GridToolbar,
+          }}
+          pageSizeOptions={[5, 10]}
+        />
+      </section>
+    </div>
+  );
+};
+
+export const ReporteOrdenesXEntregarDashboard = () => {
+  const userContext = useContext(UserContext);
+  let [ordenes, setOrdenes] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await pagoTarjeta("dashboard/reservasXempleado", {
+          FechaInicio_res: fechaInicial.toISOString().split("T")[0],
+          idPersonal_res: userContext.usuario.idTercero_ter,
+        });
+        setOrdenes(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+  const columns = [
+    { field: "Hora_res", headerName: "HORA", width: 70 },
+    { field: "Nombre_ter", headerName: "CLIENTE", width: 100 },
+    { field: "matricula_veh", headerName: "MATRICULA", width: 100 },
+    { field: "VehiculoNom", headerName: "VEHICULO", width: 150 },
+    { field: "Nota_Res", headerName: "SITIO DE ENTREGA", width: 180 },
+  ];
+  return (
+    <div>
+      <section>
+        <DataGrid
+          rows={ordenes}
+          columns={columns}
+          getRowId={(ordenes) => ordenes.idReserva_res}
+          initialState={{
+            pagination: {
+              paginationModel: { page: 0, pageSize: 5 },
+            },
+          }}
+          slots={{}}
         />
       </section>
     </div>

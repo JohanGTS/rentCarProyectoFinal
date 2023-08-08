@@ -32,6 +32,8 @@ export const CrudEntregaVehiculo = () => {
     try {
       const data = await getAllData("entrega");
       setClientes(data);
+      console.log(data)
+
     } catch (error) {
       console.log(error);
     }
@@ -62,7 +64,7 @@ export const CrudEntregaVehiculo = () => {
     const dateParts = dateString.split("T");
     return dateParts[0]; // Retorna solo la parte antes de la 'T'
   };
-
+  
   return (
     <div className="container mx-auto">
       <h2 className="font-bold text-gray-500 py-3">{"Entrega de vehículos"}</h2>

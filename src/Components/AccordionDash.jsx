@@ -4,7 +4,10 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { ReporteOrdenesRecientesDashboard } from "../Pages/reportes";
+import {
+  ReporteOrdenesRecientesDashboard,
+  ReporteOrdenesXEntregarDashboard,
+} from "../Pages/reportes";
 
 export default function AccordionDash() {
   return (
@@ -30,14 +33,7 @@ export default function AccordionDash() {
           <Typography>Ordenes para entregar</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          {/* <Typography>
-            <a
-              href="http://localhost:5173/src/assets/Propuestaproyecto.pdf"
-              target="_blank"
-            >
-              Abrir Manual de Usuario
-            </a>
-          </Typography> */}
+          <ReporteOrdenesXEntregarDashboard />
         </AccordionDetails>
       </Accordion>
       <Accordion>

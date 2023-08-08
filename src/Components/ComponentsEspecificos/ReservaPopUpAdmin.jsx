@@ -144,8 +144,7 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
       fechaValidada = false;
     }
     if (formValues.idPersonal_res == "" || isNaN(formValues.idPersonal_res)) {
-      errors.idPersonal_res = "Debe especificar el empleado";
-      fechaValidada = false;
+      formValues.idPersonal_res = 0;
     }
     if (formValues.FechaInicio_Res == "") {
       console.log("Debe especificar la fecha inicial");
@@ -191,9 +190,17 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
         fin: date2.toISOString().split("T")[0],
         id: formValues.idVehiculo_res,
       });
-      console.log(res);
+      const resP = await pagoTarjeta("reserva/disponiblePersonal", {
+        inicio: date1.toISOString().split("T")[0],
+        fin: date2.toISOString().split("T")[0],
+        id: formValues.idPersonal_res,
+      });
+      // console.log(res);
       if (res.estado_veh == 1) {
         errors.FechaInicio_Res = "Vehículo no disponible en esta fecha";
+      }
+      if (resP.estado_veh == 1) {
+        errors.idPersonal_res = "Personal no disponible en ese momento";
       }
       formValues.FechaInicio_Res = date1.toISOString().split("T")[0];
       formValues.FechaFin_Res = date2.toISOString().split("T")[0];
@@ -483,7 +490,7 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
             id={"idPersonal_res"}
             onChange={handleSelectChange}
           >
-            <option data-key={""}>Seleccione un valor</option>
+            <option data-key={""}>Asignar más tarde</option>
             {empleados.map((values, index) => {
               const key = values["idTercero_ter"];
               const descripcion =
