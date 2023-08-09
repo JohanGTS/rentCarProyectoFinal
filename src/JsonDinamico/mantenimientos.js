@@ -410,3 +410,8 @@ export const cancelacion = [
   { id: "fechaCancelacion_can", nombre: "Fecha de solicitud" },
   { id: "idRecepcionOnline_fac", nombre: "Id Stripe" },
 ];
+
+export const asignarPersonal = [
+  { id: "idReserva_res", nombre: "Id Reserva" },
+  { id: "idPersonal_res", nombre: "Id Personal" },
+];

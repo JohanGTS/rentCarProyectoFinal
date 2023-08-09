@@ -385,9 +385,8 @@ export const ReporteOrdenesXEntregar = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await pagoTarjeta("dashboard/reservasXempleado", {
+        const data = await pagoTarjeta("dashboard/reservasAHacer", {
           FechaInicio_res: fechaInicial.toISOString().split("T")[0],
-          idPersonal_res: userContext.usuario.idTercero_ter,
         });
         setOrdenes(data);
       } catch (error) {
@@ -404,6 +403,7 @@ export const ReporteOrdenesXEntregar = () => {
     { field: "VehiculoNom", headerName: "VEHICULO", width: 200 },
     { field: "Nota_Res", headerName: "SITIO DE ENTREGA", width: 200 },
     { field: "Hora_res", headerName: "HORA DE ENTREGA", width: 180 },
+    { field: "Empleado", headerName: "EMPLEADO", width: 180 },
   ];
   return (
     <div>

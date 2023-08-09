@@ -7,8 +7,12 @@ import {
   updateData,
 } from "../../Features/apiCalls";
 import { UserContext } from "../../Contexts/UserContext";
-
 import { cancelacion2 } from "../../JsonDinamico/mantenimientos";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+
+const MySwal = withReactContent(Swal);
+
 const CancelarRervacionCliente = () => {
   let actualiza;
   const userContext = useContext(UserContext);
@@ -44,20 +48,48 @@ const CancelarRervacionCliente = () => {
     return obj;
   }, {});
   const handleModifica = async (row) => {
-    await addData("cancelacion", {
-      fake: row.idReserva_res,
-      idReserva_can: row.idReserva_res,
-      estado_can: "P",
+    MySwal.fire({
+      title: 'La reserva será cancelada',
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+    })
+    .then(async (willDelete) => {
+      try {
+        if (willDelete.isConfirmed) {
+          await addData("cancelacion", {
+            fake: row.idReserva_res,
+            idReserva_can: row.idReserva_res,
+            estado_can: "P",
+          });
+          await updateData("cancelacion/reserva", {
+            idReserva_can: row.idReserva_res,
+            estado_can: "P",
+          });
+          await updateData("cancelacion/factura", {
+            idReserva_can: row.idReserva_res,
+            estado_can: "P",
+          });
+          await fetchData();
+          MySwal.fire({
+            icon: 'success',
+            text: 'Ha sido cancelada correctamente!', 
+          });
+          await fetchData();
+        } else {
+          MySwal.fire({
+            icon: "info",
+            text: 'No ha sido cancelada!', 
+          });
+        }
+      } catch (error) {
+        console.error("Error al llamar al API:", error);
+        MySwal.fire({
+          icon: 'error',
+          text: 'No se ha podido Cancelar la reserva', 
+        });
+      }
     });
-    await updateData("cancelacion/reserva", {
-      idReserva_can: row.idReserva_res,
-      estado_can: "P",
-    });
-    await updateData("cancelacion/factura", {
-      idReserva_can: row.idReserva_res,
-      estado_can: "P",
-    });
-    await fetchData();
   };
   console.log(cancelaciones);
   return (

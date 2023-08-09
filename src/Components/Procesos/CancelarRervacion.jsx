@@ -9,7 +9,11 @@ import {
 
 import { cancelacion } from "../../JsonDinamico/mantenimientos";
 import { UserContext } from "../../Contexts/UserContext";
-import { Await } from "react-router-dom";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+
+const MySwal = withReactContent(Swal);
+
 const CancelarRervacion = () => {
   let actualiza;
   const userContext = useContext(UserContext);
@@ -50,22 +54,83 @@ const CancelarRervacion = () => {
     return obj;
   }, {});
   const handleModifica = async (row) => {
-    const guardar = document.getElementById("guarda");
-    guardar.focus();
-    row.estado_can = "C";
-    await updateData("cancelacion", row);
-    await updateData("entrega/reserva", {
-      idReserva_res: row.idReserva_can,
-      estado_res: "C",
+    MySwal.fire({
+      title: 'La reserva será cancelada',
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+    })
+    .then(async (willDelete) => {
+      try {
+        if (willDelete.isConfirmed) {
+
+          const guardar = document.getElementById("guarda");
+          guardar.focus();
+          row.estado_can = "C";
+          await updateData("cancelacion", row);
+          await updateData("entrega/reserva", {
+            idReserva_res: row.idReserva_can,
+            estado_res: "C",
+          });
+          await fetchData();
+
+          MySwal.fire({
+            icon: 'success',
+            text: 'Ha sido cancelada correctamente!', 
+          });
+          await fetchData();
+        } else {
+          MySwal.fire({
+            icon: "info",
+            text: 'No ha sido cancelada!', 
+          });
+        }
+      } catch (error) {
+        console.error("Error al llamar al API:", error);
+        MySwal.fire({
+          icon: 'error',
+          text: 'No se ha podido Cancelar la reserva', 
+        });
+      }
     });
-    await fetchData();
   };
+
   const handleEliminar = async (row) => {
-    const eliminar = document.getElementById("elimina");
-    eliminar.focus();
-    row.estado_can = "D";
-    await updateData("cancelacion", row);
-    await fetchData();
+    MySwal.fire({
+      title: 'La cancelacion será denegada',
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+    })
+    .then(async (willDelete) => {
+      try {
+        if (willDelete.isConfirmed) {
+
+          const eliminar = document.getElementById("elimina");
+          eliminar.focus();
+          row.estado_can = "D";
+          await updateData("cancelacion", row);
+          await fetchData();
+          
+          MySwal.fire({
+            icon: 'success',
+            text: 'Ha sido denegada!', 
+          });
+          await fetchData();
+        } else {
+          MySwal.fire({
+            icon: "info",
+            text: 'No ha sido denegada!', 
+          });
+        }
+      } catch (error) {
+        console.error("Error al llamar al API:", error);
+        MySwal.fire({
+          icon: 'error',
+          text: 'No se ha podido denegadar la cancelacion', 
+        });
+      }
+    });
   };
   return (
     <div className="container mx-auto">

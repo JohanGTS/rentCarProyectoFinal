@@ -10,21 +10,16 @@ import {
 } from "../Pages/reportes";
 
 export default function AccordionDash() {
+
+  const [expanded, setExpanded] = React.useState('panel1');
+
+  const handleChange = (panel) => (event, newExpanded) => {
+    setExpanded(newExpanded ? panel : false);
+  };
+
   return (
     <div>
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <Typography>Ultimas Ordenes</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <ReporteOrdenesRecientesDashboard />
-        </AccordionDetails>
-      </Accordion>
-      <Accordion>
+      <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel2a-content"
@@ -36,7 +31,21 @@ export default function AccordionDash() {
           <ReporteOrdenesXEntregarDashboard />
         </AccordionDetails>
       </Accordion>
-      <Accordion>
+
+      <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography>Ultimas Ordenes</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <ReporteOrdenesRecientesDashboard />
+        </AccordionDetails>
+      </Accordion>
+
+      <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel2a-content"

@@ -33,6 +33,7 @@ import CancelarRervacion from "./Procesos/CancelarRervacion";
 import Checklist from "./CheckList";
 import { CrudEntregaVehiculo } from "./CrudEntregaVehiculo";
 import { CrudRecibirVehiculo } from "./CrudRecibirVehiculo";
+import { CrudAsignarEntrega } from "./CrudAsignarEntrega";
 import { CrudVehiculo } from "./CrudVehiculo";
 import { CrudUsuario } from "./CrudUsuario";
 export const BarraLateral = () => {
@@ -94,6 +95,11 @@ export const BarraLateral = () => {
       value: "recibirVehiculo",
       ruta: "recibirVehiculo",
     },
+    {
+      label: "Asignar Personal",
+      value: "asignarPersonal",
+      ruta: "asignarPersonal",
+    },
   ];
 
   const dropDownReportes = [
@@ -144,7 +150,7 @@ export const BarraLateral = () => {
 
   return (
     <>
-      <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800">
+      <nav className="fixed top-0 z-50 w-full bg-light border-b border-gray-200 dark:bg-gray-800">
         <div className="px-3 py-3 lg:px-5 lg:pl-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-start">
@@ -186,10 +192,10 @@ export const BarraLateral = () => {
       </nav>
       <aside
         id="logo-sidebar"
-        className="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r sm:translate-x-0"
+        className="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-light border-r sm:translate-x-0"
         aria-label="Sidebar"
       >
-        <div className="h-full px-3 pb-4 overflow-y-auto bg-white ">
+        <div className="h-full px-3 pb-4 overflow-y-auto bg-light ">
           <ul className="space-y-2 font-medium">
             <li>
               <a
@@ -521,6 +527,10 @@ export const BarraLateral = () => {
                 element={<CrudEntregaVehiculo />}
               />
               <Route
+                path="/asignarPersonal"
+                element={<CrudAsignarEntrega />}
+              />
+              <Route
                 path="/recibirVehiculo"
                 element={<CrudRecibirVehiculo />}
               />
@@ -545,10 +555,7 @@ export const BarraLateral = () => {
                 path="/reporteVehiculosMasRentados"
                 element={<ReporteVehiculosMasRentados />}
               />
-              <Route
-                path="/reporteVehiculos"
-                element={<ReporteVehiculos />}
-              />
+              <Route path="/reporteVehiculos" element={<ReporteVehiculos />} />
               <Route
                 path="/reporteOrdenesXEntregar"
                 element={<ReporteOrdenesXEntregar />}

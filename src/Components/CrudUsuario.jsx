@@ -144,7 +144,7 @@ export const CrudUsuario = ({ ...props }) => {
               <td key={"botones" + index}>
                 <button
                   id="guarda"
-                  className="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded"
+                  className="flex-shrink-0 w-4/5 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded"
                   type="submit"
                   onClick={() => handleModifica(objeto)}
                 >
@@ -152,7 +152,7 @@ export const CrudUsuario = ({ ...props }) => {
                 </button>
                 <button
                   id="elimina"
-                  className="flex-shrink-0 bg-red-500 hover:bg-red-700 border-red-500 hover:border-red-700 text-sm border-4 text-white py-1 px-2 mx-1 rounded"
+                  className="flex-shrink-0 w-4/5 bg-red-500 hover:bg-red-700 border-red-500 hover:border-red-700 text-sm border-4 text-white py-1 px-2  rounded"
                   type="button"
                   onClick={() => handleEliminar(objeto)}
                 >
