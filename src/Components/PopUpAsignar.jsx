@@ -2,35 +2,29 @@ import React, { useEffect, useState, useRef } from "react";
 import { Modal } from "react-bootstrap";
 import { UserContext } from "../Contexts/UserContext";
 import { useNavigate } from "react-router-dom";
-import { updateData } from "../Features/apiCalls";
+import { updateData, pagoTarjeta } from "../Features/apiCalls";
 const PopUpDinamico = ({
   campos,
   titulo,
   valorInicial,
-  actualiza,
-  link,
   ...props
 }) => {
+  const initial = {
+    idPersonal_res: 0,
+
+  };
+
   let inicia = true;
-  const [formValues, setFormValues] = useState(valorInicial);
+  const [formValues, setFormValues] = useState(initial);
   const [formErrors, setFormErrors] = useState([]);
 
   const handleInputChange = (e) => {
+    const date1 = new Date(formValues.FechaInicio_Res);
+    date1.setDate(date1.getDate());
     const { id, value } = e.target;
     const field = document.getElementById(id);
     if (field && field.type === "date") {
       // Formateamos la fecha al formato "yyyy-MM-dd"
-      const formattedDate = new Date(value).toISOString().split("T")[0];
-      setFormValues({ ...formValues, [id]: formattedDate });
-    } else {
-      setFormValues({ ...formValues, [id]: value });
-    }
-  };
-
-  const handleInputChange2 = (e) => {
-    const { id, value } = e.target;
-    const field = document.getElementById(id);
-    if (field && field.type === "date") {
       const formattedDate = new Date(value).toISOString().split("T")[0];
       setFormValues({ ...formValues, [id]: formattedDate });
     } else {
@@ -48,8 +42,7 @@ const PopUpDinamico = ({
     setFormErrors(validarForm(formValues));
 
     if (Object.keys(formErrors).length === 0) {
-      if (actualiza) await addDataLista(link, formValues);
-      else await updateData(link, formValues);
+      await updateData("asignar", formValues);
       formulario.reset();
       props.onHide();
     }
@@ -103,14 +96,32 @@ const PopUpDinamico = ({
     }
   };
 
-  const validarForm = () => {
+  const validarForm = async () => {
+    let fechaValidada = true;
     const errors = {};
 
     Object.keys(formValues).forEach((campo) => {
       if (isNaN(campo || campo == "") && !inicia) {
         errors.error = "Debe completar todos los campos";
+        fechaValidada = false;
+      }
+      if (formValues.idPersonal_res == "" || isNaN(formValues.idPersonal_res)) {
+        formValues.idPersonal_res = 0;
+        fechaValidada = false
       }
     });
+    if (fechaValidada) {
+      const dateActual = Date.now();
+      const date1 = new Date(formValues.FechaInicio_Res);
+    const resP = await pagoTarjeta("reserva/disponiblePersonal", {
+      inicio: date1.toISOString().split("T")[0],
+      // fin: date2.toISOString().split("T")[0],
+      id: formValues.idPersonal_res,
+    });
+    if (resP.estado_veh == 1) {
+      errors.idPersonal_res = "Personal no disponible en ese momento";
+    }}
+    console.log(date1)
     return errors;
   };
 
@@ -122,6 +133,19 @@ const PopUpDinamico = ({
       }
     }
   }, [props.show, valorInicial]);
+
+  const [empleados, setEmpleados] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getAllData("personal/empleado");
+        setEmpleados(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
   return (
     <Modal
       {...props}
@@ -158,7 +182,7 @@ const PopUpDinamico = ({
                     id={field.id}
                     onChange={handleSelectChange}
                   >
-                    <option data-key={""}>Seleccione un valor</option>
+                    <option data-key={""}>Asignar más tarde</option>
                     {field.retorna.map((option) => {
                       const values = Object.values(option);
                       const key = values[0];

@@ -17,7 +17,6 @@ const MySwal = withReactContent(Swal);
 
 let fechaInicial = new Date(Date.now());
 fechaInicial.setDate(fechaInicial.getDate());
-const link = "vehiculo";
 let actualiza;
 
 
@@ -105,8 +104,6 @@ export const CrudAsignarEntrega = () => {
         show={showModal}
         campos={campos}
         titulo={`Asignar Personal`}
-        link={link}
-        actualiza={actualiza}
         valorInicial={selectedRow}
         onHide={() => {
           setShowModal(false);

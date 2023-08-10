@@ -412,6 +412,10 @@ export const cancelacion = [
 ];
 
 export const asignarPersonal = [
-  { id: "idReserva_res", nombre: "Id Reserva" },
-  { id: "idPersonal_res", nombre: "Id Personal" },
+  { id: "idReserva_res", nombre: "Id Reserva", label: "Id Personal" },
+  {
+    id: "idPersonal_res",
+    retorna: await getAllData("personal"),
+    label: "Id Personal",
+  },
 ];
