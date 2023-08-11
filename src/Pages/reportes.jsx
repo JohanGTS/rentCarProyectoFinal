@@ -5,7 +5,10 @@ import { UserContext } from "../Contexts/UserContext";
 import { useContext } from "react";
 
 let fechaInicial = new Date(Date.now());
-fechaInicial.setDate(fechaInicial.getDate());
+fechaInicial.setDate(fechaInicial.getDate() - 1)
+let fechaReporte = new Date(Date.now());
+fechaReporte.setDate(fechaReporte.getDate() )
+// fechaInicial.setDate(fechaInicial.getDate());
 
 export const ReporteClientesFrecuentes = () => {
   let [clientes, setClientes] = useState([]);
@@ -105,7 +108,7 @@ export const ReporteOrdenesRecientesDashboard = () => {
     const fetchData = async () => {
       try {
         const data = await pagoTarjeta(`dashboard/ultimasReservasDashboard`, {
-          FechaCreacion_res: fechaInicial.toISOString().split("T")[0],
+          FechaCreacion_res: fechaReporte.toISOString().split("T")[0],
         });
         setVentas(data);
       } catch (error) {
@@ -434,7 +437,8 @@ export const ReporteOrdenesXEntregarDashboard = () => {
     const fetchData = async () => {
       try {
         const data = await pagoTarjeta("dashboard/reservasXempleado", {
-          FechaInicio_res: fechaInicial.toISOString().split("T")[0],
+
+          FechaInicio_res: fechaReporte.toISOString().split("T")[0],
           idPersonal_res: userContext.usuario.idTercero_ter,
         });
         setOrdenes(data);
