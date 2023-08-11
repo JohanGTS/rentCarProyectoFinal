@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { Modal } from "react-bootstrap";
 import { UserContext } from "../Contexts/UserContext";
 import { useNavigate } from "react-router-dom";
-import { updateData, pagoTarjeta } from "../Features/apiCalls";
+import { updateData, pagoTarjeta,getAllData } from "../Features/apiCalls";
 const PopUpDinamico = ({
   campos,
   titulo,
@@ -15,8 +15,9 @@ const PopUpDinamico = ({
   };
 
   let inicia = true;
+  let  formattedDate = ''
   const [formValues, setFormValues] = useState(initial);
-  const [formErrors, setFormErrors] = useState([]);
+  const [formErrors, setFormErrors] = useState({});
 
   const handleInputChange = (e) => {
     const date1 = new Date(formValues.FechaInicio_Res);
@@ -37,11 +38,14 @@ const PopUpDinamico = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
     const guardar = document.getElementById("guardar");
+    
+  formattedDate = valorInicial.FechaInicio_res.split("T")[0];
     guardar.focus();
     const formulario = document.getElementById("formulario");
-    setFormErrors(validarForm(formValues));
+    const errores = await validarForm(formValues)
+    setFormErrors(errores);
 
-    if (Object.keys(formErrors).length === 0) {
+    if (Object.keys(errores).length === 0) {
       await updateData("asignar", formValues);
       formulario.reset();
       props.onHide();
@@ -111,17 +115,16 @@ const PopUpDinamico = ({
       }
     });
     if (fechaValidada) {
-      const dateActual = Date.now();
-      const date1 = new Date(formValues.FechaInicio_Res);
     const resP = await pagoTarjeta("reserva/disponiblePersonal", {
-      inicio: date1.toISOString().split("T")[0],
-      // fin: date2.toISOString().split("T")[0],
       id: formValues.idPersonal_res,
+      inicio: formattedDate,
+      hora: valorInicial.Hora_res,
     });
     if (resP.estado_veh == 1) {
       errors.idPersonal_res = "Personal no disponible en ese momento";
+      fechaValidada = false
     }}
-    console.log(date1)
+    // console.log(errors)
     return errors;
   };
 
@@ -214,7 +217,7 @@ const PopUpDinamico = ({
             ))}
 
             <p className="text-red-700 text-sm font-bold mb-2">
-              {formErrors.error}
+              {formErrors.idPersonal_res}
             </p>
             <div className="flex justify-end">
               <button

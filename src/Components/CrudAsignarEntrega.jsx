@@ -58,6 +58,7 @@ export const CrudAsignarEntrega = () => {
       const handleModifica = (row) => {
         setSelectedRow(row);
         setShowModal(true);
+        console.log(row)
       };
       const formatDate = (dateString) => {
         const dateParts = dateString.split("T");
@@ -84,7 +85,7 @@ export const CrudAsignarEntrega = () => {
                       ? formatDate(objeto[campo])
                       : objeto[campo]}
                   </td>
-                ))}
+                ))} 
                 <td>
                   <button
                     id="guarda"

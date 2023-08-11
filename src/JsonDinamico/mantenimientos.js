@@ -417,5 +417,6 @@ export const asignarPersonal = [
     id: "idPersonal_res",
     retorna: await getAllData("personal"),
     label: "Id Personal",
+    type: "text",
   },
 ];
