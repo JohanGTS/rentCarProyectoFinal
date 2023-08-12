@@ -391,9 +391,9 @@ export const user = [
   {
     id: "Especificacion_terdir",
     nombre: "Direccion",
-    label: "Resto de la dirección",
+    label: "Dirección",
     type: "text",
-    placeholder: "Digite el resto de la dirección",
+    placeholder: "Digite la dirección",
     fullWidth: true,
   },
 ];

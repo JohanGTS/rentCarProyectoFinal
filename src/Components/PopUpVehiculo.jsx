@@ -30,17 +30,6 @@ const PopUpDinamico = ({
     }
   };
 
-  const handleInputChange2 = (e) => {
-    const { id, value } = e.target;
-    const field = document.getElementById(id);
-    if (field && field.type === "date") {
-      const formattedDate = new Date(value).toISOString().split("T")[0];
-      setFormValues({ ...formValues, [id]: formattedDate });
-    } else {
-      setFormValues({ ...formValues, [id]: value });
-    }
-  };
-
   const firstInputRef = useRef(null);
 
   const handleSubmit = async (e) => {
@@ -74,7 +63,6 @@ const PopUpDinamico = ({
   }, [valorInicial]);
   const handleBlur = () => {
     if (valorInicial) {
-      console.log(valorInicial);
       setTimeout(() => {
         Object.entries(valorInicial).forEach(([key, value]) => {
           const field = document.getElementById(key);

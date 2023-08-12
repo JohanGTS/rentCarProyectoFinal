@@ -11,7 +11,11 @@ import { Modal } from "react-bootstrap";
 import easyinvoice from "easyinvoice";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
 const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
+  pdfMake.vfs = pdfFonts.pdfMake.vfs;
+  let contrato = ``;
   const userContext = useContext(UserContext);
   const stripe = useStripe();
   const elements = useElements();
@@ -50,7 +54,7 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
     idRecepcionOnline_fac: "",
     Nota_Res: "Local en Santiago",
     Hora_res: "08:00",
-    idPersonal_res: 0
+    idPersonal_res: 0,
   };
 
   const MySwal = withReactContent(Swal);
@@ -66,6 +70,114 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
     { Nota_Res: "Aeropuerto Internacional de Punta Cana" },
     { Nota_Res: "Aeropuerto Internacional de las Américas" },
   ];
+  function convertirFormatoFecha(fecha) {
+    const partesFecha = fecha.split("-");
+
+    const fechaConvertida = `${partesFecha[2]}/${partesFecha[1]}/${partesFecha[0]}`;
+
+    return fechaConvertida;
+  }
+  const generarPDFBase64 = () => {
+    return new Promise((resolve, reject) => {
+      const documentoDefinition = {
+        content: [
+          {
+            text: "CONTRATO DE RESERVA",
+            fontSize: 18,
+            bold: true,
+            margin: [0, 0, 0, 20],
+            alignment: "center",
+          },
+          {
+            text: [
+              `
+            'Este contrato se establece entre RRRentalesRD, en adelante denominado "El Proveedor", y `,
+              { text: userContext.usuario.Nombre_ter, bold: true },
+              `, en adelante denominado "El Cliente".
+          
+          1. OBJETO DEL CONTRATO:
+          El Proveedor se compromete a ofrecer el servicio reservado, descrito como: renta de vehículos.
+          
+          2. FECHA Y DURACIÓN:
+          El servicio se ofrecerá desde el `,
+              {
+                text: convertirFormatoFecha(initial.FechaInicio_Res),
+                bold: true,
+              },
+              ` hasta el `,
+              { text: convertirFormatoFecha(initial.FechaFin_Res), bold: true },
+              ` .
+          
+          3. RESPONSABILIDADES DEL CLIENTE:
+          El Cliente se compromete a:
+          - Solamente la persona cuyo nombre aparezca en el contrato y a quien se alquile el vehículo será el conductor. El permitir que cualquier persona maneje el vehículo cancelará todo seguro y hace que el que alquiló el vehículo se responsabilice por todos los gastos de daños al vehículo y días de reparación.
+          - El vehículo no podrá ser usado en carreras o competencias, no se usará para enseñar a conducir, no se usará como taxi, nunca se usará para empujar o remolcar otros vehículos, además de que solo será usado en carreteras asfaltadas.
+          - El consumo de gasolina será cubierto por el cliente.
+          - El vehículo será devuelto en el día y hora especificado en el contrato, en la oficina de la compañía. El incumplimiento hará necesario que la policía recoja el vehículo y será motivo para que el vehículo sea devuelto de inmediato a la oficina de la compañía.
+          - El cliente no tiene autorización para contratar gastos de reparación de ninguna clase al vehículo.
+          - En caso de accidente, el cliente notificará de inmediato a la compañía y a la policía, procediendo a levantar una acta policial.
+          - El impuesto del 5% del gobierno para negocio del alquiler de vehículos se añadirá a cada factura.
+          - La cantidad mínima de renta será de 3 días.
+          - Si la persona cambia de dirección en la República Dominicana, deberá informar de inmediato a la oficina de la compañía.
+          - Las cancelaciones de las reservaciones se cobrarán 1 día y lo demás será devuelto en la forma de pago que realizó.
+          - El cliente devolverá el vehículo en las mismas condiciones en que le fue entregado.
+          - La compañía pone seguro de ley a todos sus vehículos.
+          - Cualquier multa será informada a la compañía y cancelada al cerrar el contrato.
+          - En caso de incumplimiento del contrato podrá ser reportado a Data Crédito.
+          - El vehículo nunca será conducido hasta que haya pasado un mínimo de 12 horas después de ingerir bebidas alcohólicas, sin importar la cantidad consumida.
+          - Cumplir con todas las políticas y normas establecidas por El Proveedor.
+          - Pagar el monto acordado por el servicio en la fecha establecida.
+            
+          4. CANCELACIONES Y MODIFICACIONES:
+          - Cualquier cancelación o modificación debe notificarse con al menos 2 días de anticipación. 
+          - Las cancelaciones realizadas estarán sujetas a un cobro de por lo menos un día del costo de la renta del vehículo en cuestión.
+          
+          5. INDEMNIZACIÓN:
+          En caso de incumplimiento de las cláusulas de este contrato por parte de El Cliente, El Proveedor tiene el derecho de buscar reparación por daños y perjuicios.
+          
+          6. LEY APLICABLE:
+          Este contrato se regirá y se interpretará de acuerdo con las leyes vigentes de la República Dominicana.
+          
+          Ambas partes, al firmar, aceptan todos los términos y condiciones descritos en este contrato.
+          
+
+          
+              `,
+            ],
+            alignment: "justify",
+          },
+        ],
+        footer: function (currentPage, pageCount) {
+          if (currentPage === pageCount) {
+            return {
+              columns: [
+                {
+                  text: "__________________________\nFirma de El Proveedor\n\nFecha: ______/______/________",
+                  alignment: "center",
+                  fontSize: 10,
+                  margin: [0, 0, 0, 10],
+                },
+                {
+                  text: "__________________________\nFirma de El Cliente\n\nFecha: ______/______/________",
+                  alignment: "center",
+                  fontSize: 10,
+                  margin: [0, 0, 0, 10],
+                },
+              ],
+              margin: [10, 10],
+            };
+          } else {
+            return "";
+          }
+        },
+      };
+
+      pdfMake.createPdf(documentoDefinition).getBase64((base64) => {
+        resolve(base64);
+      });
+    });
+  };
+
   const handleInputChange = (e) => {
     const { id, value, type } = e.target;
     if (id.includes("id"))
@@ -94,11 +206,12 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
   const guardar = document.getElementById("guarda");
   const enviarEmail = (prueba) => {
     //puerto:2525
+
     Email.send({
       Host: "smtp.elasticemail.com",
       Username: "quitomiguel56@gmail.com",
       Password: "EAC635C56878709AEA14A25537D4F24BEAF9",
-      To: userContext.usuario.correo,
+      To: userContext.usuario.Correo_ter,
       From: "quitomiguel56@gmail.com",
       Subject: "Recibo de reservación",
       Body: "Confirmación de reservación de vehículo adjuntada",
@@ -107,10 +220,15 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
           name: "recibo.pdf",
           data: prueba,
         },
+        {
+          name: "contrato.pdf",
+          data: contrato,
+        },
       ],
     });
     console.log("enviado");
   };
+
   const handleSelectChange = (e) => {
     const { id, value } = e.target;
     const selectId = id; //
@@ -185,18 +303,18 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
         fin: date2.toISOString().split("T")[0],
         id: formValues.idVehiculo_res,
       });
-      console.log(res)
+
       if (res.estado_veh == 1) {
         errors.FechaInicio_Res = "Vehículo no disponible en esta fecha";
       }
       formValues.FechaInicio_Res = date1.toISOString().split("T")[0];
       formValues.FechaFin_Res = date2.toISOString().split("T")[0];
     }
+    contrato = await generarPDFBase64();
     return errors;
   };
   const handleGuardar = async (e) => {
     e.preventDefault();
-    console.log("Entra");
     const error = await validarForm();
     setFormErrors(error);
     MySwal.fire({
@@ -224,7 +342,6 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
             id,
           });
           if (res.id) {
-            console.log("Se recibió el pago");
             formValues.idRecepcionOnline_fac = res.id;
             await addData("reserva", formValues);
             let dataCorreo = {
@@ -249,8 +366,8 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
               },
               information: {
                 number: id,
-                date: formValues.FechaInicio_Res,
-                "due-date": formValues.FechaFin_Res,
+                date: convertirFormatoFecha(formValues.FechaInicio_Res),
+                "due-date": convertirFormatoFecha(formValues.FechaFin_Res),
               },
               products: [
                 {
@@ -278,10 +395,9 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
                 total: "Total",
               },
             };
-            console.log(dataCorreo);
+
             await easyinvoice.createInvoice(dataCorreo, function (result) {
               enviarEmail(result.pdf);
-              console.log("Se envió el correo");
             });
             props.onHide();
             MySwal.close();
@@ -293,10 +409,12 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
           }
         } catch (error) {
           console.log("Error: " + error);
+          MySwal.close();
         }
       } else {
-        MySwal.close()
+        MySwal.close();
         console.log(error.message);
+        MySwal.close();
       }
     } else {
       MySwal.close();

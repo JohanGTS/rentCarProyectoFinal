@@ -22,7 +22,6 @@ const CancelarRervacionCliente = () => {
       const data = await getData("reserva/cliente", {
         id: userContext.usuario.idTercero_ter,
       });
-      console.log(data);
       setCancelaciones(data);
     } catch (error) {
       console.log(error);
@@ -91,7 +90,6 @@ const CancelarRervacionCliente = () => {
       }
     });
   };
-  console.log(cancelaciones);
   return (
     <div className="container mx-auto">
       <h2 className="font-bold text-gray-500 py-3">Cancelaciones</h2>
@@ -119,8 +117,7 @@ const CancelarRervacionCliente = () => {
                   id="elimina"
                   className="flex-shrink-0 bg-red-500 hover:bg-red-700 border-red-500 hover:border-red-700 text-sm border-4 text-white py-1 px-2  rounded"
                   type="button"
-                  onClick={() => handleModifica(objeto)}
-                >
+                  onClick={() => handleModifica(objeto)}>
                   Cancelar
                 </button>
               </td>

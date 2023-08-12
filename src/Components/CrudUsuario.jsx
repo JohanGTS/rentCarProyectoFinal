@@ -37,31 +37,12 @@ export const CrudUsuario = ({ ...props }) => {
   let camposConNombre = campos.filter((obj) => obj.nombre);
   let cabeceraHeader = camposConNombre.map((obj) => obj.nombre);
   let cabeceraBody = campos.map((obj) => obj.id);
-  let cabeceraLocal;
   const limpiarForm = () => {
     const element = document.getElementById("formulario");
     element.reset();
     setFormValues({});
   };
   actualiza = false;
-  const handleInputChange = (e) => {
-    const { id, value, type } = e.target;
-    if (id.includes("id"))
-      setFormValues({ ...formValues, [id]: parseInt(value) });
-    else setFormValues({ ...formValues, [id]: value });
-  };
-
-  const handleSelectChange = (e) => {
-    const { id, value } = e.target;
-    const selectId = id; //
-    const optionId =
-      e.target.options[e.target.selectedIndex].getAttribute("data-key");
-
-    setFormValues({
-      ...formValues,
-      [selectId]: parseInt(optionId),
-    });
-  };
   const handleGuardar = async (e) => {
     e.preventDefault();
     actualiza = false;
@@ -74,6 +55,7 @@ export const CrudUsuario = ({ ...props }) => {
     obj[columna] = index === 0 ? 0 : "";
     return obj;
   }, {});
+
   const handleModifica = (row) => {
     setSelectedRow(row);
     setShowModal(true);
@@ -83,10 +65,6 @@ export const CrudUsuario = ({ ...props }) => {
   const handleEliminar = async (valor) => {
     const eliminar = document.getElementById("elimina");
     eliminar.focus();
-    // console.log(valor);
-    // const data = await deleteData(link, valor);
-    // console.log(data);
-
     MySwal.fire({
       title: "El registro será eliminado",
       icon: "warning",
@@ -115,7 +93,6 @@ export const CrudUsuario = ({ ...props }) => {
       }
     });
   };
-  console.log(clientes);
   return (
     <div className="container mx-auto">
       <h2 className="font-bold text-gray-500 py-3">{titulo}</h2>

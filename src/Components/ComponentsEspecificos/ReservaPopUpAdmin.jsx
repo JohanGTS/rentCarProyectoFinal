@@ -11,10 +11,13 @@ import { Modal } from "react-bootstrap";
 import easyinvoice from "easyinvoice";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
 const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
   const userContext = useContext(UserContext);
   const stripe = useStripe();
   const elements = useElements();
+  let contrato = ``;
   const opcionTarjetas = {
     iconStyle: "solid",
     style: {
@@ -41,7 +44,7 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
   segundaFecha.setDate(segundaFecha.getDate() + 4);
   const initial = {
     idReserva_res: 0,
-    idCliente_res: 0,//userContext.usuario.idTercero_ter,
+    idCliente_res: 0, //userContext.usuario.idTercero_ter,
     FechaInicio_Res: fechaInicial.toISOString().split("T")[0],
     FechaFin_Res: segundaFecha.toISOString().split("T")[0],
     idVehiculo_res: vehiculo.idVehiculo_veh,
@@ -56,7 +59,6 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
   const MySwal = withReactContent(Swal);
   const [valor, setValor] = useState(1);
   const [formValues, setFormValues] = useState(initial);
-  console.log(formValues);
   const [formErrors, setFormErrors] = useState({});
 
   let diferenciaDias = 0;
@@ -93,6 +95,116 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
   }, [formValues.FechaInicio_Res, formValues.FechaFin_Res]);
 
   const guardar = document.getElementById("guarda");
+
+  function convertirFormatoFecha(fecha) {
+    const partesFecha = fecha.split("-");
+
+    const fechaConvertida = `${partesFecha[2]}/${partesFecha[1]}/${partesFecha[0]}`;
+
+    return fechaConvertida;
+  }
+
+  const generarPDFBase64 = () => {
+    return new Promise((resolve, reject) => {
+      const documentoDefinition = {
+        content: [
+          {
+            text: "CONTRATO DE RESERVA",
+            fontSize: 18,
+            bold: true,
+            margin: [0, 0, 0, 20],
+            alignment: "center",
+          },
+          {
+            text: [
+              `
+            'Este contrato se establece entre RRRentalesRD, en adelante denominado "El Proveedor", y `,
+              { text: userContext.usuario.Nombre_ter, bold: true },
+              `, en adelante denominado "El Cliente".
+          
+          1. OBJETO DEL CONTRATO:
+          El Proveedor se compromete a ofrecer el servicio reservado, descrito como: renta de vehículos.
+          
+          2. FECHA Y DURACIÓN:
+          El servicio se ofrecerá desde el `,
+              {
+                text: convertirFormatoFecha(initial.FechaInicio_Res),
+                bold: true,
+              },
+              ` hasta el `,
+              { text: convertirFormatoFecha(initial.FechaFin_Res), bold: true },
+              ` .
+          
+          3. RESPONSABILIDADES DEL CLIENTE:
+          El Cliente se compromete a:
+          - Solamente la persona cuyo nombre aparezca en el contrato y a quien se alquile el vehículo será el conductor. El permitir que cualquier persona maneje el vehículo cancelará todo seguro y hace que el que alquiló el vehículo se responsabilice por todos los gastos de daños al vehículo y días de reparación.
+          - El vehículo no podrá ser usado en carreras o competencias, no se usará para enseñar a conducir, no se usará como taxi, nunca se usará para empujar o remolcar otros vehículos, además de que solo será usado en carreteras asfaltadas.
+          - El consumo de gasolina será cubierto por el cliente.
+          - El vehículo será devuelto en el día y hora especificado en el contrato, en la oficina de la compañía. El incumplimiento hará necesario que la policía recoja el vehículo y será motivo para que el vehículo sea devuelto de inmediato a la oficina de la compañía.
+          - El cliente no tiene autorización para contratar gastos de reparación de ninguna clase al vehículo.
+          - En caso de accidente, el cliente notificará de inmediato a la compañía y a la policía, procediendo a levantar una acta policial.
+          - El impuesto del 5% del gobierno para negocio del alquiler de vehículos se añadirá a cada factura.
+          - La cantidad mínima de renta será de 3 días.
+          - Si la persona cambia de dirección en la República Dominicana, deberá informar de inmediato a la oficina de la compañía.
+          - Las cancelaciones de las reservaciones se cobrarán 1 día y lo demás será devuelto en la forma de pago que realizó.
+          - El cliente devolverá el vehículo en las mismas condiciones en que le fue entregado.
+          - La compañía pone seguro de ley a todos sus vehículos.
+          - Cualquier multa será informada a la compañía y cancelada al cerrar el contrato.
+          - En caso de incumplimiento del contrato podrá ser reportado a Data Crédito.
+          - El vehículo nunca será conducido hasta que haya pasado un mínimo de 12 horas después de ingerir bebidas alcohólicas, sin importar la cantidad consumida.
+          - Cumplir con todas las políticas y normas establecidas por El Proveedor.
+          - Pagar el monto acordado por el servicio en la fecha establecida.
+            
+          4. CANCELACIONES Y MODIFICACIONES:
+          - Cualquier cancelación o modificación debe notificarse con al menos 2 días de anticipación. 
+          - Las cancelaciones realizadas estarán sujetas a un cobro de por lo menos un día del costo de la renta del vehículo en cuestión.
+          
+          5. INDEMNIZACIÓN:
+          En caso de incumplimiento de las cláusulas de este contrato por parte de El Cliente, El Proveedor tiene el derecho de buscar reparación por daños y perjuicios.
+          
+          6. LEY APLICABLE:
+          Este contrato se regirá y se interpretará de acuerdo con las leyes vigentes de la República Dominicana.
+          
+          Ambas partes, al firmar, aceptan todos los términos y condiciones descritos en este contrato.
+          
+
+          
+              `,
+            ],
+            alignment: "justify",
+          },
+        ],
+        footer: function (currentPage, pageCount) {
+          if (currentPage === pageCount) {
+            return {
+              columns: [
+                {
+                  text: "__________________________\nFirma de El Proveedor\n\nFecha: ______/______/________",
+                  alignment: "center",
+                  fontSize: 10,
+                  margin: [0, 0, 0, 10],
+                },
+                {
+                  text: "__________________________\nFirma de El Cliente\n\nFecha: ______/______/________",
+                  alignment: "center",
+                  fontSize: 10,
+                  margin: [0, 0, 0, 10],
+                },
+              ],
+              margin: [10, 10],
+            };
+          } else {
+            return "";
+          }
+        },
+      };
+
+      pdfMake.createPdf(documentoDefinition).getBase64((base64) => {
+        resolve(base64);
+      });
+    });
+  };
+
   const enviarEmail = (prueba) => {
     //puerto:2525
     Email.send({
@@ -107,6 +219,10 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
         {
           name: "recibo.pdf",
           data: prueba,
+        },
+        {
+          name: "contrato.pdf",
+          data: contrato,
         },
       ],
     });
@@ -138,7 +254,7 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
       errors.idVehiculo_res = "Debe especificar el vehículo";
       fechaValidada = false;
     }
-    console.log(formValues.idCliente_res)
+    console.log(formValues.idCliente_res);
     if (formValues.idCliente_res == "" || isNaN(formValues.idCliente_res)) {
       errors.idCliente_res = "Debe especificar el cliente";
       fechaValidada = false;
@@ -205,12 +321,12 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
       formValues.FechaInicio_Res = date1.toISOString().split("T")[0];
       formValues.FechaFin_Res = date2.toISOString().split("T")[0];
     }
-    console.log(errors)
+    contrato = generarPDFBase64();
+    console.log(errors);
     return errors;
   };
   const handleGuardar = async (e) => {
     e.preventDefault();
-    console.log("Entra");
     const error = await validarForm();
     setFormErrors(error);
     MySwal.fire({
@@ -224,7 +340,6 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
       },
     });
     if (Object.keys(error).length == 0) {
-      console.log("Paga");
       const { error, paymentMethod } = await stripe.createPaymentMethod({
         type: "card",
         card: elements.getElement(CardElement),
@@ -309,7 +424,7 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
           console.log("Error: " + error);
         }
       } else {
-        MySwal.close()
+        MySwal.close();
         console.log(error.message);
       }
     } else {
@@ -355,36 +470,36 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
       <Modal.Body>
         <div className="container">
           <form>
-          <div>
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor={"idCliente_res"}
-          >
-            {"Cliente"}
-          </label>
+            <div>
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor={"idCliente_res"}
+              >
+                {"Cliente"}
+              </label>
 
-          <select
-            key={"nose"}
-            className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id={"idCliente_res"}
-            onChange={handleSelectChange}
-          >
-            <option data-key={""}>Seleccione un valor</option>
-            {clientes.map((values, index) => {
-              const key = values["idTercero_ter"];
-              const descripcion =
-                values["Nombre_usu"] + " : " + values["Nombre_ter"];
-              return (
-                <option key={index} data-key={key} value={descripcion}>
-                  {descripcion}
-                </option>
-              );
-            })}
-          </select>
-          <p className="text-red-700 text-sm font-bold mb-2">
-            {formErrors.idCliente_res}
-          </p>
-        </div>
+              <select
+                key={"nose"}
+                className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id={"idCliente_res"}
+                onChange={handleSelectChange}
+              >
+                <option data-key={""}>Seleccione un valor</option>
+                {clientes.map((values, index) => {
+                  const key = values["idTercero_ter"];
+                  const descripcion =
+                    values["Nombre_usu"] + " : " + values["Nombre_ter"];
+                  return (
+                    <option key={index} data-key={key} value={descripcion}>
+                      {descripcion}
+                    </option>
+                  );
+                })}
+              </select>
+              <p className="text-red-700 text-sm font-bold mb-2">
+                {formErrors.idCliente_res}
+              </p>
+            </div>
             <div>
               <label
                 htmlFor={"FechaInicio_Res"}
@@ -475,37 +590,37 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
                 {formErrors.idCliente_res}
               </p> */}
             </div>
-            
-          <div>
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor={"idPersonal_res"}
-          >
-            {"Entregar por"}
-          </label>
 
-          <select
-            key={"nose"}
-            className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id={"idPersonal_res"}
-            onChange={handleSelectChange}
-          >
-            <option data-key={""}>Asignar más tarde</option>
-            {empleados.map((values, index) => {
-              const key = values["idTercero_ter"];
-              const descripcion =
-                values["Nombre_usu"] + " : " + values["Nombre_ter"];
-              return (
-                <option key={index} data-key={key} value={descripcion}>
-                  {descripcion}
-                </option>
-              );
-            })}
-          </select>
-          <p className="text-red-700 text-sm font-bold mb-2">
-            {formErrors.idPersonal_res}
-          </p>
-        </div>
+            <div>
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor={"idPersonal_res"}
+              >
+                {"Entregar por"}
+              </label>
+
+              <select
+                key={"nose"}
+                className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id={"idPersonal_res"}
+                onChange={handleSelectChange}
+              >
+                <option data-key={""}>Seleccione un valor</option>
+                {empleados.map((values, index) => {
+                  const key = values["idTercero_ter"];
+                  const descripcion =
+                    values["Nombre_usu"] + " : " + values["Nombre_ter"];
+                  return (
+                    <option key={index} data-key={key} value={descripcion}>
+                      {descripcion}
+                    </option>
+                  );
+                })}
+              </select>
+              <p className="text-red-700 text-sm font-bold mb-2">
+                {formErrors.idPersonal_res}
+              </p>
+            </div>
 
             <div>
               <label className="block text-gray-700 text-lg font-bold mb-2">

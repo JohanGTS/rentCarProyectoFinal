@@ -23,7 +23,6 @@ const CancelarRervacion = () => {
     try {
       const data = await getAllData("cancelacion");
       setCancelaciones(data);
-      console.log(data);
     } catch (error) {
       console.log(error);
     }

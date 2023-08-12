@@ -14,13 +14,6 @@ const LoginPopUp = (props) => {
   };
   const MySwal = withReactContent(Swal);
 
-  useEffect(() => {
-    //navigate("/dashboard");
-
-    const auxUser = usuario;
-    console.log(usuario);
-  }, [usuario]);
-
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,9 +31,11 @@ const LoginPopUp = (props) => {
       if (response[0].Correo_ter) {
         form.reset();
         await setUsuario(response[0]);
-        console.log(response[0]);
-        console.log(usuario);
-        navigate("/dashboard");
+
+        if (response[0].idTipoUsuario_usu == 1) navigate("/dashboard");
+        else {
+          navigate("/reservarVehiculo");
+        }
       } else {
         MySwal.fire({
           icon: "error",

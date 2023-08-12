@@ -69,7 +69,6 @@ export const BarraLateral = () => {
   };
 
   const navega = (ruta) => {
-    console.log("navega");
     if (ruta !== undefined && ruta !== null) {
       navigate(`/${ruta}`);
     }

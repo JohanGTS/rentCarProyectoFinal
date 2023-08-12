@@ -36,39 +36,13 @@ export const CrudVehiculo = ({ ...props }) => {
     fetchData();
   }, [campos]);
 
-  // const
   let { todosVehiculos } = vistaVehiculo[0];
-  console.log(todosVehiculos);
   let camposConNombre = campos.filter((obj) => obj.nombre);
   camposConNombre = [...camposConNombre, { nombre: "Descripcion" }];
   let cabeceraHeader = camposConNombre.map((obj) => obj.nombre);
   let cabeceraBody = campos.map((obj) => obj.id);
-  console.log(cabeceraBody);
-  let cabeceraLocal;
-  const limpiarForm = () => {
-    const element = document.getElementById("formulario");
-    element.reset();
-    setFormValues({});
-  };
   actualiza = false;
-  const handleInputChange = (e) => {
-    const { id, value, type } = e.target;
-    if (id.includes("id"))
-      setFormValues({ ...formValues, [id]: parseInt(value) });
-    else setFormValues({ ...formValues, [id]: value });
-  };
 
-  const handleSelectChange = (e) => {
-    const { id, value } = e.target;
-    const selectId = id; //
-    const optionId =
-      e.target.options[e.target.selectedIndex].getAttribute("data-key");
-
-    setFormValues({
-      ...formValues,
-      [selectId]: parseInt(optionId),
-    });
-  };
   const handleGuardar = async (e) => {
     e.preventDefault();
     actualiza = false;
@@ -83,7 +57,6 @@ export const CrudVehiculo = ({ ...props }) => {
   }, {});
   const handleModifica = (row) => {
     setSelectedRow(row);
-    console.log(row);
     setShowModal(true);
     actualiza = true;
   };
@@ -95,43 +68,37 @@ export const CrudVehiculo = ({ ...props }) => {
   const handleEliminar = async (valor) => {
     const eliminar = document.getElementById("elimina");
     eliminar.focus();
-    // console.log(valor);
-    // const data = await deleteData(link, valor);
-    // console.log(data);
-
     MySwal.fire({
-  title: 'El registro será eliminado',
+      title: "El registro será eliminado",
 
-  icon: 'warning',
-  buttons: true,
-  dangerMode: true,
-})
-.then(async (willDelete) => {
-  try {
-    if (willDelete.isConfirmed) {
-      const data = await deleteData(link, valor);
-      console.log(data)
-      MySwal.fire({
-        icon: 'success',
-        text: 'Ha sido eliminado correctamente!', 
-      });
-      await fetchData();
-    } else {
-      MySwal.fire({
-        icon: "info",
-        text: 'No ha sido eliminado!', 
-      });
-    }
-  } catch (error) {
-    console.error("Error al llamar al API:", error);
-    MySwal.fire({
-      icon: 'error',
-      text: 'No se ha podido eliminar el registro', 
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then(async (willDelete) => {
+      try {
+        if (willDelete.isConfirmed) {
+          const data = await deleteData(link, valor);
+          console.log(data);
+          MySwal.fire({
+            icon: "success",
+            text: "Ha sido eliminado correctamente!",
+          });
+          await fetchData();
+        } else {
+          MySwal.fire({
+            icon: "info",
+            text: "No ha sido eliminado!",
+          });
+        }
+      } catch (error) {
+        console.error("Error al llamar al API:", error);
+        MySwal.fire({
+          icon: "error",
+          text: "No se ha podido eliminar el registro",
+        });
+      }
     });
-  }
-});
-};
-  console.log(todosVehiculos[0]["Marca"]);
+  };
   let indice = 0;
   return (
     <div className="container mx-auto">

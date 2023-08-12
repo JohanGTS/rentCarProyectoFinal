@@ -1,5 +1,4 @@
 import axios from "axios";
-//http://d0878ff6b82c-18129876520898750185.ngrok-free.app/
 const primaryPath = "http://localhost:3000/";
 
 export const getAllData = async (ruta) => {
@@ -14,7 +13,6 @@ export const getAllData = async (ruta) => {
 
 export const getAllDataSP = async (ruta, data) => {
   try {
-    console.log(data);
     const res = await axios.get(`${primaryPath}${ruta}`, data);
     return res.data;
   } catch (err) {
@@ -39,7 +37,6 @@ export const addData = async (ruta, data) => {
   try {
     data[Object.keys(data)[0]] = 0;
     const res = await axios.post(`${primaryPath}${ruta}/`, data);
-    console.log("Agregado");
     return res.data;
   } catch (err) {
     console.log(err);
@@ -49,13 +46,9 @@ export const addData = async (ruta, data) => {
 
 export const addDataLista = async (ruta, dataArray) => {
   try {
-    console.log(dataArray);
     dataArray.forEach(async (data) => {
-      console.log(data);
       try {
-        console.log(data);
         const res = await axios.post(`${primaryPath}${ruta}/`, data);
-        console.log("Agregado");
       } catch (err) {
         console.log(err);
       }

@@ -68,7 +68,6 @@ const RegisterPopUp = (props) => {
     } else {
       MySwal.close();
     }
-    MySwal.close();
   };
   const handleSelectChange = (e) => {
     const { id, value } = e.target;
@@ -80,13 +79,11 @@ const RegisterPopUp = (props) => {
       ...formValues,
       [selectId]: parseInt(optionId),
     });
-    console.log(formValues);
   };
   const [showModal, setShowModal] = useState(false);
 
   const validarForm = async (form) => {
     const errors = {};
-    console.log(form);
     if (form.Clave_usu !== form.passwordS || !form.Clave_usu || !form.passwordS)
       errors.Clave_usu = "Las contraseñas no coinciden";
 
@@ -101,7 +98,6 @@ const RegisterPopUp = (props) => {
         `https://api.digital.gob.do/v3/cedulas/${form.Documento_ter}/validate`
       );
       const res = await validarCedula.json();
-      console.log(res);
       if (res.valid == false)
         errors.Documento_ter = "Licencia de conducir inválida";
     }
