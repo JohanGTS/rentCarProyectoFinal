@@ -25,7 +25,6 @@ export const CrudUsuario = ({ ...props }) => {
   const fetchData = async () => {
     try {
       const data = await getAllData(link);
-      console.log(data);
       setClientes(data);
     } catch (error) {
       console.log(error);

@@ -11,7 +11,6 @@ const PopUpDinamico = ({
   link,
   ...props
 }) => {
-  console.log(campos);
   let inicia = true;
   const [formValues, setFormValues] = useState(valorInicial);
   const [formErrors, setFormErrors] = useState([]);
@@ -57,10 +56,7 @@ const PopUpDinamico = ({
     handleBlur();
   }, [valorInicial]);
   const handleBlur = () => {
-    console.log(valorInicial);
-
     if (valorInicial) {
-      console.log(Object.entries(valorInicial));
       setTimeout(() => {
         Object.entries(valorInicial).forEach(([key, value]) => {
           console.log("Campo: " + key);

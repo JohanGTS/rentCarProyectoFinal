@@ -60,7 +60,7 @@ const LinesChart = () => {
         });
         useEffect(()=> {
             const fetchData= async()=> {
-                const url = 'http://localhost:3000/dashboard/cant_cliveh'
+                const url = 'http://localhost:3001/api/dashboard/cant_cliveh'
                 const dataSet1 = [];
                 const dataSet2 = [];
                 const dataSet3 = [];

@@ -2,22 +2,16 @@ import React, { useEffect, useState, useRef } from "react";
 import { Modal } from "react-bootstrap";
 import { UserContext } from "../Contexts/UserContext";
 import { useNavigate } from "react-router-dom";
-import { updateData, pagoTarjeta,getAllData } from "../Features/apiCalls";
-const PopUpDinamico = ({
-  campos,
-  titulo,
-  valorInicial,
-  ...props
-}) => {
+import { updateData, pagoTarjeta, getAllData } from "../Features/apiCalls";
+const PopUpDinamico = ({ campos, titulo, valorInicial, ...props }) => {
   const initial = {
     idPersonal_res: 0,
-
   };
-
   let inicia = true;
-  let  formattedDate = ''
+  let formattedDate = "";
   const [formValues, setFormValues] = useState(initial);
   const [formErrors, setFormErrors] = useState({});
+  const [empleados, setEmpleados] = useState([]);
 
   const handleInputChange = (e) => {
     const date1 = new Date(formValues.FechaInicio_Res);
@@ -38,11 +32,11 @@ const PopUpDinamico = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
     const guardar = document.getElementById("guardar");
-    
-  formattedDate = valorInicial.FechaInicio_res.split("T")[0];
+
+    formattedDate = valorInicial.FechaInicio_res.split("T")[0];
     guardar.focus();
     const formulario = document.getElementById("formulario");
-    const errores = await validarForm(formValues)
+    const errores = await validarForm(formValues);
     setFormErrors(errores);
 
     if (Object.keys(errores).length === 0) {
@@ -68,7 +62,6 @@ const PopUpDinamico = ({
   }, [valorInicial]);
   const handleBlur = () => {
     if (valorInicial) {
-      console.log(valorInicial);
       setTimeout(() => {
         Object.entries(valorInicial).forEach(([key, value]) => {
           const field = document.getElementById(key);
@@ -111,19 +104,20 @@ const PopUpDinamico = ({
       }
       if (formValues.idPersonal_res == "" || isNaN(formValues.idPersonal_res)) {
         formValues.idPersonal_res = 0;
-        fechaValidada = false
+        fechaValidada = false;
       }
     });
     if (fechaValidada) {
-    const resP = await pagoTarjeta("reserva/disponiblePersonal", {
-      id: formValues.idPersonal_res,
-      inicio: formattedDate,
-      hora: valorInicial.Hora_res,
-    });
-    if (resP.estado_veh == 1) {
-      errors.idPersonal_res = "Personal no disponible en ese momento";
-      fechaValidada = false
-    }}
+      const resP = await pagoTarjeta("reserva/disponiblePersonal", {
+        id: formValues.idPersonal_res,
+        inicio: formattedDate,
+        hora: valorInicial.Hora_res,
+      });
+      if (resP.estado_veh == 1) {
+        errors.idPersonal_res = "Personal no disponible en ese momento";
+        fechaValidada = false;
+      }
+    }
     // console.log(errors)
     return errors;
   };
@@ -137,7 +131,6 @@ const PopUpDinamico = ({
     }
   }, [props.show, valorInicial]);
 
-  const [empleados, setEmpleados] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -189,7 +182,7 @@ const PopUpDinamico = ({
                     {field.retorna.map((option) => {
                       const values = Object.values(option);
                       const key = values[0];
-                      const descripcion = values[values.length - 1];
+                      const descripcion = values[1];
                       return (
                         <option key={key} data-key={key} value={descripcion}>
                           {descripcion}

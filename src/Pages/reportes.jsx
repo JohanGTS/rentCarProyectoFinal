@@ -5,9 +5,9 @@ import { UserContext } from "../Contexts/UserContext";
 import { useContext } from "react";
 
 let fechaInicial = new Date(Date.now());
-fechaInicial.setDate(fechaInicial.getDate() - 1)
+fechaInicial.setDate(fechaInicial.getDate() - 1);
 let fechaReporte = new Date(Date.now());
-fechaReporte.setDate(fechaReporte.getDate() )
+fechaReporte.setDate(fechaReporte.getDate());
 // fechaInicial.setDate(fechaInicial.getDate());
 
 export const ReporteClientesFrecuentes = () => {
@@ -392,6 +392,7 @@ export const ReporteOrdenesXEntregar = () => {
           FechaInicio_res: fechaInicial.toISOString().split("T")[0],
         });
         setOrdenes(data);
+        console.log(data);
       } catch (error) {
         console.log(error);
       }
@@ -437,7 +438,6 @@ export const ReporteOrdenesXEntregarDashboard = () => {
     const fetchData = async () => {
       try {
         const data = await pagoTarjeta("dashboard/reservasXempleado", {
-
           FechaInicio_res: fechaReporte.toISOString().split("T")[0],
           idPersonal_res: userContext.usuario.idTercero_ter,
         });

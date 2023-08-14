@@ -26,14 +26,14 @@ export const DashBoard = () => {
     const fetchData = async () => {
       try {
         const data = await getAllData("dashboard/dashboard");
-        setDashboard(data);
+        setDashboard(data[0]);
       } catch (error) {
         console.log(error);
       }
     };
     fetchData();
   }, []);
-
+  console.log("first");
   return (
     <>
       <Box sx={{ display: "flex" }}>
@@ -126,7 +126,7 @@ export const DashBoard = () => {
             <Grid item xs={4}>
               <Stack spacing={2}>
                 <Card
-                  sx={{             
+                  sx={{
                     maxWidth: 415,
                     background:
                       "linear-gradient(158deg, rgba(53,138,178,1) 0%, rgba(91,180,96,1) 100%)",

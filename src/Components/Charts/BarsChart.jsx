@@ -55,7 +55,7 @@ const Bars = () => {
   });
   useEffect(() => {
     const fetchData = async () => {
-      const url = "http://localhost:3000/dashboard/cantVehiculoRentado";
+      const url = "http://localhost:3001/api/dashboard/cantVehiculoRentado";
       const dataSet1 = [];
       const dataSet2 = [];
       await fetch(url)

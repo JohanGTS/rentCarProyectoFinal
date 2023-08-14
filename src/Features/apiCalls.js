@@ -1,5 +1,5 @@
 import axios from "axios";
-const primaryPath = "http://localhost:3000/";
+const primaryPath = "http://localhost:3001/api/";
 
 export const getAllData = async (ruta) => {
   try {
