@@ -226,7 +226,6 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
         },
       ],
     });
-    console.log("enviado");
   };
 
   const handleSelectChange = (e) => {
@@ -328,7 +327,6 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
       },
     });
     if (Object.keys(error).length == 0) {
-      console.log("Paga");
       const { error, paymentMethod } = await stripe.createPaymentMethod({
         type: "card",
         card: elements.getElement(CardElement),

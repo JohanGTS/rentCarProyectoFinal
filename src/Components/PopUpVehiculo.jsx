@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { Modal } from "react-bootstrap";
 import { UserContext } from "../Contexts/UserContext";
 import { useNavigate } from "react-router-dom";
-import { updateData } from "../Features/apiCalls";
+import { addData, updateData } from "../Features/apiCalls";
 import PopUpImagen from "./PopUpImagen";
 const PopUpDinamico = ({
   campos,
@@ -19,6 +19,7 @@ const PopUpDinamico = ({
 
   const [showModal, setShowModal] = useState(false);
   const handleInputChange = (e) => {
+    inicia = false;
     const { id, value } = e.target;
     const field = document.getElementById(id);
     if (field && field.type === "date") {
@@ -37,11 +38,12 @@ const PopUpDinamico = ({
     const guardar = document.getElementById("guardar");
     guardar.focus();
     const formulario = document.getElementById("formulario");
-    setFormErrors(validarForm(formValues));
+    const error = validarForm(formValues);
+    setFormErrors(error);
 
-    if (Object.keys(formErrors).length === 0) {
-      if (actualiza) await addDataLista(link, formValues);
-      else await updateData(link, formValues);
+    if (Object.keys(error).length === 0) {
+      if (actualiza) await updateData(link, formValues);
+      else await addData(link, formValues);
       formulario.reset();
       props.onHide();
     }
@@ -63,6 +65,7 @@ const PopUpDinamico = ({
   }, [valorInicial]);
   const handleBlur = () => {
     if (valorInicial) {
+      inicia = false;
       setTimeout(() => {
         Object.entries(valorInicial).forEach(([key, value]) => {
           const field = document.getElementById(key);

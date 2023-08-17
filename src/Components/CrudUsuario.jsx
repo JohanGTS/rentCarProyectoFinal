@@ -15,12 +15,12 @@ export const CrudUsuario = ({ ...props }) => {
   let campos = user;
   const titulo = "Usuarios";
   const link = "personal/usuario";
-  let actualiza;
   let valorInicial = [{}];
   const [clientes, setClientes] = useState([]);
   const [formValues, setFormValues] = useState({});
   const [selectedRow, setSelectedRow] = useState({});
   const [showModal, setShowModal] = useState(false);
+  const [actualiza, setActualiza] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -41,10 +41,9 @@ export const CrudUsuario = ({ ...props }) => {
     element.reset();
     setFormValues({});
   };
-  actualiza = false;
   const handleGuardar = async (e) => {
     e.preventDefault();
-    actualiza = false;
+    setActualiza(false);
     console.log(objetoVacio);
     setSelectedRow(objetoVacio);
     setShowModal(true);
@@ -59,7 +58,7 @@ export const CrudUsuario = ({ ...props }) => {
     setSelectedRow(row);
     setShowModal(true);
     console.log(row);
-    actualiza = true;
+    setActualiza(true);
   };
   const handleEliminar = async (valor) => {
     const eliminar = document.getElementById("elimina");

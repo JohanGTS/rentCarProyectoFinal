@@ -86,6 +86,7 @@ export const deleteData = async (ruta, data) => {
 
 export const updateData = async (ruta, data) => {
   try {
+    console.log(ruta);
     console.log(data);
     const dataId = data[Object.keys(data)[0]];
     const res = await axios.put(`${primaryPath}${ruta}/` + dataId, data);

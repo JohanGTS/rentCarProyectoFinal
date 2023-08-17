@@ -211,7 +211,7 @@ export const vehiculo = [
   {
     id: "idTipoVehiculo_veh",
     retorna: await getAllData("tipovehiculo"),
-    label: "Id del tipo de vehiculo",
+    label: "Tipo de vehiculo",
     type: "text",
     placeholder: "Digite el id del tipo de vehiculo",
     fullWidth: true,
@@ -219,7 +219,7 @@ export const vehiculo = [
   {
     id: "idMarca_veh",
     retorna: await getAllData("marca"),
-    label: "Id del tipo de marca",
+    label: "Marca ",
     type: "text",
     placeholder: "Digite el id del tipo de marca",
     fullWidth: true,
@@ -227,7 +227,7 @@ export const vehiculo = [
   {
     id: "idModelo_veh",
     retorna: await getAllData("modelo"),
-    label: "Id del tipo de modelo",
+    label: "Modelo",
     type: "text",
     placeholder: "Digite el id del tipo de modelo",
     fullWidth: true,
@@ -266,7 +266,7 @@ export const vehiculo = [
   {
     id: "idColor_veh",
     retorna: await getAllData("color"),
-    label: "Id del color",
+    label: "Color",
     type: "text",
     placeholder: "Digite el id del color",
     fullWidth: true,
@@ -283,7 +283,7 @@ export const vehiculo = [
     id: "CostoPorDia_veh",
     nombre: "Costo diario",
     label: "Costo por día (Dólares)",
-    type: "text",
+    type: "number",
     placeholder: "Digite el costo por día(dólares)",
     fullWidth: true,
   },
@@ -297,7 +297,7 @@ export const vehiculo = [
   {
     id: "idCombustible_veh",
     retorna: await getAllData("combustible"),
-    label: "Id del combustible",
+    label: "Combustible usado",
     type: "text",
     placeholder: "Digite el id del combustible",
     fullWidth: true,
@@ -412,11 +412,11 @@ export const cancelacion = [
 ];
 
 export const asignarPersonal = [
-  { id: "idReserva_res", nombre: "Id Reserva", label: "Id Personal" },
+  { id: "idReserva_res", nombre: "Id Reserva", label: "Número de la reserva" },
   {
     id: "idPersonal_res",
     retorna: await getAllData("personal"),
-    label: "Id Personal",
+    label: "Personal encargado",
     type: "text",
   },
 ];

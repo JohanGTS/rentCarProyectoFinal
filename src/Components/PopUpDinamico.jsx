@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { Modal } from "react-bootstrap";
 import { UserContext } from "../Contexts/UserContext";
 import { useNavigate } from "react-router-dom";
-import { updateData } from "../Features/apiCalls";
+import { addData, updateData } from "../Features/apiCalls";
 const PopUpDinamico = ({
   campos,
   titulo,
@@ -34,7 +34,7 @@ const PopUpDinamico = ({
     setFormErrors(validarForm(formValues));
 
     if (Object.keys(formErrors).length === 0) {
-      if (actualiza) await addDataLista(link, formValues);
+      if (!actualiza) await addData(link, formValues);
       else await updateData(link, formValues);
       formulario.reset();
       props.onHide();
@@ -59,8 +59,6 @@ const PopUpDinamico = ({
     if (valorInicial) {
       setTimeout(() => {
         Object.entries(valorInicial).forEach(([key, value]) => {
-          console.log("Campo: " + key);
-          console.log("valor: " + value);
           const field = document.getElementById(key);
           if (field && field.type === "select-one") {
             const options = field.options;

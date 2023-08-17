@@ -60,8 +60,9 @@ const PopUpPiezaRecibe = ({ valorInicial, ...props }) => {
         ...item,
         idReserva_rp: valorInicial.idReserva_rp,
       }));
-      await deleteDataLista("entrega", itemsToAdd);
-      await updateData("entrega/reserva", {
+      //await deleteDataLista("entrega", itemsToAdd);
+      console.log("eNRTA");
+      await updateData("recibir/reserva", {
         idReserva_rp: valorInicial.idReserva_rp,
         estado_res: "F",
       });

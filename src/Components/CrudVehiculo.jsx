@@ -17,39 +17,39 @@ export const CrudVehiculo = ({ ...props }) => {
   let campos = vehiculo;
   const titulo = "Vehículos";
   const link = "vehiculo";
-  let actualiza;
   let valorInicial = [{}];
   const [clientes, setClientes] = useState([]);
   const [formValues, setFormValues] = useState({});
   const [selectedRow, setSelectedRow] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [showModalIm, setShowModalIm] = useState(false);
+  const [actualiza, setActualiza] = useState(false);
+  let { todosVehiculos } = vistaVehiculo[0];
   const fetchData = async () => {
     try {
+      const aux = await getAllData("vehiculo/vehiculo");
+      todosVehiculos = aux;
       const data = await getAllData(link);
       setClientes(data);
     } catch (error) {
       console.log(error);
     }
   };
+
   useEffect(() => {
     fetchData();
   }, [campos]);
 
-  let { todosVehiculos } = vistaVehiculo[0];
   let camposConNombre = campos.filter((obj) => obj.nombre);
   camposConNombre = [...camposConNombre, { nombre: "Descripcion" }];
   let cabeceraHeader = camposConNombre.map((obj) => obj.nombre);
   let cabeceraBody = campos.map((obj) => obj.id);
-  actualiza = false;
 
   const handleGuardar = async (e) => {
     e.preventDefault();
-    actualiza = false;
-    console.log(objetoVacio);
+    setActualiza(false);
     setSelectedRow(objetoVacio);
     setShowModal(true);
-    await fetchData();
   };
   const objetoVacio = cabeceraBody.reduce((obj, columna, index) => {
     obj[columna] = index === 0 ? 0 : "";
@@ -57,13 +57,13 @@ export const CrudVehiculo = ({ ...props }) => {
   }, {});
   const handleModifica = (row) => {
     setSelectedRow(row);
+    setActualiza(true);
     setShowModal(true);
-    actualiza = true;
   };
   const handleImagen = (row) => {
     setSelectedRow(row);
     setShowModalIm(true);
-    actualiza = true;
+    setActualiza(true);
   };
   const handleEliminar = async (valor) => {
     const eliminar = document.getElementById("elimina");
@@ -78,7 +78,6 @@ export const CrudVehiculo = ({ ...props }) => {
       try {
         if (willDelete.isConfirmed) {
           const data = await deleteData(link, valor);
-          console.log(data);
           MySwal.fire({
             icon: "success",
             text: "Ha sido eliminado correctamente!",
@@ -116,7 +115,7 @@ export const CrudVehiculo = ({ ...props }) => {
           {clientes.map((objeto, index) => (
             <tr key={index} className="bg-white border-b">
               {camposConNombre.map((campo) => {
-                return campo.nombre != "Descripcion" ? (
+                return campo.nombre !== "Descripcion" ? (
                   <td
                     key={campo.id}
                     className="px-1 py-4 font-medium text-gray-900"
@@ -128,14 +127,17 @@ export const CrudVehiculo = ({ ...props }) => {
                     key={campo.id}
                     className="px-1 py-4 font-medium text-gray-900"
                   >
-                    {todosVehiculos[indice]["Marca"] +
-                      " " +
-                      todosVehiculos[indice]["Modelo"] +
-                      " " +
-                      todosVehiculos[indice++]["Color"]}
+                    {todosVehiculos[indice]
+                      ? todosVehiculos[indice]["Marca"] +
+                        " " +
+                        todosVehiculos[indice]["Modelo"] +
+                        " " +
+                        todosVehiculos[indice]["Color"]
+                      : "N/A"}
                   </td>
                 );
               })}
+
               <td className="">
                 <button
                   id="guarda"

@@ -66,7 +66,6 @@ export const CrudDinamico = ({
   const handleGuardar = async (e) => {
     e.preventDefault();
     actualiza = false;
-    console.log(objetoVacio);
     setSelectedRow(objetoVacio);
     setShowModal(true);
     await fetchData();
@@ -97,7 +96,7 @@ export const CrudDinamico = ({
       try {
         if (willDelete.isConfirmed) {
           const data = await deleteData(link, valor);
-          console.log(data);
+
           MySwal.fire({
             icon: "success",
             text: "Ha sido eliminado correctamente!",

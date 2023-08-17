@@ -14,6 +14,7 @@ import withReactContent from "sweetalert2-react-content";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
+  pdfMake.vfs = pdfFonts.pdfMake.vfs;
   const userContext = useContext(UserContext);
   const stripe = useStripe();
   const elements = useElements();
@@ -254,7 +255,6 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
       errors.idVehiculo_res = "Debe especificar el vehículo";
       fechaValidada = false;
     }
-    console.log(formValues.idCliente_res);
     if (formValues.idCliente_res == "" || isNaN(formValues.idCliente_res)) {
       errors.idCliente_res = "Debe especificar el cliente";
       fechaValidada = false;
@@ -272,7 +272,6 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
       errors.FechaFin_Res = "Debe especificar la fecha final";
       fechaValidada = false;
     }
-    console.log(fechaValidada);
     if (fechaValidada) {
       const dateActual = Date.now();
       const date1 = new Date(formValues.FechaInicio_Res);
@@ -311,7 +310,6 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
         fin: date2.toISOString().split("T")[0],
         id: formValues.idPersonal_res,
       });
-      // console.log(res);
       if (res.estado_veh == 1) {
         errors.FechaInicio_Res = "Vehículo no disponible en esta fecha";
       }
@@ -355,6 +353,7 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
           if (res.id) {
             console.log("Se recibió el pago");
             formValues.idRecepcionOnline_fac = res.id;
+            console.log(formValues);
             await addData("reserva", formValues);
             let dataCorreo = {
               customize: {},
@@ -425,7 +424,6 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
         }
       } else {
         MySwal.close();
-        console.log(error.message);
       }
     } else {
       MySwal.close();

@@ -39,7 +39,7 @@ export const ReporteClientesFrecuentes = () => {
           getRowId={(clientes) => clientes.idCliente_res}
           initialState={{
             pagination: {
-              paginationModel: { page: 0, pageSize: 5 },
+              paginationModel: { page: 0, pageSize: 15 },
             },
           }}
           slots={{
@@ -87,7 +87,7 @@ export const ReporteOrdenesRecientes = () => {
               getRowId={(ventas) => ventas.idReserva_res}
               initialState={{
                 pagination: {
-                  paginationModel: { page: 0, pageSize: 5 },
+                  paginationModel: { page: 0, pageSize: 15 },
                 },
               }}
               slots={{
@@ -136,7 +136,7 @@ export const ReporteOrdenesRecientesDashboard = () => {
               getRowId={(ventas) => ventas.idReserva_res}
               initialState={{
                 pagination: {
-                  paginationModel: { page: 0, pageSize: 5 },
+                  paginationModel: { page: 0, pageSize: 15 },
                 },
               }}
               // pageSizeOptions={[5, 10]}
@@ -230,7 +230,7 @@ export const ReporteOrdenesRecientesxCliente = () => {
               getRowId={(ventas) => ventas.idReserva_res}
               initialState={{
                 pagination: {
-                  paginationModel: { page: 0, pageSize: 5 },
+                  paginationModel: { page: 0, pageSize: 15 },
                 },
               }}
               slots={{
@@ -276,7 +276,7 @@ export const ReportesFacturasActivas = () => {
           getRowId={(facturas) => facturas.idFactura_fac}
           initialState={{
             pagination: {
-              paginationModel: { page: 0, pageSize: 5 },
+              paginationModel: { page: 0, pageSize: 15 },
             },
           }}
           slots={{
@@ -323,7 +323,7 @@ export const ReportesFacturasActivasXCliente = () => {
           getRowId={(facturas) => facturas.idFactura_fac}
           initialState={{
             pagination: {
-              paginationModel: { page: 0, pageSize: 5 },
+              paginationModel: { page: 0, pageSize: 15 },
             },
           }}
           slots={{
@@ -369,7 +369,7 @@ export const ReporteVehiculos = () => {
           getRowId={(vehiculos) => vehiculos.idVehiculo_veh}
           initialState={{
             pagination: {
-              paginationModel: { page: 0, pageSize: 5 },
+              paginationModel: { page: 0, pageSize: 15 },
             },
           }}
           slots={{
@@ -418,7 +418,7 @@ export const ReporteOrdenesXEntregar = () => {
           getRowId={(ordenes) => ordenes.idReserva_res}
           initialState={{
             pagination: {
-              paginationModel: { page: 0, pageSize: 5 },
+              paginationModel: { page: 0, pageSize: 15 },
             },
           }}
           slots={{
@@ -464,7 +464,7 @@ export const ReporteOrdenesXEntregarDashboard = () => {
           getRowId={(ordenes) => ordenes.idReserva_res}
           initialState={{
             pagination: {
-              paginationModel: { page: 0, pageSize: 5 },
+              paginationModel: { page: 0, pageSize: 15 },
             },
           }}
           slots={{}}

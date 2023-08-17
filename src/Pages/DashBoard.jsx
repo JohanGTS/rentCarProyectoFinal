@@ -33,7 +33,6 @@ export const DashBoard = () => {
     };
     fetchData();
   }, []);
-  console.log("first");
   return (
     <>
       <Box sx={{ display: "flex" }}>
