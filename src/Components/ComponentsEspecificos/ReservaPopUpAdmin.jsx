@@ -12,9 +12,7 @@ import easyinvoice from "easyinvoice";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
 const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
-  pdfMake.vfs = pdfFonts.pdfMake.vfs;
   const userContext = useContext(UserContext);
   const stripe = useStripe();
   const elements = useElements();
@@ -26,7 +24,7 @@ const ReservaPopUp = ({ vehiculo, nombreProducto, ...props }) => {
         iconColor: "#162234",
         color: "#000",
         fontWeight: 500,
-        fontFamily: "Roboto, Open Sans, Segoe UI, sans-serif",
+        fontFamily: "sans-serif",
         fontSize: "16px",
         fontSmoothing: "antialiased",
         ":-webkit-autofill": { color: "#000" },
